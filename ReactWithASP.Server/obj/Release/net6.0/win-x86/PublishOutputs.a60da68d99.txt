@@ -1,0 +1,5 @@
+E:\WorkSpaceAnubhav\ASSR\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\win-x86\PubTmp\Out\appsettings.Development.json
+E:\WorkSpaceAnubhav\ASSR\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\win-x86\PubTmp\Out\appsettings.json
+E:\WorkSpaceAnubhav\ASSR\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\win-x86\PubTmp\Out\ReactWithASP.Server.pdb
+E:\WorkSpaceAnubhav\ASSR\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\win-x86\PubTmp\Out\Microsoft.Data.SqlClient.SNI.dll
+E:\WorkSpaceAnubhav\ASSR\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\win-x86\PubTmp\Out\ReactWithASP.Server.exe

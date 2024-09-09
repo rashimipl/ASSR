@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\ASSR_Publish\ASSR14</_PublishTargetUrl>
+    <History>True|2024-09-06T13:17:33.0424281Z||;True|2024-09-06T18:32:48.5929103+05:30||;True|2024-09-06T17:55:42.9055987+05:30||;True|2024-09-06T17:25:45.3596016+05:30||;True|2024-09-06T14:58:19.2662419+05:30||;True|2024-09-06T14:33:41.6250704+05:30||;True|2024-09-06T10:28:59.6337507+05:30||;True|2024-09-05T15:10:53.8354380+05:30||;True|2024-09-04T16:32:31.1995035+05:30||;True|2024-09-04T16:28:23.3102421+05:30||;True|2024-09-02T18:31:10.2181570+05:30||;True|2024-09-02T16:17:04.4868136+05:30||;True|2024-09-02T15:38:23.6363473+05:30||;True|2024-09-02T15:24:13.9019127+05:30||;True|2024-09-02T15:01:24.8813794+05:30||;True|2024-09-02T14:57:14.3552499+05:30||;True|2024-09-02T14:54:48.8539060+05:30||;True|2024-09-02T14:33:16.4938181+05:30||;True|2024-09-02T13:21:32.3347577+05:30||;True|2024-09-02T11:24:49.8879629+05:30||;False|2024-08-27T15:36:45.5172204+05:30||;True|2024-08-27T14:43:43.4501270+05:30||;True|2024-08-16T11:59:52.0780406+05:30||;True|2024-08-16T11:40:15.6053844+05:30||;True|2024-08-16T11:37:04.2309546+05:30||;True|2024-08-16T10:43:59.3259354+05:30||;</History>
+    <LastFailureDetails />
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Data Source=122.176.104.29%3bInitial Catalog=assr%3bUser Id=assr%3bPassword= Assr%401234#%3bTrustServerCertificate=True%3bEncrypt=True%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

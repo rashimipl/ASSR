@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\2aefbbf1-7e07-4de6-b9c5-d457b257ee87_WhatsApp Image 2024-05-13 at 18.17.05.jpeg",
+      "PackagePath": "staticwebassets\\uploads\\2aefbbf1-7e07-4de6-b9c5-d457b257ee87_WhatsApp Image 2024-05-13 at 18.17.05.jpeg"
+    },
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\5f86276e-38a7-442b-a757-0f7b1d423d6d_Anubhav.jpg",
+      "PackagePath": "staticwebassets\\uploads\\5f86276e-38a7-442b-a757-0f7b1d423d6d_Anubhav.jpg"
+    },
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\8966b904-83b0-4a85-b13a-851f8bd50e5e_Boy_Image.jpg",
+      "PackagePath": "staticwebassets\\uploads\\8966b904-83b0-4a85-b13a-851f8bd50e5e_Boy_Image.jpg"
+    },
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\8f3395ff-6507-42e4-bc35-fe645d14431f_Anubhav.jpg",
+      "PackagePath": "staticwebassets\\uploads\\8f3395ff-6507-42e4-bc35-fe645d14431f_Anubhav.jpg"
+    },
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\cb98f77f-8bbb-4b09-9d8a-3db9b621aafb_Boy_Image.jpg",
+      "PackagePath": "staticwebassets\\uploads\\cb98f77f-8bbb-4b09-9d8a-3db9b621aafb_Boy_Image.jpg"
+    },
+    {
+      "Id": "E:\\WorkSpaceAnubhav\\ASSR\\ReactWithASP\\ReactWithASP.Server\\wwwroot\\uploads\\d4ca22b5-6ab7-436f-a657-24a88404866e_Boy_Image.jpg",
+      "PackagePath": "staticwebassets\\uploads\\d4ca22b5-6ab7-436f-a657-24a88404866e_Boy_Image.jpg"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\win-x86\\staticwebassets\\msbuild.ReactWithASP.Server.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\win-x86\\staticwebassets\\msbuild.build.ReactWithASP.Server.props",
+      "PackagePath": "build\\ReactWithASP.Server.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\win-x86\\staticwebassets\\msbuild.buildMultiTargeting.ReactWithASP.Server.props",
+      "PackagePath": "buildMultiTargeting\\ReactWithASP.Server.props"
+    },
+    {
+      "Id": "obj\\Release\\net6.0\\win-x86\\staticwebassets\\msbuild.buildTransitive.ReactWithASP.Server.props",
+      "PackagePath": "buildTransitive\\ReactWithASP.Server.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
