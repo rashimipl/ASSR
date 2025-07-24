@@ -27,6 +27,16 @@ using Google.Apis.Auth.OAuth2;
 using System.Text;
 using Quartz;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using ReactWithASP.Server.InterfaceServices;
+using System.Linq;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using System;
+using System.Net.Mime;
+using PayPal;
 
 namespace ReactWithASP.Server.Controllers
 {
@@ -39,198 +49,32 @@ namespace ReactWithASP.Server.Controllers
         private Microsoft.AspNetCore.Hosting.IHostingEnvironment Environment;
         private readonly ApplicationDbContext _context;
         private readonly ISchedulerFactory _schedulerFactory;
+        private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILinkedInService _linkedInService;
+        private readonly IHttpClientFactory _httpClientFactory;
 
 
-        public PostController(IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, ApplicationDbContext context, ISchedulerFactory schedulerFactory)
+
+        public PostController(IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, ApplicationDbContext context, ISchedulerFactory schedulerFactory, HttpClient httpClient, IHttpContextAccessor httpContextAccessor,ILinkedInService linkedInService, IHttpClientFactory httpClientFactory)
         {
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
             Environment = environment;
+            _linkedInService = linkedInService;
             _context = context;
             _schedulerFactory = schedulerFactory;
-            //FFmpeg.ExecutablesPath = @"C:\path\to\ffmpeg\bin"; // Set the path to the FFmpeg executables
+            _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
+            _httpClientFactory = httpClientFactory;
         }
-        /*[HttpPost]
-        [Authorize]*/
-
-        /* public IActionResult CreatePost([FromBody] CreatePostRequest request)
-         {
-             if (string.IsNullOrEmpty(request.userGUId) ||
-                 string.IsNullOrEmpty(request.Title) ||
-                 string.IsNullOrEmpty(request.Description) ||
-                 request.MediaUrl == null || request.MediaUrl.Count == 0 ||
-                 request.Tags == null || request.Tags.Count == 0 ||
-                 string.IsNullOrEmpty(request.AccountOrGroupName) ||
-                 request.AccountOrGroupId == null || request.AccountOrGroupId.Count == 0)
-             {
-                 return BadRequest(new CreatePostResponse
-                 {
-                     Message = "Fields Missing"
-                 });
-             }
-
-             return Ok(new CreatePostResponse
-             {
-                 Message = "Post created successfully"
-             });
-         }*/
-
-        //[HttpPost]
-        //[Authorize]
-        //public async Task<IActionResult> CreatePost(CreatePostRequest request)
-        //{
-        //    var processedFiles = new List<MediaFileResponse>();
-
-        //    foreach (var formFile in request.MediaUrl)
-        //    {
-        //        if (formFile.Length > 0)
-        //        {
-        //            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-        //            if (!Directory.Exists(uploadsFolder))
-        //            {
-        //                Directory.CreateDirectory(uploadsFolder);
-        //            }
-
-        //            var uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-        //            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                await formFile.CopyToAsync(stream)
-        //;
-        //            }
-
-        //            var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-        //            if (!Directory.Exists(thumbnailFolder))
-        //            {
-        //                Directory.CreateDirectory(thumbnailFolder);
-        //            }
-
-        //            var thumbnailFileName = "thumb_" + Path.GetFileNameWithoutExtension(uniqueFileName) + ".jpg";
-        //            var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-
-        //            if (formFile.ContentType.StartsWith("image"))
-        //            {
-        //                await GenerateImageThumbnailAsync(filePath, thumbnailPath);
-        //            }
-        //            else if (formFile.ContentType.StartsWith("video"))
-        //            {
-        //                GenerateVideoThumbnailAsync(filePath, thumbnailPath);
-        //            }
-
-        //            var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-        //            var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-        //            //processedFiles.Add(new MediaFileResponse
-        //            //{
-        //            //    FileName = uniqueFileName,
-        //            //    FilePath = filePath,
-        //            //    ContentType = formFile.ContentType,
-        //            //    ThumbnailUrl = thumbnailUrl
-        //            //});
-        //            processedFiles.Add(new MediaFileResponse
-        //            {
-        //                FileName = thumbnailFileName,
-        //                FilePath = filePath,
-        //                ContentType = formFile.ContentType,
-        //                ThumbnailUrl = thumbnailUrl
-        //            });
-        //        }
-        //    }
-
-
-        //    if (string.IsNullOrEmpty(request.userGUId) ||
-        //        string.IsNullOrEmpty(request.Title) ||
-        //        string.IsNullOrEmpty(request.Description) ||
-        //        request.MediaUrl == null  ||
-        //        request.Tags == null || request.Tags.Count == 0 ||
-        //        string.IsNullOrEmpty(request.AccountOrGroupName) ||
-        //        request.AccountOrGroupId == null || request.AccountOrGroupId.Count == 0)
-        //    {
-        //        return BadRequest(new { Message = "Fields Missing" });
-        //    }
-
-
-
-        //    var newPost = new SocialMediaPosts
-        //    {
-        //        UserGuid = request.userGUId,
-        //        Title = request.Title,
-        //        Description = request.Description,
-        //        CreatedAt = DateTime.UtcNow,
-        //        Status = "Published",
-        //        AccountOrGroupName = request.AccountOrGroupName,
-        //        AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
-        //        PostIcon = JsonConvert.SerializeObject(request.MediaUrl),
-        //    };
-
-        //    _context.SocialMediaPosts.Add(newPost);
-        //    _context.SaveChanges();
-
-        //    foreach (var accountId in request.AccountOrGroupId)
-        //    {
-        //        if (int.TryParse(accountId, out int groupId))
-        //        {
-        //            var userGroupPost = new UserGroupPosts
-        //            {
-        //                GroupId = groupId,
-        //                PostId = newPost.Id
-        //            };
-
-        //            _context.UserGroupPosts.Add(userGroupPost);
-
-        //        }
-        //    }
-        //    _context.SaveChanges();
-        //    // Initializing likes, shares, and views with 0 for the new post
-        //    var postLikes = new PostLikes
-        //    {
-        //        PostId = newPost.Id,
-        //        UserGuid = request.userGUId,
-        //        PostLikesCount = 0
-
-        //    };
-        //    _context.PostLikes.Add(postLikes);
-        //    _context.SaveChanges();
-        //    var postShares = new PostShares
-        //    {
-        //        PostId = newPost.Id,
-        //        UserGuid = request.userGUId,
-        //        PostSharesCount = 0
-        //    };
-
-        //    _context.PostShares.Add(postShares);
-        //    _context.SaveChanges();
-
-        //    var postViews = new PostViews
-        //    {
-        //        PostId = newPost.Id,
-        //        UserGuid = request.userGUId,
-        //        PostViewsCount = 0
-        //    };
-
-        //    _context.PostViews.Add(postViews);
-        //    _context.SaveChanges();
-        //    var userSocialMediaStatus = new UserSocialMediaStatus
-        //    {
-        //        SocialMediaId = 1,
-        //        UserGuid = request.userGUId,
-        //        Status = 1
-
-        //    };
-        //    _context.UserSocialMediaStatus.Add(userSocialMediaStatus);
-        //    _context.SaveChanges();
-
-
-
-        //    return Ok(new { Message = "Post created successfully" });
-        //}
+       
 
 
         [HttpPost]
         /*[Authorize]*/
         public async Task<IActionResult> CreatePost(CreatePostRequest request)
-        {
+            {
             if (string.IsNullOrEmpty(request.userGUId) ||
                 string.IsNullOrEmpty(request.Title) ||
                 string.IsNullOrEmpty(request.Description) ||
@@ -241,8 +85,29 @@ namespace ReactWithASP.Server.Controllers
             {
                 return BadRequest(new { Message = "Fields Missing" });
             }
+      List<string> groupIds = request.AccountOrGroupName == "Groups"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.Id) ? a.Id : "").ToList()
+: new List<string>();
 
-            var newPost = new SocialMediaPosts
+
+      List<string> accountpageId = request.AccountOrGroupName == "Accounts"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.PageId) ? a.PageId : "").ToList()
+: new List<string>();
+      //  // Process account IDs
+      //  List<string> accountIds = request.AccountOrGroupName == "Account"
+      //? request.AccountOrGroupId.Where(a => !string.IsNullOrEmpty(a.PageId)).Select(a => a.PageId).ToList()
+      //: new List<string>();
+      List<string> accountIds = request.AccountOrGroupName == "Accounts"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.accountId) ? a.accountId : "").ToList()
+: new List<string>();
+      var groupPageIds = await (from gsm in _context.GroupSocialMedia
+                                join g in _context.@group on gsm.GroupId equals g.Id
+                                where g.UserGuid == request.userGUId
+                                      && groupIds.Contains(gsm.GroupId.ToString())
+                                select gsm.PageId)
+                            .ToListAsync();
+
+      var newPost = new SocialMediaPosts
             {
                 UserGuid = request.userGUId,
                 Title = request.Title,
@@ -250,100 +115,747 @@ namespace ReactWithASP.Server.Controllers
                 CreatedAt = DateTime.UtcNow,
                 Status = "Published",
                 AccountOrGroupName = request.AccountOrGroupName,
-                AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
-                PostIcon = JsonConvert.SerializeObject(request.MediaUrl),
-            };
+        //AccountOrGroupId =request.AccountOrGroupName=="Groups"? request.AccountOrGroupId.Select(a => a.Id).ToString(): JsonConvert.SerializeObject(request.AccountOrGroupId.Select(x => x.Id).ToList()),
+        AccountOrGroupId = request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupIds) : JsonConvert.SerializeObject(accountIds),
+        //AccountOrGroupId = request.AccountOrGroupName == "Groups" ? request.AccountOrGroupId.Select(a => a.Id).ToString() : JsonConvert.SerializeObject(request.AccountOrGroupId.Select(x => x.Id).ToList()),
+        PostIcon = JsonConvert.SerializeObject(request.MediaUrl),
+              //Tags = request.Tags,
+              ContentType ="Post",
+              AccountPageId= request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupPageIds) : JsonConvert.SerializeObject(accountpageId),
+        
+      };
 
             _context.SocialMediaPosts.Add(newPost);
             _context.SaveChanges();
 
-            foreach (var accountId in request.AccountOrGroupId)
+         if (request.AccountOrGroupName == "Groups")
+         {
+        foreach (var accountId in request.AccountOrGroupId)
+        {
+          // Directly access the `Id` property of `AccountOrPageId1`, no parsing needed
+          var groupId = accountId.Id;
+          var groupPagedata = await (from gsm in _context.GroupSocialMedia
+                                     join g in _context.@group on gsm.GroupId equals g.Id
+                                     where g.UserGuid == request.userGUId
+                                           && gsm.GroupId.ToString() == groupId // Correct comparison
+                                     select new { gsm.PageId, gsm.SocialMediaId })
+                        .ToListAsync();
+          foreach (var data in groupPagedata)
+          {
+            var pageId = data.PageId ; // Default to 0 if null
+            var accountid = data.SocialMediaId ; // Default to 0 if null
+
+            var userGroupPost = new UserGroupPosts
             {
-                //if (int.TryParse(accountId, out int groupId))
-                //{
-                //    // Check if GroupId exists in the group table
-                //    bool groupExists = _context.group.Any(g => g.Id == groupId);
-                //    if (groupExists)
-                //    {
-                //        var userGroupPost = new UserGroupPosts
-                //        {
-                //            GroupId = groupId,
-                //            PostId = newPost.Id
-                //        };
+              GroupId = int.TryParse(groupId, out int value) ? value : 0,
+              PostId = newPost.Id,
+              StoryId = 0,
+              AccountID = accountid.ToString(),
+              AccountPageId = pageId,
+            };
 
-                //        _context.UserGroupPosts.Add(userGroupPost);
-                //    }
-                //    else
-                //    {
-                //        return BadRequest(new { Message = $"GroupId {groupId} does not exist." });
-                //    }
-                //}
-                if (int.TryParse(accountId, out int groupId))
+            _context.UserGroupPosts.Add(userGroupPost);
+          }
+          _context.SaveChanges();
+        }
+         }
+         else if (request.AccountOrGroupName == "Accounts")
+         {
+        
+          foreach (var accountId in request.AccountOrGroupId)
+          {
+          var accountpageid = accountId.PageId;
+          var accountid = accountId.accountId;
+          
+            var userGroupPost = new UserGroupPosts
+            {
+              GroupId = 0, 
+              PostId = newPost.Id, 
+              StoryId = 0, 
+              AccountID = accountid,
+              AccountPageId = accountpageid,
+            };
+
+            _context.UserGroupPosts.Add(userGroupPost);
+          }
+         
+          _context.SaveChanges();
+          }
+
+
+      //foreach (var accountId in request.AccountOrGroupId)
+      //{
+      //        var groupId = accountId.Id;
+      //        var userGroupPost = new UserGroupPosts
+      //        {
+      //            GroupId = groupId,
+      //            PostId = newPost.Id
+      //        };
+
+      //        _context.UserGroupPosts.Add(userGroupPost);
+      //}
+
+      // Initializing likes, shares, and views with 0 for the new post
+      //var postLikes = new PostLikes
+      //{
+      //    PostId = newPost.Id,
+      //    UserGuid = request.userGUId,
+      //    PostLikesCount = 0,
+      //    CreatedAt= DateTime.UtcNow
+
+      //};
+      //_context.PostLikes.Add(postLikes);
+      //_context.SaveChanges();
+      //var postShares = new PostShares
+      //{
+      //    PostId = newPost.Id,
+      //    UserGuid = request.userGUId,
+      //    PostSharesCount = 0,
+      //    CreatedAt = DateTime.UtcNow
+      //};
+
+      //_context.PostShares.Add(postShares);
+      //_context.SaveChanges();
+
+      //var postViews = new PostViews
+      //{
+      //    PostId = newPost.Id,
+      //    UserGuid = request.userGUId,
+      //    PostViewsCount = 0,
+      //    CreatedAt = DateTime.UtcNow
+      //};
+
+      //_context.PostViews.Add(postViews);
+      //_context.SaveChanges();
+
+      var userSocialMediaStatus = new UserSocialMediaStatus
+        {
+          SocialMediaId = 1,
+          UserGuid = request.userGUId,
+          Status = 1
+
+        };
+        _context.UserSocialMediaStatus.Add(userSocialMediaStatus);
+     
+            _context.SaveChanges();
+            //if (request.AccountOrGroupName == "Account")
+            //{
+            //    var infoList = _context.ConnectedSocialMediaInfo.Where(x => x.UserId == request.userGUId && request.AccountOrGroupId.Contains(x.Id.ToString())).ToList();
+            //}
+            //if (request.AccountOrGroupName == "group")
+            //{
+            //    var infoList1 = _context.group.Where(x => x.UserGuid == request.userGUId && request.AccountOrGroupId.Contains(x.Id.ToString())).ToList();
+            //}
+
+            List<ConnectedSocialMediaInfo> infoList = new List<ConnectedSocialMediaInfo>();
+
+            var accountOrGroupIds = request.AccountOrGroupId.Select(a => a.Id).ToList();
+            var socialMediaAccid = request.AccountOrGroupId.Select(a => a.accountId).ToList();
+            var pageIdof_accountOrGroupId = request.AccountOrGroupId.Select(a => a.PageId).ToList();
+
+            if (string.Equals(request.AccountOrGroupName, "Accounts", StringComparison.OrdinalIgnoreCase))
+            {
+                //infoList = await _context. ConnectedSocialMediaInfo
+                //.Where(x => x.UserId == request.userGUId && request.AccountOrGroupId.Contains(x.SocialMediaAccId.ToString()))
+                //.GroupBy(x => x.Id) // Group by the unique table Id
+                //.Select(group => group.First()) // Select the first record in each group
+                //.ToListAsync();
+
+                //infoList = await _context.ConnectedSocialMediaInfo
+                //   .Where(x => x.UserId == request.userGUId && pageIdof_accountOrGroupId.Contains(x.PageId) && accountOrGroupIds.Contains(x.SocialMediaAccId.ToString()))
+                //   .ToListAsync();
+        infoList = await _context.ConnectedSocialMediaInfo
+   .Where(x => x.UserId == request.userGUId &&
+               pageIdof_accountOrGroupId.Contains(x.PageId) &&
+               socialMediaAccid.Contains(x.SocialMediaAccId.ToString()))
+   .ToListAsync();
+      }
+            else if (string.Equals(request.AccountOrGroupName, "Groups", StringComparison.OrdinalIgnoreCase))
+            {
+
+        //infoList = (from gsm in _context.GroupSocialMedia
+        //            join csi in _context.ConnectedSocialMediaInfo
+        //            on gsm.SocialMediaId equals csi.SocialMediaAccId into csiGroup
+        //            from csi in csiGroup.DefaultIfEmpty() // This handles nulls from the join
+        //            where request.AccountOrGroupId.Contains(gsm.GroupId.ToString())
+        //            //where request.AccountOrGroupId.Contains(gsm.GroupId.ToString()) && csi.SocialMediaAccId == request.socialmediaId
+        //            select new ConnectedSocialMediaInfo
+        //            {
+        //                Id = csi.Id,
+        //                SocialMediaAccId = csi != null ? csi.SocialMediaAccId : 0,  // Handle possible null
+        //                SocialMediaAccName = csi != null ? csi.SocialMediaAccName : string.Empty,
+        //                PageId = csi != null ? csi.PageId : string.Empty,
+        //                PageAccessToken = csi != null ? csi.PageAccessToken : string.Empty
+        //            }).ToList();       
+
+        infoList = await (from gsm in _context.GroupSocialMedia
+                          join g in _context.@group on gsm.GroupId equals g.Id
+                          where g.UserGuid == request.userGUId
+                                && accountOrGroupIds.Contains(gsm.GroupId.ToString())
+                          select new ConnectedSocialMediaInfo
+                          {
+                            Id = gsm.Id,
+                            SocialMediaAccId = gsm.SocialMediaId,
+                            PageId = gsm.PageId,
+                            PageAccessToken = gsm.PageAccessToken
+                          })
+              .ToListAsync();
+
+        //infoList = await (from gsm in _context.GroupSocialMedia                                 
+        //                          join g in _context.@group on gsm.GroupId equals g.Id
+        //                  where g.UserGuid == request.userGUId && request.AccountOrGroupId.Split(',').Select(int.Parse).Contains(gsm.GroupId)
+                         
+        //                          /*where request.userGUId==g.UserGuid && request.AccountOrGroupId.Select(a => a.Id).ToString().Contains(gsm.GroupId.ToString()) */// Assuming you need to check UserGuid as well
+        //                          select new ConnectedSocialMediaInfo
+        //                          {
+        //                              // Populate relevant fields from both tables if needed
+        //                              Id = gsm.Id,// You can add other properties from GroupSocialMedia
+        //                              SocialMediaAccId = gsm.SocialMediaId,
+        //                              //SocialMediaAccName = gsm.SocialMediaAccName,
+        //                              PageId = gsm.PageId,
+        //                              PageAccessToken = gsm.PageAccessToken,
+        //                              // Add more fields if necessary
+        //                          })
+        //              .ToListAsync();
+
+            }
+            else
+            {
+                return BadRequest(new { Message = "Something Went wrong !..." });
+            }
+
+
+
+            //Facebook Upload Logic(if video or image is provided)
+
+            if (request.MediaUrl != null &&infoList.Count > 0)
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+                foreach (var mediaFile in request.MediaUrl)
                 {
-                    var userGroupPost = new UserGroupPosts
-                    {
-                        GroupId = groupId,
-                        PostId = newPost.Id
-                    };
+                    // Combine the path dynamically for each media file
+                    //string filePath2 = Path.Combine(wwwRootPath, "uploads", "thumbnails", mediaFile);
+                    string filePath2 = Path.Combine(wwwRootPath, "uploads", mediaFile);
 
-                    _context.UserGroupPosts.Add(userGroupPost);
+                    IFormFile fullfile = ConvertPathToIFormFile(filePath2);
+
+                    if (fullfile == null)
+                    {
+                        return StatusCode(StatusCodes.Status400BadRequest, $"Invalid file path or file not found: {mediaFile}");
+                    }
+
+                    IFormFile videoFile = null;
+                    IFormFile imageFile = null;
+
+                    // Check the content type of the file
+                    string fileExtension = Path.GetExtension(fullfile.FileName).ToLower();
+
+                    bool isVideo = fileExtension == ".mp4";
+                    bool isImage = fileExtension == ".png" || fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".jfif";
+
+                    if (isVideo)
+                    {
+                        videoFile = fullfile;
+                    }
+                    else if (isImage)
+                    {
+                        imageFile = fullfile;
+                    }
+
+                    // Loop through all the ConnectedSocialMediaInfo records
+                    if (infoList.Any(x => x.SocialMediaAccId == 1))
+                    {
+                        var infolist1 = infoList.Where(x => x.SocialMediaAccId == 1).ToList();
+                        foreach (var info in infolist1)
+                        {
+                            if (info.PageId != null && info.PageAccessToken != null)
+                            {
+                                using (var client = new HttpClient())
+                                {
+                                    // Video upload logic (if video file exists)
+                                    if (videoFile != null && videoFile.Length > 0)
+                                    {
+                                        try
+                                        {
+                                            // Step 1: Start video upload
+                                            var startResponse = await client.PostAsync(
+                                                $"https://graph.facebook.com/v12.0/{info.PageId}/videos?upload_phase=start&file_size={videoFile.Length}&access_token={info.PageAccessToken}",
+                                                null
+                                            );
+
+                                            if (!startResponse.IsSuccessStatusCode)
+                                            {
+                                                var startError = await startResponse.Content.ReadAsStringAsync();
+                                                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to start video upload: " + startError);
+                                            }
+
+                                            var startContent = await startResponse.Content.ReadAsStringAsync();
+                                            dynamic startJson = Newtonsoft.Json.JsonConvert.DeserializeObject(startContent);
+                                            string uploadSessionId = startJson.upload_session_id;
+                                            string videoId = startJson.video_id;
+                                            string startOffset = startJson.start_offset;
+
+                                            // Step 2: Upload video in chunks
+                                            using (var videoStream = videoFile.OpenReadStream())
+                                            {
+                                                byte[] buffer = new byte[1024 * 1024 * 4]; // 4MB chunk size
+                                                int bytesRead;
+                                                while ((bytesRead = await videoStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                                                {
+                                                    using (var content = new MultipartFormDataContent())
+                                                    {
+                                                        content.Add(new StringContent("transfer"), "upload_phase");
+                                                        content.Add(new StringContent(uploadSessionId), "upload_session_id");
+                                                        content.Add(new StringContent(startOffset), "start_offset");
+                                                        content.Add(new ByteArrayContent(buffer, 0, bytesRead), "video_file_chunk", videoFile.FileName);
+
+                                                        var uploadResponse = await client.PostAsync(
+                                                            $"https://graph.facebook.com/v12.0/{info.PageId}/videos?access_token={info.PageAccessToken}",
+                                                            content
+                                                        );
+
+                                                        if (!uploadResponse.IsSuccessStatusCode)
+                                                        {
+                                                            var uploadError = await uploadResponse.Content.ReadAsStringAsync();
+                                                            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload video chunk: " + uploadError);
+                                                        }
+
+                                                        var uploadContent = await uploadResponse.Content.ReadAsStringAsync();
+                                                        dynamic uploadJson = Newtonsoft.Json.JsonConvert.DeserializeObject(uploadContent);
+                                                        startOffset = uploadJson.start_offset;
+                                                    }
+                                                }
+                                            }
+                      string hashtags = string.Join(" ", request.Tags.Select(tag => tag.StartsWith("#") ? tag : $"#{tag}"));
+                      string finalDescription = $"{request.Description} {hashtags}";
+
+                      // Step 3: Finish video upload and publish with description
+                      var finishAndPublishResponse = await client.PostAsync(
+                                                $"https://graph.facebook.com/v12.0/{info.PageId}/videos" +
+                                                $"?upload_phase=finish" +
+                                                $"&upload_session_id={uploadSessionId}" +
+                                                $"&access_token={info.PageAccessToken}" +
+                                                $"&description={Uri.EscapeDataString(finalDescription)}", // Include the description here
+                                                null
+                                            );
+
+                                            if (!finishAndPublishResponse.IsSuccessStatusCode)
+                                            {
+                                                var finishAndPublishError = await finishAndPublishResponse.Content.ReadAsStringAsync();
+                                                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to finish video upload and publish: " + finishAndPublishError);
+                                            }
+
+                                            // Parse the publish response to get the post ID
+                                            var publishContent = await finishAndPublishResponse.Content.ReadAsStringAsync();
+                                            dynamic publishJson = Newtonsoft.Json.JsonConvert.DeserializeObject(publishContent);
+                                            string postId = publishJson.postid;
+
+
+                                            if (string.IsNullOrEmpty(postId))
+                                            {
+                                                // Retrieve video details if postId is not included in finish response
+                                                var videoDetailsResponse = await client.GetAsync(
+                                                    $"https://graph.facebook.com/v12.0/{videoId}?fields=id,post_id&access_token={info.PageAccessToken}"
+                                                );
+
+                                                if (!videoDetailsResponse.IsSuccessStatusCode)
+                                                {
+                                                    var videoDetailsError = await videoDetailsResponse.Content.ReadAsStringAsync();
+                                                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to retrieve video details: " + videoDetailsError);
+                                                }
+
+                                                var videoDetailsContent = await videoDetailsResponse.Content.ReadAsStringAsync();
+                                                dynamic videoDetailsJson = Newtonsoft.Json.JsonConvert.DeserializeObject(videoDetailsContent);
+                                                postId = videoDetailsJson.post_id;
+                                            }
+
+
+                                            // Save the post details to the database
+                                            await SavePostIdToDatabase(postId, info.PageId, info.PageAccessToken, request.userGUId);
+
+                                            //return Ok(new { message = "Video uploaded and published successfully", postId });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred: " + ex.Message);
+                                        }
+                                    }
+
+                                    // Image upload logic (if image file exists)
+                                    if (imageFile != null && imageFile.Length > 0)
+                                    {
+                                        using (var imageStream = imageFile.OpenReadStream())
+                                        {
+                                            byte[] imageBytes;
+                                            using (var ms = new MemoryStream())
+                                            {
+                                                imageStream.CopyTo(ms);
+                                                imageBytes = ms.ToArray();
+                                            }
+
+                                            var imageContent = new MultipartFormDataContent();
+                                            imageContent.Add(new ByteArrayContent(imageBytes), "source", imageFile.FileName);
+                                            //imageContent.Add(new StringContent(request.Description), "caption");
+
+                      // Prepare hashtags and caption
+                      string hashtags = string.Join(" ", request.Tags.Select(tag => tag.StartsWith("#") ? tag : $"#{tag}"));
+                      string finalCaption = $"{request.Description} {hashtags}";
+
+                      // Add caption with hashtags
+                      imageContent.Add(new StringContent(finalCaption), "caption");
+
+                      var imageUploadResponse = await client.PostAsync(
+                                                $"https://graph.facebook.com/v12.0/{info.PageId}/photos?access_token={info.PageAccessToken}",
+                                                imageContent
+                                            );
+
+                                            var publishContent = await imageUploadResponse.Content.ReadAsStringAsync();
+                                            dynamic publishJson = Newtonsoft.Json.JsonConvert.DeserializeObject(publishContent);
+                                            string postId = publishJson.post_id;
+
+                                            if (!imageUploadResponse.IsSuccessStatusCode)
+                                            {
+                                                var imageErrorContent = await imageUploadResponse.Content.ReadAsStringAsync();
+                                                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload image: " + imageErrorContent);
+                                            }
+
+                                            await SavePostIdToDatabase(postId, info.PageId, info.PageAccessToken, request.userGUId);
+
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+                    
+
+
                 }
             }
-            _context.SaveChanges();
-            // Initializing likes, shares, and views with 0 for the new post
-            var postLikes = new PostLikes
+
+
+            else
             {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostLikesCount = 0,
-                CreatedAt= DateTime.UtcNow
+                return StatusCode(StatusCodes.Status400BadRequest, "Invalid request parameters.");
+            }
 
-            };
-            _context.PostLikes.Add(postLikes);
-            _context.SaveChanges();
-            var postShares = new PostShares
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostSharesCount = 0,
-                CreatedAt = DateTime.UtcNow
-            };
 
-            _context.PostShares.Add(postShares);
-            _context.SaveChanges();
 
-            var postViews = new PostViews
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostViewsCount = 0,
-                CreatedAt = DateTime.UtcNow
-            };
 
-            _context.PostViews.Add(postViews);
-            _context.SaveChanges();
-            var userSocialMediaStatus = new UserSocialMediaStatus
-            {
-                SocialMediaId = 1,
-                UserGuid = request.userGUId,
-                Status = 1
-
-            };
-            _context.UserSocialMediaStatus.Add(userSocialMediaStatus);
-            _context.SaveChanges();
 
             // Check if notifications are allowed
             var allowedNotifications = _context.Notification
                 .Where(x => x.UserGuid == request.userGUId && x.Status == true && x.Name == "Remind Before 1 hours")
                 .ToList();
-
+            var Dtoken = _context.NotificationSetting.FirstOrDefault(x => x.UserGUID == request.userGUId);
             if (allowedNotifications.Any()) // If notifications are allowed
             {
-                await SendPostCreationNotification(request.userGUId, request.deviceTokens);
+                await SendPostCreationNotification(request.userGUId, Dtoken.DeviceToken);
             }
 
-            return Ok(new { Message = "Post created successfully" });
+
+            return Ok(new { Message = "Post created and Media Uploaded successfully" });
         }
+
+      
+        // Method to save PostId to database
+        private async Task SavePostIdToDatabase(string postId, string pageId, string pageAccessToken, string userGUId)
+        {
+            var existingPost = await _context.PostIdForSocialMediaPosts
+                .FirstOrDefaultAsync(p => p.PostId == postId && p.PageId == pageId);
+
+            if (existingPost == null)
+            {
+                var PostIdForSocialMediaPosts = new PostIdForSocialMediaPosts
+                {
+                    PostId = postId,
+                    userGUId = userGUId,
+                    PageId = pageId,
+                    PageAccessToken = pageAccessToken,
+                    CreatedOn = DateTime.Now
+                };
+
+                _context.PostIdForSocialMediaPosts.Add(PostIdForSocialMediaPosts);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
+        
+
+
+        [HttpGet("CountByPostId")]
+        public async Task<IActionResult> GetPostMetrics(string userGuid)
+        {
+            if (string.IsNullOrWhiteSpace(userGuid))
+            {
+                return BadRequest("User GUID is required.");
+            }
+
+            // Fetch access token for the given user GUID
+            var userAccessToken = await _context.PostIdForSocialMediaPosts
+                .Where(x => x.userGUId == userGuid)
+                .Select(x => x.PageAccessToken)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrWhiteSpace(userAccessToken))
+            {
+                return NotFound("Access token not found for the specified User GUID.");
+            }
+
+            var postInfo = _context.PostIdForSocialMediaPosts.Where(x => x.userGUId == userGuid).ToList();
+            if (postInfo == null || !postInfo.Any())
+            {
+                return NotFound("No posts found for the specified User GUID.");
+            }
+
+            try
+            {
+                foreach (var post in postInfo)
+                {
+                    string postId = post.PostId;
+
+                    // Save reaction counts
+                    var reactionTypes = new[] { "like", "love", "haha", "wow", "sad", "angry" };
+                    foreach (var type in reactionTypes)
+                    {
+                        var reactionUrl = $"https://graph.facebook.com/v21.0/{postId}/insights?metric=post_reactions_{type}_total&access_token={userAccessToken}";
+                        var reactionCount = await GetMetricCountAsync(reactionUrl) ?? 0;
+
+                        // Save to LikesTable
+                        var likeRecord = new PostLikes
+                        {
+                            PostId = postId,
+                            UserGuid = userGuid,
+                            CreatedAt = DateTime.Now,
+                            ReactionType = type,
+                            PostLikesCount = reactionCount
+                        };
+                        _context.PostLikes.Add(likeRecord);
+                    }
+
+                    // Save share count
+                    var shareUrl = $"https://graph.facebook.com/v17.0/{postId}?fields=shares&access_token={userAccessToken}";
+                    var shareCount = await GetShareCountAsync(shareUrl);
+                    var shareRecord = new PostShares
+                    {
+                        PostId = postId,
+                        UserGuid = userGuid,
+                        CreatedAt = DateTime.Now,
+                        PostSharesCount = shareCount
+                    };
+                    _context.PostShares.Add(shareRecord);
+
+                    // Save view count
+                    var viewsUrl = $"https://graph.facebook.com/v17.0/{postId}/insights?metric=total_video_views&period=lifetime&access_token={userAccessToken}";
+                    var viewCount = await GetMetricCountAsync(viewsUrl) ?? 0;
+                    var viewRecord = new PostViews
+                    {
+                        PostId = postId,
+                        UserGuid = userGuid,
+                        CreatedAt = DateTime.Now,
+                        PostViewsCount = viewCount
+                    };
+                    _context.PostViews.Add(viewRecord);
+                }
+
+                // Save all changes to the database
+                await _context.SaveChangesAsync();
+
+                return Ok("Metrics saved successfully.");
+            }
+            catch (HttpRequestException httpEx)
+            {
+                return StatusCode(500, $"HTTP Request error: {httpEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Unexpected error: {ex.Message}");
+            }
+        }
+
+        // Helper method to fetch metric count
+        private async Task<int?> GetMetricCountAsync(string url)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var json = JsonDocument.Parse(content);
+
+                    if (json.RootElement.TryGetProperty("data", out var dataArray) && dataArray.GetArrayLength() > 0)
+                    {
+                        var dataObject = dataArray[0];
+                        if (dataObject.TryGetProperty("values", out var valuesArray) && valuesArray.GetArrayLength() > 0)
+                        {
+                            var valueObject = valuesArray[0];
+                            if (valueObject.TryGetProperty("value", out var countValue))
+                            {
+                                return countValue.GetInt32();
+                            }
+                        }
+                    }
+                }
+                return 0; // Default to 0 if data is missing
+            }
+            catch
+            {
+                return null; // Return null to indicate failure
+            }
+        }
+
+        // Helper method to fetch share count
+        private async Task<int> GetShareCountAsync(string url)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var json = JsonDocument.Parse(content);
+
+                    if (json.RootElement.TryGetProperty("shares", out var shareElement) &&
+                        shareElement.TryGetProperty("count", out var shareCount))
+                    {
+                        return shareCount.GetInt32();
+                    }
+                }
+                return 0; // Default to 0 if data is missing
+            }
+            catch
+            {
+                return 0; // Default to 0 if request fails
+            }
+        }
+
+
+
+
+        [HttpGet("LinkedInCount")]
+        public async Task<IActionResult> GetLinkedInPostMetadata(string postURN, string accessToken)
+        {
+            if (string.IsNullOrEmpty(postURN))
+            {
+                return BadRequest("Post URN is required.");
+            }
+
+            // Updated endpoint using LinkedIn REST API for social actions
+            string requestUrl = $"https://api.linkedin.com/rest/socialActions/{postURN}";
+
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            client.DefaultRequestHeaders.Add("LinkedIn-Version", "202306");
+
+            try
+            {
+                var response = await client.GetAsync(requestUrl);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, $"Error retrieving data from LinkedIn API: {errorContent}");
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                var metadata = JsonConvert.DeserializeObject<LinkedInPostStatistics>(content);
+
+                return Ok(metadata);
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Request error: {ex.Message}");
+            }
+        }
+
+
+        //[HttpGet("CountByPostId")]
+        //public async Task<IActionResult> GetPostMetrics(string postId, string accessToken)
+        //{
+        //    if (string.IsNullOrWhiteSpace(postId) || string.IsNullOrWhiteSpace(accessToken))
+        //    {
+        //        return BadRequest("Post ID and access token are required.");
+        //    }
+
+        //    try
+        //    {
+        //        // Construct the Graph API URL
+
+        //        var url = $"https://graph.facebook.com/v20.0/{postId}/insights?access_token={accessToken}&period=lifetime&metric=post_reactions_like_total,post_shares";
+        //        var shareUrl = $"https://graph.facebook.com/v20.0/{postId}/insights?access_token={accessToken}&period=lifetime&metric=post_shares";
+        //        var viewsUrl = $"https://graph.facebook.com/v20.0/{postId}/insights?access_token={accessToken}&period=lifetime&metric=video_views";
+
+
+
+        //        var response = await _httpClient.GetAsync(url);
+
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            var result = await response.Content.ReadAsStringAsync();
+        //            return Ok(result); // Return the metrics as JSON response
+        //        }
+        //        else
+        //        {
+        //            var errorContent = await response.Content.ReadAsStringAsync();
+        //            return BadRequest($"Error fetching post metrics: {errorContent}");
+        //        }
+        //    }
+        //    catch (HttpRequestException httpEx)
+        //    {
+        //        return StatusCode(500, $"HTTP Request error: {httpEx.Message}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception if necessary
+        //        return StatusCode(500, $"Unexpected error: {ex.Message}");
+        //    }
+        //}
+
+
+        //public async Task<IActionResult> GetPostEngagement(string pageid)
+        //{
+        //    if (string.IsNullOrEmpty(pageid))
+        //    {
+        //        return BadRequest("Post ID and access token are required.");
+        //    }
+        //    var result = _context.PostIdForSocialMediaPosts.FirstOrDefault(x => x.PageId == pageid);
+
+        //    var engagementStats = GetPostEngagementStatsAsync(result.PostId, result.PageAccessToken);
+        //    return Ok(engagementStats);
+        //}
+
+
+        //private async Task<PostEngagementStats> GetPostEngagementStatsAsync(string postId, string accessToken)
+        //{
+        //    var url = $"https://graph.facebook.com/v12.0/{postId}?fields=likes.summary(true),shares,insights.metric(post_impressions)&access_token={accessToken}";
+
+        //    var response = await _httpClient.GetAsync(url);
+        //    response.EnsureSuccessStatusCode();
+
+        //    var jsonResponse = await response.Content.ReadAsStringAsync();
+
+        //    // Parse the response here
+        //    dynamic data = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonResponse);
+
+        //    var likes = data.likes.summary.total_count;
+        //    var shares = data.shares != null ? data.shares : 0;
+        //    var views = data.insights.data[0].values[0].value; // Assuming `post_impressions` represents views
+
+        //    return new PostEngagementStats
+        //    {
+        //        Likes = likes,
+        //        Shares = shares,
+        //        Views = views
+        //    };
+        //}
+
+
+
 
         private async Task SendPostCreationNotification(string userGuid, string deviceTokens)
         {
@@ -383,7 +895,7 @@ namespace ReactWithASP.Server.Controllers
             {
                 // Log the exception or handle the error appropriately
             }
-        }
+        } 
 
         private async Task SendAndroidNotificationAsync2(string[] deviceTokens, string content, string path)
         {
@@ -446,555 +958,224 @@ namespace ReactWithASP.Server.Controllers
 
 
 
-        /*[HttpPost]
-        [Authorize]
-        public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //[HttpPost("upload")]
+    ///*[Authorize]*/
+    //public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
+    //{
+    //    if (request.MediaFiles == null || request.MediaFiles.Count == 0)
+    //    {
+    //        return BadRequest(new MediaSelectionResponse
+    //        {
+    //            Message = "No media files selected"
+    //        });
+    //    }
+
+    //    var processedFiles = new List<MediaFileResponse>();
+
+    //    foreach (var formFile in request.MediaFiles)
+    //    {
+    //        if (formFile.Length > 0)
+    //        {
+    //            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+    //            if (!Directory.Exists(uploadsFolder))
+    //            {
+    //                Directory.CreateDirectory(uploadsFolder);
+    //            }
+
+    //            var cleanedFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+    //  string originalFileName = cleanedFileName;
+
+    //  // Decode URL-encoded characters
+    //  string decodedFileName = Uri.UnescapeDataString(originalFileName);
+
+    //  // Remove the space represented by "%20"
+    //  string uniqueFileName = decodedFileName.Replace(" ", "");
+    //  //var uniqueFileName = Guid.NewGuid().ToString() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+    //  var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+    //            // Save the uploaded file to the server
+    //            using (var stream = new FileStream(filePath, FileMode.Create))
+    //            {
+    //                await formFile.CopyToAsync(stream);
+    //            }
+
+    //            var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
+    //            if (!Directory.Exists(thumbnailFolder))
+    //            {
+    //                Directory.CreateDirectory(thumbnailFolder);
+    //            }
+
+    //            string thumbnailFileName;
+    //            string thumbnailPath;
+    //            string newFileName;
+    //            var fileUrl ="";
+    //            // Check if the uploaded file is an image or video
+    //            if (formFile.ContentType.StartsWith("image"))
+    //            {
+    //                // Create image thumbnail (use .jpg for image thumbnails)
+    //                thumbnailFileName = "thumb_" + Path.GetFileName(uniqueFileName);
+    //                thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
+
+    //                await GenerateImageThumbnailAsync(filePath, thumbnailPath);
+    //            }
+    //            else if (formFile.ContentType.StartsWith("video"))
+    //            {
+    //                // Create video thumbnail (use .jpg for video thumbnails)
+    //                thumbnailFileName = "thumb_" + Path.GetFileName(uniqueFileName);
+    //                thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
+
+    //                await GenerateVideoThumbnailAsync(filePath, thumbnailPath);
+    //            }
+    //            else
+    //            {
+    //                continue; // Skip unsupported media types
+
+
+    //            }
+
+    //              newFileName = "" + Path.GetFileName(uniqueFileName);
+    //              fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{newFileName}";
+    //              var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
+
+    //            // Processed file response
+    //            processedFiles.Add(new MediaFileResponse
+    //            {
+    //                //FileName = thumbnailFileName,
+    //                FileName = uniqueFileName,
+    //                ImageName = uniqueFileName,
+    //                FilePath = fileUrl,
+    //                ContentType = formFile.ContentType,
+    //                ThumbnailUrl = thumbnailUrl
+    //            });
+    //        }
+    //    }
+
+    //    return Ok(new MediaSelectionResponse
+    //    {
+    //        Message = "Media files uploaded successfully",
+    //        ProcessedMediaFiles = processedFiles
+    //    });
+    //}
+    [HttpPost("upload")]
+    /*[Authorize]*/
+    public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
+    {
+      if (request.MediaFiles == null || request.MediaFiles.Count == 0)
+      {
+        return BadRequest(new MediaSelectionResponse
         {
-            // Validate the request fields first
-            if (string.IsNullOrEmpty(request.userGUId) ||
-                string.IsNullOrEmpty(request.Title) ||
-                string.IsNullOrEmpty(request.Description) ||
-                request.MediaUrl == null ||
-                request.Tags == null || request.Tags.Count == 0 ||
-                string.IsNullOrEmpty(request.AccountOrGroupName) ||
-                request.AccountOrGroupId == null || request.AccountOrGroupId.Count == 0)
-            {
-                return BadRequest(new { Message = "Fields Missing" });
-            }
+          Message = "No media files selected"
+        });
+      }
 
-            var processedFiles = new List<MediaFileResponse>();
-            string postIcon = null;
+      var processedFiles = new List<MediaFileResponse>();
 
-            foreach (var mediaUrl in request.MediaUrl)
-            {
-                if (mediaUrl.Length > 0)
-                {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + mediaUrl.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await mediaUrl.CopyToAsync(stream);
-                    }
-
-                    var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-                    if (!Directory.Exists(thumbnailFolder))
-                    {
-                        Directory.CreateDirectory(thumbnailFolder);
-                    }
-
-                    var thumbnailFileName = "thumb_" + Path.GetFileNameWithoutExtension(uniqueFileName) + ".jpg";
-                    var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-
-                    if (mediaUrl.ContentType.StartsWith("image"))
-                    {
-                        await GenerateImageThumbnailAsync(filePath, thumbnailPath);
-                    }
-                    else if (mediaUrl.ContentType.StartsWith("video"))
-                    {
-                        await GenerateVideoThumbnailAsync(filePath, thumbnailPath);
-                    }
-
-                    var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-                    var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-                    processedFiles.Add(new MediaFileResponse
-                    {
-                        FileName = thumbnailFileName,
-                        FilePath = filePath,
-                        ContentType = mediaUrl.ContentType,
-                        ThumbnailUrl = thumbnailUrl
-                    });
-
-                    // Use the first thumbnail as the post icon
-                    if (postIcon == null)
-                    {
-                        postIcon = thumbnailFileName;
-                    }
-                }
-            }
-
-            var newPost = new SocialMediaPosts
-            {
-                UserGuid = request.userGUId,
-                Title = request.Title,
-                Description = request.Description,
-                CreatedAt = DateTime.UtcNow,
-                Status = "Published",
-                AccountOrGroupName = request.AccountOrGroupName,
-                AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
-                PostIcon = postIcon // Store the first thumbnail name
-            };
-
-            _context.SocialMediaPosts.Add(newPost);
-            await _context.SaveChangesAsync();
-
-            foreach (var accountId in request.AccountOrGroupId)
-            {
-                if (int.TryParse(accountId, out int groupId))
-                {
-                    var userGroupPost = new UserGroupPosts
-                    {
-                        GroupId = groupId,
-                        PostId = newPost.Id
-                    };
-
-                    _context.UserGroupPosts.Add(userGroupPost);
-                }
-            }
-            await _context.SaveChangesAsync();
-
-            // Initializing likes, shares, and views with 0 for the new post
-            var postLikes = new PostLikes
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostLikesCount = 0
-            };
-            _context.PostLikes.Add(postLikes);
-
-            var postShares = new PostShares
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostSharesCount = 0
-            };
-            _context.PostShares.Add(postShares);
-
-            var postViews = new PostViews
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostViewsCount = 0
-            };
-            _context.PostViews.Add(postViews);
-
-            var userSocialMediaStatus = new UserSocialMediaStatus
-            {
-                SocialMediaId = 1,
-                UserGuid = request.userGUId,
-                Status = 1
-            };
-            _context.UserSocialMediaStatus.Add(userSocialMediaStatus);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = "Post created successfully" });
-        }*/
-
-
-
-        //[HttpPost("CreatePost")]
-        //[Authorize]
-        //public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (request.MediaFiles == null || request.MediaFiles.Count == 0)
-        //    {
-        //        return BadRequest(new CreatePostResponse
-        //        {
-        //            Message = "No media files selected"
-        //        });
-        //    }
-
-        //    var processedFiles = new List<MediaFileResponse>();
-        //    string postIcon = null;
-
-        //    foreach (var formFile in request.MediaFiles)
-        //    {
-        //        if (formFile.Length > 0)
-        //        {
-        //            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-        //            if (!Directory.Exists(uploadsFolder))
-        //            {
-        //                Directory.CreateDirectory(uploadsFolder);
-        //            }
-
-        //            var uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-        //            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-        //            using (var stream = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                await formFile.CopyToAsync(stream);
-        //            }
-
-        //            var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-        //            if (!Directory.Exists(thumbnailFolder))
-        //            {
-        //                Directory.CreateDirectory(thumbnailFolder);
-        //            }
-
-        //            var thumbnailFileName = "thumb_" + Path.GetFileNameWithoutExtension(uniqueFileName) + ".jpg";
-        //            var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-
-        //            if (formFile.ContentType.StartsWith("image"))
-        //            {
-        //                await GenerateImageThumbnailAsync(filePath, thumbnailPath);
-        //            }
-        //            else if (formFile.ContentType.StartsWith("video"))
-        //            {
-        //                await GenerateVideoThumbnailAsync(filePath, thumbnailPath);
-        //            }
-
-        //            var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-        //            var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-        //            processedFiles.Add(new MediaFileResponse
-        //            {
-        //                FileName = thumbnailFileName,
-        //                FilePath = filePath,
-        //                ContentType = formFile.ContentType,
-        //                ThumbnailUrl = thumbnailUrl
-        //            });
-
-        //            // Store the thumbnail name in postIcon (assuming the first file's thumbnail is used)
-        //            if (postIcon == null)
-        //            {
-        //                postIcon = thumbnailFileName;
-        //            }
-        //        }
-        //    }
-
-        //    // Save the post with the postIcon and other properties
-        //    var newPost = new SocialMediaPosts
-        //    {
-        //        UserGuid = request.userGUId,
-        //        Title = request.Title,
-        //        Description = request.Description,
-        //        PostIcon = postIcon,
-        //        //MediaUrl = request.MediaUrl,
-        //        Tags = request.Tags,
-        //        AccountOrGroupName = request.AccountOrGroupName,
-        //        AccountOrGroupId = request.AccountOrGroupId,
-        //        // Add other properties as needed
-        //    };
-
-        //    _dbContext.Posts.Add(newPost);
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new CreatePostResponse
-        //    {
-        //        Message = "Post created successfully",
-        //        PostId = newPost.Id,
-        //        ProcessedMediaFiles = processedFiles
-        //    });
-        //}
-
-
-
-        /*[HttpPost("CreatePost")]
-        public async Task<IActionResult> CreatePost([FromForm] CreatePostRequest request)
+      foreach (var formFile in request.MediaFiles)
+      {
+        if (formFile.Length > 0)
         {
-            if (string.IsNullOrEmpty(request.userGUId) ||
-                string.IsNullOrEmpty(request.Title) ||
-                string.IsNullOrEmpty(request.Description) ||
-                request.MediaUrl == null || request.MediaUrl.Count == 0 ||
-                request.Tags == null || request.Tags.Count == 0 ||
-                string.IsNullOrEmpty(request.AccountOrGroupName) ||
-                request.AccountOrGroupId == null || request.AccountOrGroupId.Count == 0)
-            {
-                return BadRequest(new { Message = "Fields Missing" });
-            }
+          var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+          if (!Directory.Exists(uploadsFolder))
+          {
+            Directory.CreateDirectory(uploadsFolder);
+          }
 
-            var mediaUrls = new List<string>();
-            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+          var cleanedFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
+          string originalFileName = cleanedFileName;
 
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
+          // Decode URL-encoded characters
+          string decodedFileName = Uri.UnescapeDataString(originalFileName);
 
-            foreach (var file in request.MediaUrl)
-            {
-                if (file.Length > 0)
-                {
-                    var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-                    var filePath = Path.Combine(uploadPath, fileName);
+          // Remove the space represented by "%20"
+          string uniqueFileName = decodedFileName.Replace(" ", "");
+          //var uniqueFileName = Guid.NewGuid().ToString() + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss");
+          var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
+          // Save the uploaded file to the server
+          using (var stream = new FileStream(filePath, FileMode.Create))
+          {
+            await formFile.CopyToAsync(stream);
+          }
 
-                    var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
-                    mediaUrls.Add(fileUrl);
-                }
-            }
+          var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
+          if (!Directory.Exists(thumbnailFolder))
+          {
+            Directory.CreateDirectory(thumbnailFolder);
+          }
 
-            var newPost = new SocialMediaPosts
-            {
-                UserGuid = request.userGUId,
-                Title = request.Title,
-                Description = request.Description,
-                CreatedAt = DateTime.UtcNow,
-                Status = "Published",
-                AccountOrGroupName = request.AccountOrGroupName,
-                AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
-                PostIcon = JsonConvert.SerializeObject(mediaUrls),
-            };
+          string thumbnailFileName;
+          string thumbnailPath;
+          string newFileName;
+          var fileUrl = "";
+          // Check if the uploaded file is an image or video
+          if (formFile.ContentType.StartsWith("image"))
+          {
+            // Create image thumbnail (use .jpg for image thumbnails)
+            thumbnailFileName = "thumb_" + Path.GetFileName(uniqueFileName);
+            thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
 
-            _context.SocialMediaPosts.Add(newPost);
-            await _context.SaveChangesAsync();
+            await GenerateImageThumbnailAsync(filePath, thumbnailPath);
+          }
+          else if (formFile.ContentType.StartsWith("video"))
+          {
+            // Change the thumbnail file extension to .jpg
+            var baseName = Path.GetFileNameWithoutExtension(uniqueFileName); // remove .mp4 or any extension
+            thumbnailFileName = "thumb_" + baseName + ".jpg"; // now it's thumb_filename.jpg
+            thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
 
-            foreach (var accountId in request.AccountOrGroupId)
-            {
-                if (int.TryParse(accountId, out int groupId))
-                {
-                    var userGroupPost = new UserGroupPosts
-                    {
-                        GroupId = groupId,
-                        PostId = newPost.Id
-                    };
-
-                    _context.UserGroupPosts.Add(userGroupPost);
-                }
-            }
-            await _context.SaveChangesAsync();
-
-            var postLikes = new PostLikes
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostLikesCount = 0
-            };
-            _context.PostLikes.Add(postLikes);
-
-            var postShares = new PostShares
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostSharesCount = 0
-            };
-            _context.PostShares.Add(postShares);
-
-            var postViews = new PostViews
-            {
-                PostId = newPost.Id,
-                UserGuid = request.userGUId,
-                PostViewsCount = 0
-            };
-            _context.PostViews.Add(postViews);
-
-            var userSocialMediaStatus = new UserSocialMediaStatus
-            {
-                SocialMediaId = 1,
-                UserGuid = request.userGUId,
-                Status = 1
-            };
-            _context.UserSocialMediaStatus.Add(userSocialMediaStatus);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = "Post created successfully" });
-        }*/
+            await GenerateVideoThumbnailAsync(filePath, thumbnailPath);
+          }
+          else
+          {
+            continue; // Skip unsupported media types
 
 
+          }
 
+          newFileName = "" + Path.GetFileName(uniqueFileName);
+          fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{newFileName}";
+          var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
 
-
-
-
-        /*[HttpPost("upload")]
-        [Authorize]
-        public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
-        {
-            if (request.MediaFiles == null || request.MediaFiles.Count == 0)
-            {
-                return BadRequest(new MediaSelectionResponse
-                {
-                    Message = "No media files selected"
-                });
-            }
-
-            var processedFiles = new List<MediaFileResponse>();
-
-            foreach (var formFile in request.MediaFiles)
-            {
-                if (formFile.Length > 0)
-                {
-                    var filePath = Path.Combine("Uploads", formFile.FileName);
-
-                    // Ensure the upload directory exists
-                    if (!Directory.Exists("Uploads"))
-                    {
-                        Directory.CreateDirectory("Uploads");
-                    }
-
-                    // Save the file to the server
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-
-                    // Add file details to the response
-                    processedFiles.Add(new MediaFileResponse
-                    {
-                        FileName = formFile.FileName,
-                        FilePath = filePath,
-                        ContentType = formFile.ContentType
-                    });
-                }
-            }
-
-            return Ok(new MediaSelectionResponse
-            {
-                Message = "Media files uploaded successfully",
-                ProcessedMediaFiles = processedFiles
-            });
-        }*/
-
-        /* [HttpPost("upload")]
-         [Authorize]
-         public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
-         {
-             if (request.MediaFiles == null || request.MediaFiles.Count == 0)
-             {
-                 return BadRequest(new MediaSelectionResponse
-                 {
-                     Message = "No media files selected"
-                 });
-             }
-
-             var processedFiles = new List<MediaFileResponse>();
-
-             foreach (var formFile in request.MediaFiles)
-             {
-                 if (formFile.Length > 0)
-                 {
-                     var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                     if (!Directory.Exists(uploadsFolder))
-                     {
-                         Directory.CreateDirectory(uploadsFolder);
-                     }
-
-                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                     using (var stream = new FileStream(filePath, FileMode.Create))
-                     {
-                         await formFile.CopyToAsync(stream);
-                     }
-
-                     var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-                     if (!Directory.Exists(thumbnailFolder))
-                     {
-                         Directory.CreateDirectory(thumbnailFolder);
-                     }
-
-                     var thumbnailFileName = "thumb_" + uniqueFileName;
-                     var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-                     await GenerateThumbnailAsync(filePath, thumbnailPath);
-
-                     var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-                     var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-                     processedFiles.Add(new MediaFileResponse
-                     {
-                         FileName = uniqueFileName,
-                         FilePath = filePath,
-                         ContentType = formFile.ContentType,
-                         ThumbnailUrl = thumbnailUrl
-                     });
-                 }
-             }
-
-             return Ok(new MediaSelectionResponse
-             {
-                 Message = "Media files uploaded successfully",
-                 ProcessedMediaFiles = processedFiles
-             });
-         }
- */
-
-        /*[HttpPost("upload")]
-        [Authorize]
-        public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
-        {
-            if (request.MediaFiles == null || request.MediaFiles.Count == 0)
-            {
-                return BadRequest(new MediaSelectionResponse
-                {
-                    Message = "No media files selected"
-                });
-            }
-
-
-            var processedFiles = new List<MediaFileResponse>();
-
-            foreach (var formFile in request.MediaFiles)
-            {
-                if (formFile.Length > 0)
-                {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-
-                    var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-                    if (!Directory.Exists(thumbnailFolder))
-                    {
-                        Directory.CreateDirectory(thumbnailFolder);
-                    }
-
-
-                    var thumbnailFileName = "thumb_" + Path.GetFileNameWithoutExtension(uniqueFileName) + ".jpg";
-                    var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-
-                    using (var stream = new FileStream(thumbnailPath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-
-                    if (formFile.ContentType.StartsWith("image"))
-                    {
-                        GenerateImageThumbnailAsync(filePath, thumbnailPath);
-                    }
-                    else if (formFile.ContentType.StartsWith("video"))
-                    {
-
-                        GenerateVideoThumbnailAsync(filePath, thumbnailPath);
-                    }
-
-                    var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-                    var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-                    processedFiles.Add(new MediaFileResponse
-                    {
-                        FileName = uniqueFileName,
-                        FilePath = filePath,
-                        ContentType = formFile.ContentType,
-                        ThumbnailUrl = thumbnailUrl
-                    });
-                }
-            }
-
-            return Ok(new MediaSelectionResponse
-            {
-                Message = "Media files uploaded successfully",
-                ProcessedMediaFiles = processedFiles
-            });
+          // Processed file response
+          processedFiles.Add(new MediaFileResponse
+          {
+            //FileName = thumbnailFileName,
+            FileName = uniqueFileName,
+            ImageName = uniqueFileName,
+            FilePath = fileUrl,
+            ContentType = formFile.ContentType,
+            ThumbnailUrl = thumbnailUrl
+          });
         }
+      }
 
-        private async Task GenerateImageThumbnailAsync(string imagePath, string thumbnailPath)
+      return Ok(new MediaSelectionResponse
+      {
+        Message = "Media files uploaded successfully",
+        ProcessedMediaFiles = processedFiles
+      });
+    }
+
+    private async Task GenerateImageThumbnailAsync(string imagePath, string thumbnailPath)
         {
             using (var image = SixLabors.ImageSharp.Image.Load(imagePath))
             {
@@ -1006,159 +1187,20 @@ namespace ReactWithASP.Server.Controllers
                 await image.SaveAsync(thumbnailPath);
             }
         }
-
         private async Task GenerateVideoThumbnailAsync(string videoPath, string thumbnailPath)
         {
-            try
-            {
+      try
+      {
+        var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
+        ffMpeg.GetVideoThumbnail(videoPath, thumbnailPath, 1); // Saves to .jpg or .png based on thumbnailPath extension
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"Error generating video thumbnail: {ex.Message}");
+        throw;
+      }
+    }
 
-                FFmpeg.SetExecutablesPath(Path.Combine(_webHostEnvironment.WebRootPath, "ffmpeg", "bin"));
-                var conversion = await FFmpeg.Conversions.FromSnippet.Snapshot(videoPath, thumbnailPath, TimeSpan.FromSeconds(1));
-                await conversion.Start();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            try
-            {
-                // Extract a frame from the video and save it as an image
-                IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(videoPath);
-                IConversion conversion = FFmpeg.Conversions.New()
-                    .AddStream(mediaInfo.VideoStreams.First())
-                    .SetSeek(TimeSpan.FromSeconds(1))
-                    .AddParameter("-vframes 1") // Extract only one frame
-                    .SetOutput(thumbnailPath);
-                await conversion.Start();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-        }*/
-
-
-        /*public async Task<string> GenerateThumbnailAsync(string imagePath, string thumbnailPath)
-        {
-            using (ImageSharp.Image image = await ImageSharp.Image.LoadAsync(imagePath))
-            {
-                image.Mutate(x => x.Resize(new ImageSharp.Processing.ResizeOptions
-                {
-                    Mode = ImageSharp.Processing.ResizeMode.Crop,
-                    Size = new ImageSharp.Size(100, 100) // Set your desired thumbnail size here
-                }));
-
-                await image.SaveAsync(thumbnailPath, new JpegEncoder()); // Save as JPEG or any format you prefer
-            }
-
-            return thumbnailPath;
-        }*/
-
-
-        [HttpPost("upload")]
-        /*[Authorize]*/
-        public async Task<IActionResult> UploadMedia([FromForm] MediaSelectionRequest request)
-        {
-            if (request.MediaFiles == null || request.MediaFiles.Count == 0)
-            {
-                return BadRequest(new MediaSelectionResponse
-                {
-                    Message = "No media files selected"
-                });
-            }
-
-            var processedFiles = new List<MediaFileResponse>();
-
-            foreach (var formFile in request.MediaFiles)
-            {
-                if (formFile.Length > 0)
-                {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-                    if (!Directory.Exists(uploadsFolder))
-                    {
-                        Directory.CreateDirectory(uploadsFolder);
-                    }
-
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + formFile.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream)
-        ;
-                    }
-
-                    var thumbnailFolder = Path.Combine(uploadsFolder, "thumbnails");
-                    if (!Directory.Exists(thumbnailFolder))
-                    {
-                        Directory.CreateDirectory(thumbnailFolder);
-                    }
-
-                    var thumbnailFileName = "thumb_" + Path.GetFileNameWithoutExtension(uniqueFileName) + ".jpg";
-                    var thumbnailPath = Path.Combine(thumbnailFolder, thumbnailFileName);
-
-                    if (formFile.ContentType.StartsWith("image"))
-                    {
-                        await GenerateImageThumbnailAsync(filePath, thumbnailPath);
-                    }
-                    else if (formFile.ContentType.StartsWith("video"))
-                    {
-                        GenerateVideoThumbnailAsync(filePath, thumbnailPath);
-                    }
-
-                    var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{uniqueFileName}";
-                    var thumbnailUrl = $"{Request.Scheme}://{Request.Host}/uploads/thumbnails/{thumbnailFileName}";
-
-                    //processedFiles.Add(new MediaFileResponse
-                    //{
-                    //    FileName = uniqueFileName,
-                    //    FilePath = filePath,
-                    //    ContentType = formFile.ContentType,
-                    //    ThumbnailUrl = thumbnailUrl
-                    //});
-                    processedFiles.Add(new MediaFileResponse
-                    {
-                        FileName = thumbnailFileName,
-                        FilePath = filePath,
-                        ContentType = formFile.ContentType,
-                        ThumbnailUrl = thumbnailUrl
-                    });
-                }
-            }
-
-            return Ok(new MediaSelectionResponse
-            {
-                Message = "Media files uploaded successfully",
-                ProcessedMediaFiles = processedFiles
-            });
-        }
-        private async Task GenerateImageThumbnailAsync(string imagePath, string thumbnailPath)
-        {
-            using (var image = SixLabors.ImageSharp.Image.Load(imagePath))
-            {
-                image.Mutate(x => x.Resize(new ResizeOptions
-                {
-                    Mode = ResizeMode.Crop,
-                    Size = new Size(150, 150)
-                }));
-                await image.SaveAsync(thumbnailPath);
-            }
-        }
-
-        private async Task GenerateVideoThumbnailAsync(string videoPath, string thumbnailPath)
-        {
-            try
-            {
-                var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                ffMpeg.GetVideoThumbnail(videoPath, thumbnailPath, 1); // Capture frame at 1 second
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error generating video thumbnail: {ex.Message}");
-                throw;
-            }
-        }
 
 
         //[HttpPost("CreateHashtags")]
@@ -1183,12 +1225,12 @@ namespace ReactWithASP.Server.Controllers
 
 
         [HttpPost("CreateHashtagGroup")]
-        [Authorize]
+        //[Authorize]
         public IActionResult CreateHashtagGroup([FromBody] CreateHashtagGroupRequest request)
         {
-            if (string.IsNullOrEmpty(request.userGUId) ||
-                string.IsNullOrEmpty(request.HashtagGroupName) ||
-                request.Hashtags == null || request.Hashtags.Count == 0)
+            if (string.IsNullOrEmpty(request.userGUId) || request.userGUId.Trim().Equals("string", StringComparison.OrdinalIgnoreCase)||
+                string.IsNullOrEmpty(request.name) || request.name.Trim().Equals("string", StringComparison.OrdinalIgnoreCase)||
+               request.Hashtags.Any(h => h.Trim().Equals("string", StringComparison.OrdinalIgnoreCase))|| request.Hashtags == null || request.Hashtags.Count == 0)
             {
                 return BadRequest(new CreateHashtagGroupResponse
                 {
@@ -1199,7 +1241,7 @@ namespace ReactWithASP.Server.Controllers
             var hashtagGroup = new HashtagGroup
             {
                 UserGuid = request.userGUId,
-                HashtagGroupName = request.HashtagGroupName,
+                name = request.name,
                 CreatedOn = DateTime.UtcNow,
             };
 
@@ -1215,7 +1257,7 @@ namespace ReactWithASP.Server.Controllers
                     UserGuid = request.userGUId,
                     HashtagGroupId = hashtagGroupId,
                     HashtagName = item,
-                    HashtagCount =1000,
+                    HashtagCount = request.Hashtags.Count,
                     CreatedOn = DateTime.UtcNow,
                 };
 
@@ -1240,12 +1282,13 @@ namespace ReactWithASP.Server.Controllers
 
             var response = _context.HashtagGroup
                 .Where(htg => htg.UserGuid == userguid)
-                .GroupBy(htg => new { htg.Id, htg.HashtagGroupName, htg.CreatedOn })
+                .GroupBy(htg => new { htg.Id, htg.name, htg.CreatedOn })
                 .Select(group => new
                 {
-                    HashtagGroupName = group.Key.HashtagGroupName,
+                 Id =group.Key.Id,
+                    name = group.Key.name,
                     Titles = string.Join(", ", group.SelectMany(g => _context.Hashtag.Where(tg => tg.HashtagGroupId == group.Key.Id).Select(tg => tg.HashtagName))),
-                    CreatedOn = group.Key.CreatedOn
+                    CreatedOn = group.Key.CreatedOn,
                 })
                 .ToList();
 
@@ -1256,10 +1299,10 @@ namespace ReactWithASP.Server.Controllers
         public IActionResult AllHashtagGroupDetails()
         {
             var response = _context.HashtagGroup
-                .GroupBy(htg => new { htg.Id, htg.HashtagGroupName, htg.CreatedOn })
+                .GroupBy(htg => new { htg.Id, htg.name, htg.CreatedOn })
                 .Select(group => new
                 {
-                    HashtagGroupName = group.Key.HashtagGroupName,
+                    name = group.Key.name,
                     Titles = string.Join(", ", group.SelectMany(g => _context.Hashtag.Where(tg => tg.HashtagGroupId == group.Key.Id).Select(tg => tg.HashtagName))),
                     CreatedOn = group.Key.CreatedOn
                 })
@@ -1268,23 +1311,100 @@ namespace ReactWithASP.Server.Controllers
             return Ok(response);
         }
 
+        //[HttpGet("GetAllHashtagDetails")]
+        //public IActionResult GetAllHashtagDetails()
+        //{
+        //    var response = _context.Hashtag
+        //        .GroupBy(htg => new { htg.Id,htg.UserGuid, htg.HashtagName, htg.CreatedOn,htg.HashtagCount })
+        //        .Select(group => new
+        //        {
+        //            userid = group.Key.UserGuid,
+        //            HashtagName = group.Key.HashtagName,
+        //            CreatedOn = group.Key.CreatedOn,
+        //            HashtagCount= group.Key.HashtagCount
+
+        //        })
+        //        .ToList();
+
+        //    return Ok(response);
+        //}
+
         [HttpGet("GetAllHashtagDetails")]
-        public IActionResult GetAllHashtagDetails()
+        public IActionResult GetAllHashtagDetails(int pageNumber = 1, int pageSize = 10)
         {
+            // Ensure pageNumber and pageSize have valid values
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            // Calculate the number of records to skip based on the current page
+            var skip = (pageNumber - 1) * pageSize;
+
+            var totalRecords = _context.Hashtag.Count(); // Total records count for pagination metadata
+
             var response = _context.Hashtag
-                .GroupBy(htg => new { htg.Id,htg.UserGuid, htg.HashtagName, htg.CreatedOn,htg.HashtagCount })
+                .GroupBy(htg => new { htg.Id, htg.UserGuid, htg.HashtagName, htg.CreatedOn, htg.HashtagCount })
                 .Select(group => new
                 {
                     userid = group.Key.UserGuid,
                     HashtagName = group.Key.HashtagName,
                     CreatedOn = group.Key.CreatedOn,
-                    HashtagCount= group.Key.HashtagCount
-
+                    HashtagCount = group.Key.HashtagCount
                 })
+                .Skip(skip)  // Skip the records based on the page number
+                .Take(pageSize)  // Take the number of records for the current page
                 .ToList();
 
-            return Ok(response);
+            // Return the paginated result along with the pagination metadata
+            var paginationMetadata = new
+            {
+                TotalRecords = totalRecords,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize)
+            };
+
+            return Ok(new { Data = response, Pagination = paginationMetadata });
         }
+
+        [HttpGet("GetAllHashtagDetailsforAdmin")]
+        public IActionResult GetAllHashtagDetailsforAdmin(int pageNumber = 1, int pageSize = 10)
+        {
+            // Ensure pageNumber and pageSize have valid values
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 10;
+
+            // Calculate the number of records to skip based on the current page
+            var skip = (pageNumber - 1) * pageSize;
+
+            var totalRecords = _context.Hashtag.Count(); // Total records count for pagination metadata
+
+            var response = _context.Hashtag
+                .GroupBy(htg => new { htg.Id, htg.UserGuid, htg.HashtagName, htg.CreatedOn, htg.HashtagCount })
+                .Select(group => new
+                {
+                    id=group.Key.Id,
+                    userid = group.Key.UserGuid,
+                    HashtagName = group.Key.HashtagName,
+                    CreatedOn = group.Key.CreatedOn,
+                    HashtagCount = group.Key.HashtagCount
+                })
+                .Skip(skip)  // Skip the records based on the page number
+                .Take(pageSize)  // Take the number of records for the current page
+                .ToList();
+
+            // Return the paginated result along with the pagination metadata
+            var paginationMetadata = new
+            {
+                TotalRecords = totalRecords,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize)
+            };
+
+            return Ok(new { Data = response, Pagination = paginationMetadata });
+        }
+
+
 
         [HttpGet("GetHashtagDetailsbyID")]
         public IActionResult GetHashtagDetailsbyID(string userguid, int id)
@@ -1306,6 +1426,32 @@ namespace ReactWithASP.Server.Controllers
 
                 })
                 .ToList();
+
+            return Ok(response);
+        }
+
+       
+        [HttpGet("GetHashtagDetailsbyIDForAdmin")]
+        public IActionResult GetHashtagDetailsbyIDForAdmin(int id)
+        {
+            if (id == null)
+            {
+                return BadRequest(new { Message = "ID is required." });
+            }
+
+            var response = _context.Hashtag
+               .Where(htg => htg.Id == id)
+               .GroupBy(htg => new { htg.Id, htg.UserGuid, htg.HashtagName, htg.CreatedOn, htg.HashtagCount })
+               .Select(group => new
+               {
+                   id = group.Key.Id,
+                   userid = group.Key.UserGuid,
+                   HashtagName = group.Key.HashtagName,
+                   CreatedOn = group.Key.CreatedOn,
+                   HashtagCount = group.Key.HashtagCount
+
+               })
+               .ToList();
 
             return Ok(response);
         }
@@ -1353,15 +1499,14 @@ namespace ReactWithASP.Server.Controllers
         public IActionResult UpdateHashtagGroup([FromBody] UpdateHashtagGroupRequest request)
         {
             if (string.IsNullOrEmpty(request.userGUId) ||
-                string.IsNullOrEmpty(request.HashtagGroupName) ||
+                string.IsNullOrEmpty(request.name) ||
                 request.Hashtags == null || request.Hashtags.Count == 0)
             {
                 return BadRequest(new { Message = "Fields Missing" });
             }
 
             // Find the existing HashtagGroup
-            var hashtagGroup = _context.HashtagGroup
-                                       .FirstOrDefault(hg => hg.UserGuid == request.userGUId && hg.Id==request.GroupId);
+            var hashtagGroup = _context.HashtagGroup .FirstOrDefault(hg => hg.UserGuid == request.userGUId && hg.Id==request.Id);
 
             if (hashtagGroup == null)
             {
@@ -1369,28 +1514,29 @@ namespace ReactWithASP.Server.Controllers
             }
 
             // Update HashtagGroup details
-            hashtagGroup.HashtagGroupName = request.HashtagGroupName;
-            hashtagGroup.CreatedOn = DateTime.UtcNow;
+            hashtagGroup.name = request.name;        
+            hashtagGroup.ModifiedOn = DateTime.UtcNow;
 
             // Remove existing Hashtags associated with the HashtagGroup
             var existingHashtags = _context.Hashtag
                                            .Where(h => h.HashtagGroupId == hashtagGroup.Id)
                                            .ToList();
+      _context.Hashtag.RemoveRange(existingHashtags);
+      //_context.Hashtag.RemoveRange(existingHashtags);
 
-            _context.Hashtag.RemoveRange(existingHashtags);
-
-            // Add the new Hashtags
-            foreach (var item in request.Hashtags)
+      // Add the new Hashtags
+      foreach (var item in request.Hashtags)
             {
                 var hashtag = new Hashtag
                 {
                     HashtagGroupId = hashtagGroup.Id,
                     HashtagName = item,
-                    CreatedOn = DateTime.UtcNow,
+                    HashtagCount = 1,
+                    ModifiedOn = DateTime.Now,
                 };
 
-                _context.Hashtag.Add(hashtag);
-            }
+        _context.Hashtag.Add(hashtag);
+      }
 
             // Save all changes
             _context.SaveChanges();
@@ -1399,58 +1545,6 @@ namespace ReactWithASP.Server.Controllers
         }
 
 
-        /*[HttpPost("ScheduledPosts")]
-        public IActionResult ScheduledPosts([FromBody] CreateScheduledPostRequest request)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var user = _context.Users
-                    .FirstOrDefault(x => x.Id == request.UserGuid);
-                if (user == null)
-                {
-                    return NotFound("User not found");
-                }
-
-                ScheduledPost res = new ScheduledPost
-                {
-                    UserGuid = request.UserGuid,
-                    ScheduledType = request.ScheduledType == "1" ? "OneTime" :
-                                    request.ScheduledType == "2" ? "Weekly" :
-                                    request.ScheduledType == "3" ? "Monthly" : " ",
-                    Days = request.Days != null ? string.Join(",", request.Days) : null,
-                    Months = request.Months != null ? string.Join(",", request.Months) : null,
-                    ScheduledTime = request.ScheduledTime,
-                    ScheduledDate = request.ScheduledDate != null ? string.Join(",", request.ScheduledDate) : null,
-                    FromDate = !string.IsNullOrEmpty(request.FromDate) ? request.FromDate : null,
-                    ToDate = !string.IsNullOrEmpty(request.ToDate) ? request.ToDate : null,
-                    IsPublished = request.IsPublished
-                };
-
-                _context.ScheduledPost.Add(res);
-                _context.SaveChanges();
-
-                return Ok(new
-                {
-                    Status = "True",
-                    Message = "Post Scheduled successfully",
-                    Data = res
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Status = "False",
-                    Message = "An error occurred while scheduling the post",
-                    Error = ex.Message
-                });
-            }
-        }*/
 
         [HttpPost("ScheduledPosts")]
         public async Task<IActionResult> ScheduledPosts([FromBody] CreateScheduledPostRequest request)
@@ -1463,18 +1557,65 @@ namespace ReactWithASP.Server.Controllers
                 }
 
                 var user = _context.Users.FirstOrDefault(x => x.Id == request.UserGuid);
-                var postdetails = _context.SocialMediaPosts.FirstOrDefault(x => x.UserGuid == request.UserGuid);
                 if (user == null)
                 {
                     return NotFound("User not found");
                 }
 
-                ScheduledPost res = new ScheduledPost
+                var domain = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
+
+                // Directory to check for existing thumbnails
+                var thumbnailFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+
+                // Prepare a list to hold the URLs of existing images
+                var savedUrls = new List<string>();
+
+                // Step 1: Check each media URL
+                foreach (var mediaUrl in request.MediaUrl)
+                {
+                    var fileName = Path.GetFileName(mediaUrl);
+                    var thumbnailPath = Path.Combine(thumbnailFolder, fileName);
+
+                    if (System.IO.File.Exists(thumbnailPath))
+                    {
+                        var fileUrl = $"{domain}/uploads/{fileName}";
+                        savedUrls.Add(fileUrl);
+                    }
+                }
+
+                if (savedUrls.Count == 0)
+                {
+                    return Ok(new
+                    {
+                        Status = "false",
+                        Message = "Image Url Not found!",
+                    });
+                }
+        List<string> groupIds = request.AccountOrGroupName == "Groups"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.Id) ? a.Id : "").ToList()
+: new List<string>();
+
+
+        List<string> accountpageIds = request.AccountOrGroupName == "Accounts"
+  ? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.PageId) ? a.PageId : "").ToList()
+  : new List<string>();
+
+        List<string> accountIds = request.AccountOrGroupName == "Accounts"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.accountId) ? a.accountId : "").ToList()
+: new List<string>();
+        var groupPageIds = await (from gsm in _context.GroupSocialMedia
+                                  join g in _context.@group on gsm.GroupId equals g.Id
+                                  where g.UserGuid == request.UserGuid
+                                        && groupIds.Contains(gsm.GroupId.ToString())
+                                  select gsm.PageId)
+                              .ToListAsync();
+        // Create the ScheduledPost entity
+        ScheduledPost res = new ScheduledPost
                 {
                     UserGuid = request.UserGuid,
                     ScheduledType = request.ScheduledType == "1" ? "OneTime" :
-                                    request.ScheduledType == "2" ? "Weekly" :
-                                    request.ScheduledType == "3" ? "Monthly" : " ",
+                                     request.ScheduledType == "2" ? "Weekly" :
+                                     request.ScheduledType == "3" ? "Monthly" : " ",
                     Days = request.Days != null ? string.Join(",", request.Days) : null,
                     Months = request.Months != null ? string.Join(",", request.Months) : null,
                     ScheduledTime = request.ScheduledTime,
@@ -1482,20 +1623,30 @@ namespace ReactWithASP.Server.Controllers
                     FromDate = !string.IsNullOrEmpty(request.FromDate) ? request.FromDate : null,
                     ToDate = !string.IsNullOrEmpty(request.ToDate) ? request.ToDate : null,
                     IsPublished = request.IsPublished,
-                    Title = postdetails.Title,
-                    Description = postdetails.Description,
-                    MediaUrl = postdetails.PostIcon,
-                    AccountOrGroupName = postdetails.AccountOrGroupName,
-                    AccountOrGroupId = postdetails.AccountOrGroupId,
-                    createdOn = DateTime.Now,
-                    DeviceToken = request.DeviceToken,
-                    Tags = "abcd"
-                };
+                    Title = request.Title,
+                    Description = request.Description,
+                    //MediaUrl = JsonConvert.SerializeObject(savedUrls),
+                    MediaUrl = string.Join(",", savedUrls),
+                    AccountOrGroupName = request.AccountOrGroupName,
+          //AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
+          AccountOrGroupId = request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupIds) : JsonConvert.SerializeObject(accountIds),
+          //AccountOrGroupId = request.AccountOrGroupName == "Groups" ? request.AccountOrGroupId.ToString():string.Join(",", request.AccountOrGroupId.Select(e=>e.Id)),
+          //PageId = string.Join(",", request.AccountOrGroupId.Select(e=>e.PageId)),
+          //          createdOn = DateTime.Now,
+          //          DeviceToken = _context.NotificationSetting
+          //              .Where(x => x.UserGUID == request.UserGuid)
+          //              .OrderByDescending(x => x.Id)
+          //              .Select(x => x.DeviceToken)
+          //              .FirstOrDefault(),
+          PageId = request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupPageIds) : JsonConvert.SerializeObject(accountpageIds),
+          Tags = JsonConvert.SerializeObject(request.Tags),
+          ContentType ="Post",
+          createdOn = DateTime.Now,
+        };
 
                 _context.ScheduledPost.Add(res);
                 await _context.SaveChangesAsync();
 
-                // Schedule the notification job
                 var scheduler = await _schedulerFactory.GetScheduler();
 
                 // Schedule based on the scenario
@@ -1504,26 +1655,41 @@ namespace ReactWithASP.Server.Controllers
                     // Scenario 1: ScheduledDate and ScheduledTime
                     foreach (var scheduledDate in res.ScheduledDate.Split(','))
                     {
-                        if (DateTime.TryParse($"{res.ScheduledDate} {res.ScheduledTime}", out DateTime scheduledDateTime))
+                        if (DateTime.TryParse($"{scheduledDate} {res.ScheduledTime}", out DateTime scheduledDateTime))
                         {
                             var jobKey = new JobKey($"NotificationJob-{res.Id}-{scheduledDateTime:yyyyMMddHHmmss}", "NotificationGroup");
-                            var job = JobBuilder.Create<NotificationJob>()
-                                                .WithIdentity(jobKey)
-                                                .UsingJobData("ScheduledPostId", res.Id)
-                                                .UsingJobData("UserGuid", res.UserGuid)
-                                                .Build();
+                            var notificationJob = JobBuilder.Create<NotificationJob>()
+                                .WithIdentity(jobKey)
+                                .UsingJobData("ScheduledPostId", res.Id)
+                                .UsingJobData("UserGuid", res.UserGuid)
+                                .Build();
 
-                            var trigger = TriggerBuilder.Create()
-                                                        .StartAt(scheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
-                                                        .ForJob(jobKey)
-                                                        .Build();
-                            await scheduler.ScheduleJob(job, trigger);
+                            var notificationTrigger = TriggerBuilder.Create()
+                                .StartAt(scheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
+                                .ForJob(jobKey)
+                                .Build();
+
+                            await scheduler.ScheduleJob(notificationJob, notificationTrigger);
+
+                            // Schedule ScheduledOnTimeJob for the exact scheduled time
+                            var onTimeJobKey = new JobKey($"ScheduledOnTimeJob-{res.Id}-{scheduledDateTime:yyyyMMddHHmmss}", "ScheduledGroup");
+                            var onTimeJob = JobBuilder.Create<ScheduledOnTimeJob>()
+                                .WithIdentity(onTimeJobKey)
+                                .UsingJobData("ScheduledPostId", res.Id)
+                                .UsingJobData("UserGuid", res.UserGuid)
+                                .Build();
+
+                            var onTimeTrigger = TriggerBuilder.Create()
+                                .StartAt(scheduledDateTime) // Exactly at the scheduled time
+                                .ForJob(onTimeJobKey)
+                                .Build();
+
+                            await scheduler.ScheduleJob(onTimeJob, onTimeTrigger);
                         }
                     }
                 }
                 else if (res.ScheduledType == "Weekly")
                 {
-                    // Scenario 2: Days, ScheduledTime, FromDate, and ToDate
                     if (DateTime.TryParse(res.FromDate, out DateTime fromDate) && DateTime.TryParse(res.ToDate, out DateTime toDate))
                     {
                         foreach (var day in res.Days.Split(','))
@@ -1540,16 +1706,32 @@ namespace ReactWithASP.Server.Controllers
                                         {
                                             var jobKey = new JobKey($"NotificationJob-{res.Id}-{scheduledDateTime:yyyyMMddHHmmss}", "NotificationGroup");
                                             var job = JobBuilder.Create<NotificationJob>()
-                                                                .WithIdentity(jobKey)
-                                                                .UsingJobData("ScheduledPostId", res.Id)
-                                                                .UsingJobData("UserGuid", res.UserGuid)
-                                                                .Build();
+                                                .WithIdentity(jobKey)
+                                                .UsingJobData("ScheduledPostId", res.Id)
+                                                .UsingJobData("UserGuid", res.UserGuid)
+                                                .Build();
 
                                             var trigger = TriggerBuilder.Create()
-                                                                        .StartAt(scheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
-                                                                        .ForJob(jobKey)
-                                                                        .Build();
+                                                .StartAt(scheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
+                                                .ForJob(jobKey)
+                                                .Build();
+
                                             await scheduler.ScheduleJob(job, trigger);
+
+                                            // Schedule ScheduledOnTimeJob for the exact scheduled time
+                                            var onTimeJobKey = new JobKey($"ScheduledOnTimeJob-{res.Id}-{scheduledDateTime:yyyyMMddHHmmss}", "ScheduledGroup");
+                                            var onTimeJob = JobBuilder.Create<ScheduledOnTimeJob>()
+                                                .WithIdentity(onTimeJobKey)
+                                                .UsingJobData("ScheduledPostId", res.Id)
+                                                .UsingJobData("UserGuid", res.UserGuid)
+                                                .Build();
+
+                                            var onTimeTrigger = TriggerBuilder.Create()
+                                                .StartAt(scheduledDateTime) // Exactly at the scheduled time
+                                                .ForJob(onTimeJobKey)
+                                                .Build();
+
+                                            await scheduler.ScheduleJob(onTimeJob, onTimeTrigger);
                                         }
                                     }
                                     currentDate = currentDate.AddDays(1);
@@ -1558,74 +1740,74 @@ namespace ReactWithASP.Server.Controllers
                         }
                     }
                 }
+                
 
                 else if (res.ScheduledType == "Monthly")
                 {
-                    // Scenario 3: Months, ScheduledDate, and ScheduledTime
                     foreach (var scheduledDate in res.ScheduledDate.Split(','))
                     {
-                        // Parse the scheduled date into a DateTime object
                         if (DateTime.TryParseExact(scheduledDate.Trim(), "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out DateTime scheduledDateTime))
                         {
+                            // Get the year, month, and day for the specific scheduled date
                             int year = scheduledDateTime.Year;
-                            int month = scheduledDateTime.Month; // Extract the month from the scheduled date
-                            int day = scheduledDateTime.Day; // Extract the day from the scheduled date
+                            int month = scheduledDateTime.Month;
+                            int day = scheduledDateTime.Day;
 
-                            // Construct the full datetime string with the scheduled time
+                            // Combine the parsed date with the scheduled time
                             string dateTimeString = $"{year}-{month:D2}-{day:D2} {res.ScheduledTime}";
 
-                            // Now you can use this dateTimeString for scheduling your job or other logic
+                            // Parse the full date and time string
+                            if (DateTime.TryParse(dateTimeString, out DateTime ScheduledDateTime))
+                            {
+                                var jobKey = new JobKey($"NotificationJob-{res.Id}-{ScheduledDateTime:yyyyMMddHHmmss}", "NotificationGroup");
+
+                                // Create the NotificationJob
+                                var notificationJob = JobBuilder.Create<NotificationJob>()
+                                    .WithIdentity(jobKey)
+                                    .UsingJobData("ScheduledPostId", res.Id)
+                                    .UsingJobData("UserGuid", res.UserGuid)
+                                    .Build();
+
+                                // Create a trigger for 1 hour before the scheduled time
+                                var notificationTrigger = TriggerBuilder.Create()
+                                    .StartAt(ScheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
+                                    .ForJob(jobKey)
+                                    .Build();
+
+                                // Schedule the NotificationJob
+                                await scheduler.ScheduleJob(notificationJob, notificationTrigger);
+
+                                // Schedule the ScheduledOnTimeJob for the exact scheduled time
+                                var onTimeJobKey = new JobKey($"ScheduledOnTimeJob-{res.Id}-{ScheduledDateTime:yyyyMMddHHmmss}", "ScheduledGroup");
+                                var onTimeJob = JobBuilder.Create<ScheduledOnTimeJob>()
+                                    .WithIdentity(onTimeJobKey)
+                                    .UsingJobData("ScheduledPostId", res.Id)
+                                    .UsingJobData("UserGuid", res.UserGuid)
+                                    .Build();
+
+                                // Trigger for the exact scheduled time
+                                var onTimeTrigger = TriggerBuilder.Create()
+                                    .StartAt(ScheduledDateTime) // Exactly at the scheduled time
+                                    .ForJob(onTimeJobKey)
+                                    .Build();
+
+                                // Schedule the on-time job
+                                await scheduler.ScheduleJob(onTimeJob, onTimeTrigger);
+                            }
+                            else
+                            {
+                                // If the combined date and time string couldn't be parsed
+                                throw new Exception($"Invalid scheduled date and time format: {dateTimeString}");
+                            }
                         }
                         else
                         {
+                            // If the scheduled date couldn't be parsed
                             throw new Exception($"Invalid date format in ScheduledDate: {scheduledDate}");
                         }
                     }
                 }
 
-
-
-
-
-
-                //else if (res.ScheduledType == "Monthly")
-                //{
-                //    // Scenario 3: Months, ScheduledDate, and ScheduledTime
-                //    foreach (var month in res.Months.Split(','))
-                //    {
-                //        if (int.TryParse(month, out int monthIndex))
-                //        {
-
-                //            // Convert zero-based index to month name
-                //            string monthName = GetMonthNameFromIndex(monthIndex);
-
-                //            // Get the month number from the month name
-                //            if (MonthAbbreviations.TryGetValue(monthName, out int monthNumber))
-                //            {
-                //                var year = DateTime.Now.Year;
-                //                if (DateTime.TryParse($"{year}-{monthNumber:D2}-{res.ScheduledDate} {res.ScheduledTime}", out DateTime scheduledDateTime))
-                //                {
-                //                    var jobKey = new JobKey($"NotificationJob-{res.Id}-{scheduledDateTime:yyyyMMddHHmmss}", "NotificationGroup");
-                //                    var job = JobBuilder.Create<NotificationJob>()
-                //                                        .WithIdentity(jobKey)
-                //                                        .UsingJobData("ScheduledPostId", res.Id)
-                //                                        .UsingJobData("UserGuid", res.UserGuid)
-                //                                        .Build();
-
-                //                    var trigger = TriggerBuilder.Create()
-                //                                                .StartAt(scheduledDateTime.AddHours(-1)) // 1 hour before the scheduled time
-                //                                                .ForJob(jobKey)
-                //                                                .Build();
-                //                    await scheduler.ScheduleJob(job, trigger);
-                //                }
-                //            }
-                //        }  
-                //    }
-                //}
-                else
-                {
-                    throw new Exception("Invalid scheduling data.");
-                }
 
                 return Ok(new
                 {
@@ -1645,6 +1827,7 @@ namespace ReactWithASP.Server.Controllers
                 });
             }
         }
+
 
         private string NormalizeDay(string day)
         {
@@ -1689,250 +1872,7 @@ namespace ReactWithASP.Server.Controllers
             return monthName;
         }
 
-        //11[HttpPost("ScheduledPosts")]
-        //public async Task<IActionResult> ScheduledPosts([FromBody] CreateScheduledPostRequest request)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
-
-        //        var user = _context.Users.FirstOrDefault(x => x.Id == request.UserGuid);
-        //        var postdetails = _context.SocialMediaPosts.FirstOrDefault(x => x.UserGuid == request.UserGuid);
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
-
-        //        ScheduledPost res = new ScheduledPost
-        //        {
-        //            UserGuid = request.UserGuid,
-        //            ScheduledType = request.ScheduledType == "1" ? "OneTime" :
-        //                            request.ScheduledType == "2" ? "Weekly" :
-        //                            request.ScheduledType == "3" ? "Monthly" : " ",
-        //            Days = request.Days != null ? string.Join(",", request.Days) : null,
-        //            Months = request.Months != null ? string.Join(",", request.Months) : null,
-        //            ScheduledTime = request.ScheduledTime,
-        //            ScheduledDate = request.ScheduledDate != null ? string.Join(",", request.ScheduledDate) : null,
-        //            FromDate = !string.IsNullOrEmpty(request.FromDate) ? request.FromDate : null,
-        //            ToDate = !string.IsNullOrEmpty(request.ToDate) ? request.ToDate : null,
-        //            IsPublished = request.IsPublished,
-        //            Title = postdetails.Title,
-        //            Description = postdetails.Description,
-        //            MediaUrl = postdetails.PostIcon,
-        //            AccountOrGroupName = postdetails.AccountOrGroupName,
-        //            AccountOrGroupId = postdetails.AccountOrGroupId,
-        //            createdOn = DateTime.Now,
-        //            DeviceToken = request.DeviceToken,
-        //            Tags = "abcd"
-        //        };
-
-        //        _context.ScheduledPost.Add(res);
-        //        await _context.SaveChangesAsync();
-
-        //        // Schedule the notification job
-        //        var scheduler = await _schedulerFactory.GetScheduler();
-        //        var job = JobBuilder.Create<NotificationJob>()
-        //                            .UsingJobData("ScheduledPostId", res.Id)
-        //                            .UsingJobData("UserGuid", res.UserGuid) // Pass additional data if needed
-        //                            .Build();
-
-        //        //// Check if the job already exists; if not, add it to the scheduler
-        //        //if (!await scheduler.CheckExists(job.Key))
-        //        //{
-        //        //    await scheduler.AddJob(job, true);
-        //        //}
-
-        //        // Parse the ScheduledTime string to a DateTime
-        //        if (DateTime.TryParse(res.ScheduledTime, out DateTime scheduledTime))
-        //        {
-        //            var trigger = TriggerBuilder.Create()
-        //                                        .StartAt(scheduledTime.AddHours(-1)) // 1 hour before the scheduled time
-        //                                        .Build();
-
-        //            await scheduler.ScheduleJob(job, trigger);
-        //        }
-        //        else
-        //        {
-        //            // Handle the case where ScheduledTime cannot be parsed
-        //            throw new Exception("Scheduled time is not in a valid format.");
-        //        }
-
-        //        return Ok(new
-        //        {
-        //            Status = "True",
-        //            Message = "Post Scheduled successfully",
-        //            Data = res
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new
-        //        {
-        //            Status = "False",
-        //            Message = "An error occurred while scheduling the post",
-        //            Error = ex,
-        //            newerr = ex.InnerException
-        //        });
-        //    }
-        //}
-
-
-        //[HttpPost("ScheduledPosts")]
-        //public async Task<IActionResult> ScheduledPosts([FromBody] CreateScheduledPostRequest request)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
-
-        //        var user = _context.Users.FirstOrDefault(x => x.Id == request.UserGuid);
-        //        var postdetails = _context.SocialMediaPosts.FirstOrDefault(x => x.UserGuid == request.UserGuid);
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
-
-        //        ScheduledPost res = new ScheduledPost
-        //        {
-        //            UserGuid = request.UserGuid,
-        //            ScheduledType = request.ScheduledType == "1" ? "OneTime" :
-        //                            request.ScheduledType == "2" ? "Weekly" :
-        //                            request.ScheduledType == "3" ? "Monthly" : " ",
-        //            Days = request.Days != null ? string.Join(",", request.Days) : null,
-        //            Months = request.Months != null ? string.Join(",", request.Months) : null,
-        //            ScheduledTime = request.ScheduledTime,
-        //            ScheduledDate = request.ScheduledDate != null ? string.Join(",", request.ScheduledDate) : null,
-        //            FromDate = !string.IsNullOrEmpty(request.FromDate) ? request.FromDate : null,
-        //            ToDate = !string.IsNullOrEmpty(request.ToDate) ? request.ToDate : null,
-        //            IsPublished = request.IsPublished,
-        //            Title = postdetails.Title,
-        //            Description = postdetails.Description,
-        //            MediaUrl = postdetails.PostIcon,
-        //            AccountOrGroupName = postdetails.AccountOrGroupName,
-        //            AccountOrGroupId = postdetails.AccountOrGroupId,
-        //            createdOn = DateTime.Now,
-        //            Tags = "abcd"
-        //        };
-
-        //        _context.ScheduledPost.Add(res);
-        //        _context.SaveChanges();
-
-        //        // Schedule the notification job
-        //        var scheduler = await _schedulerFactory.GetScheduler();
-        //        var job = JobBuilder.Create<NotificationJob>()
-        //                            .UsingJobData("ScheduledPostId", res.Id)
-        //                            .Build();
-
-        //        // Parse the ScheduledTime string to a DateTime
-        //        if (DateTime.TryParse(res.ScheduledTime, out DateTime scheduledTime))
-        //        {
-        //            var trigger = TriggerBuilder.Create()
-        //                                        .StartAt(scheduledTime.AddHours(-1)) // 1 hour before the scheduled time
-        //                                        .Build();
-
-        //            await scheduler.ScheduleJob(job, trigger);
-        //        }
-        //        else
-        //        {
-        //            // Handle the case where ScheduledTime cannot be parsed
-        //            throw new Exception("Scheduled time is not in a valid format.");
-        //        }
-
-        //        //var scheduler = await _schedulerFactory.GetScheduler();
-        //        //var job = JobBuilder.Create<NotificationJob>()
-        //        //                    .UsingJobData("ScheduledPostId", res.Id)
-        //        //                    .Build();
-
-        //        //var trigger = TriggerBuilder.Create()
-        //        //                            .StartAt(res.ScheduledTime.AddHours(-1)) // 1 hour before the scheduled time
-        //        //                            .Build();
-
-        //        //await scheduler.ScheduleJob(job, trigger);
-
-        //        return Ok(new
-        //        {
-        //            Status = "True",
-        //            Message = "Post Scheduled successfully",
-        //            Data = res
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new
-        //        {
-        //            Status = "False",
-        //            Message = "An error occurred while scheduling the post",
-        //            Error = ex,
-        //            newerr = ex.InnerException
-        //        });
-        //    }
-        //}
-
-        //public IActionResult ScheduledPosts([FromBody] CreateScheduledPostRequest request)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest(ModelState);
-        //        }
-
-        //        var user = _context.Users.FirstOrDefault(x => x.Id == request.UserGuid);
-        //        var postdetails = _context.SocialMediaPosts.FirstOrDefault(x => x.UserGuid == request.UserGuid);
-        //        if (user == null)
-        //        {
-        //            return NotFound("User not found");
-        //        }
-
-        //        ScheduledPost res = new ScheduledPost
-        //        {
-        //            UserGuid = request.UserGuid,
-        //            ScheduledType = request.ScheduledType == "1" ? "OneTime" :
-        //                            request.ScheduledType == "2" ? "Weekly" :
-        //                            request.ScheduledType == "3" ? "Monthly" : " ",
-        //            Days = request.Days != null ? string.Join(",", request.Days) : null,
-        //            Months = request.Months != null ? string.Join(",", request.Months) : null,
-        //            ScheduledTime = request.ScheduledTime,
-        //            ScheduledDate = request.ScheduledDate != null ? string.Join(",", request.ScheduledDate) : null,
-        //            FromDate = !string.IsNullOrEmpty(request.FromDate) ? request.FromDate : null,
-        //            ToDate = !string.IsNullOrEmpty(request.ToDate) ? request.ToDate : null,
-        //            IsPublished = request.IsPublished,
-        //            Title = postdetails.Title,
-        //            Description = postdetails.Description,
-        //            MediaUrl = postdetails.PostIcon,
-        //            AccountOrGroupName = postdetails.AccountOrGroupName,
-        //            AccountOrGroupId = postdetails.AccountOrGroupId,
-        //            createdOn = DateTime.Now,
-        //            Tags = "abcd"
-        //        };
-
-        //        _context.ScheduledPost.Add(res);
-        //        _context.SaveChanges();
-
-        //        return Ok(new
-        //        {
-        //            Status = "True",
-        //            Message = "Post Scheduled successfully",
-        //            Data = res
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new
-        //        {
-        //            Status = "False",
-        //            Message = "An error occurred while scheduling the post",
-        //            Error = ex,
-        //            newerr = ex.InnerException
-        //        });
-        //    }
-        //}
-
+       
 
 
 
@@ -1950,8 +1890,26 @@ namespace ReactWithASP.Server.Controllers
             {
                 return BadRequest(new { Message = "Fields Missing" });
             }
+      List<string> groupIds = request.AccountOrGroupName == "Groups"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.Id) ? a.Id : "").ToList()
+: new List<string>();
 
-            var newPost = new Drafts
+
+      List<string> accountpageIds = request.AccountOrGroupName == "Accounts"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.PageId) ? a.PageId : "").ToList()
+: new List<string>();
+
+      List<string> accountIds = request.AccountOrGroupName == "Accounts"
+? request.AccountOrGroupId.Select(a => !string.IsNullOrEmpty(a.accountId) ? a.accountId : "").ToList()
+: new List<string>();
+      var groupPageIds = await (from gsm in _context.GroupSocialMedia
+                                join g in _context.@group on gsm.GroupId equals g.Id
+                                where g.UserGuid == request.userGUId
+                                      && groupIds.Contains(gsm.GroupId.ToString())
+                                select gsm.PageId)
+                            .ToListAsync();
+
+      var newPost = new Drafts
             {
                 UserGuid = request.userGUId,
                 Title = request.Title,
@@ -1959,8 +1917,12 @@ namespace ReactWithASP.Server.Controllers
                 CreatedAt = DateTime.UtcNow,
                 Status = "Draft",
                 AccountOrGroupName = request.AccountOrGroupName,
-                AccountOrGroupId = JsonConvert.SerializeObject(request.AccountOrGroupId),
-                PostIcon = JsonConvert.SerializeObject(request.MediaUrl),
+        //AccountOrGroupId = string.Join(",", request.AccountOrGroupId.Select(e => e.Id)),
+        //PageId = string.Join(",", request.AccountOrGroupId.Select(e => e.PageId)),
+        AccountOrGroupId = request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupIds) : JsonConvert.SerializeObject(accountIds),
+        PageId = request.AccountOrGroupName == "Groups" ? JsonConvert.SerializeObject(groupPageIds) : JsonConvert.SerializeObject(accountpageIds),
+        PostIcon = JsonConvert.SerializeObject(request.MediaUrl),
+                ContentType = "Post",
             };
 
             _context.Drafts.Add(newPost);
@@ -2023,6 +1985,62 @@ namespace ReactWithASP.Server.Controllers
 
             return Ok(new { Message = "Draft created successfully" });
         }
+
+
+       private IFormFile ConvertPathToIFormFile(string filePath)
+        {
+            var fileName = Path.GetFileName(filePath);
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            // Use a default content type or determine it based on the file extension
+            string contentType = "application/octet-stream";
+
+            return new FormFile(fileStream, 0, fileStream.Length, "file", fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType
+            };
+        }
+
+        private async Task<IFormFile> DownloadImageAsIFormFile(string imageUrl)
+        {
+            using (var client = new HttpClient())
+            {
+                // Download image as byte array
+                var imageBytes = await client.GetByteArrayAsync(imageUrl);
+
+                // Convert byte array into a stream
+                var stream = new MemoryStream(imageBytes);
+
+                // Create an IFormFile from the stream
+                var fileName = Path.GetFileName(imageUrl); // Extract file name from the URL
+                return new FormFile(stream, 0, stream.Length, "image", fileName)
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg" // Adjust the content type based on your image type
+                };
+            }
+        }
+
+        private async Task<IActionResult> UploadImageAndPost([FromHeader] string accessToken,[FromForm] IFormFile image,[FromForm] string postText)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("Image is required");
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                await image.CopyToAsync(ms);
+                var imageBytes = ms.ToArray();
+                var assetId = await _linkedInService.UploadImageAsync(accessToken, imageBytes, image.FileName);
+
+                await _linkedInService.CreatePostAsync(accessToken, assetId, postText);
+            }
+
+            return Ok();
+        }
+
 
     }
 }

@@ -139,7 +139,7 @@ namespace YourNamespace.Controllers
 
         [HttpPost("updatepicture/{userGUId}")]
         [Authorize]
-        [EnableCors("AllowAll")]
+        //[EnableCors("AllowAll")]
 
         public async Task<IActionResult> UpdatePicture(string userGUId, [FromForm] IFormFile file)
         {
@@ -206,6 +206,7 @@ namespace YourNamespace.Controllers
             if (!authenticateResult.Succeeded)
                 return BadRequest("External authentication error");
 
+
             // You can get the Facebook user information here.
             var claims = authenticateResult.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
             {
@@ -215,5 +216,16 @@ namespace YourNamespace.Controllers
 
             return Ok(claims);
         }
+
+        [HttpGet("GetUserProfileUrl")]
+        public async Task<IActionResult> GetUserProfileUrl(string userGUId)
+        {
+         var user = await _userManager.FindByIdAsync(userGUId);
+         if (user == null)
+               return NotFound(new { message = "User not found" });
+          
+             return Ok(user);
+        }
+      
     }
 }

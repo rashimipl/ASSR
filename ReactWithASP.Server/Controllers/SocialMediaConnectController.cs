@@ -1,4 +1,4 @@
-﻿using JWTAuthentication.Authentication;
+using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
-//using Microsoft.AspNetCore.Authentication.Twitter;
+using Microsoft.AspNetCore.Authentication.Twitter;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Web;
@@ -25,6 +25,10 @@ using ReactWithASP.Server.Authentication;
 using System;
 using static YourNamespace.Controllers.AccountController;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
+using System.Text;
+using ReactWithASP.Server.InterfaceServices;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace ReactWithASP.Server.Controllers
 {
@@ -40,51 +44,61 @@ namespace ReactWithASP.Server.Controllers
         private readonly HttpClient _httpClient;
         private readonly string _accessToken;
         private readonly IHttpClientFactory _httpClientFactory;
-        //try code 
-        //private readonly string clientId = "483927064226359";
-        //private readonly string state = "some_string";
-        //private readonly string redirectUri = "https://localhost:7189/api/facebook-callback";
-        //private readonly string scope = "pages_manage_posts, pages_read_engagement";
-        //private readonly string config_id = "871588441670167";
-        //private CustomWebApplicationFactory<Startup> _factory;
-        //private HttpClient _client;
+        private readonly object client;
+        private readonly ILinkedInService _linkedInService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-
-        public SocialMediaConnectController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, ApplicationDbContext context)
+    public SocialMediaConnectController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment environment, ApplicationDbContext context, ILinkedInService linkedInService, IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
             Environment = environment;
             _context = context;
-        }
+            _linkedInService = linkedInService;
+      _httpContextAccessor = httpContextAccessor;
 
-        [HttpGet("FacebookLogin")]
-        public IActionResult LoginWithFacebook(string userId)
+    }
+
+    [HttpGet("FacebookLogin")]
+        public IActionResult FacebookLogin(string userId, string SocialMediaId)
         {
+          var request = _httpContextAccessor.HttpContext.Request;
+
+            HttpContext.Session.SetString("FacebookUserId", userId);
+            HttpContext.Session.SetString("FacebookSocialMediaId", SocialMediaId);
             var clientId = "483927064226359";
-            var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack?userId={userId}"; // Pass userId to the callback
+          var redirectUri = $"{request.Scheme}://{request.Host}/api/FacebookCallBack";
+
+      //var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack";// Your callback URL
+     // var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack";
+           // var redirectUri = $"https://localhost:7189/api/FacebookCallBack";
             var state = Guid.NewGuid().ToString("N");
-            var scope = "pages_manage_posts,pages_read_engagement"; // Facebook page permissions
-
-            var authorizationUrl = $"https://www.facebook.com/v17.0/dialog/oauth?client_id={clientId}&redirect_uri={Uri.EscapeDataString(redirectUri)}&state={state}&scope={Uri.EscapeDataString(scope)}";
-
+            var scope = "pages_manage_posts,pages_read_engagement"; // Facebook page permissions  
+            var config_id = "871588441670167";
+            var authorizationUrl = $"https://www.facebook.com/v17.0/dialog/oauth?client_id={clientId}&redirect_uri={Uri.EscapeUriString(redirectUri)}&state={state}&scope={scope}&config_id={config_id}";
+            //string userId = userid;
             return Redirect(authorizationUrl);
         }
         [HttpGet("FacebookCallBack")]
-        public async Task<IActionResult> FacebookCallback(string code, string state, string userid)
+        public async Task<IActionResult> FacebookCallback(string code, string state)
         {
-            if (string.IsNullOrEmpty(code))
+      var request = _httpContextAccessor.HttpContext.Request;
+
+      if (string.IsNullOrEmpty(code))
             {
-                return BadRequest(new { error = "Missing authorization code" });
+                return BadRequest(new { error = "Authorization code is missing." });
             }
 
             var clientId = "483927064226359";
             var clientSecret = "66725e0d3573bbd8e47bcc92e9173892";
-            //var redirectUri = "https://167.86.105.98.8070/api/FacebookCallBack";
-            var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack?userId={userid}";
-            var tokenRequestUrl = "https://graph.facebook.com/v17.0/oauth/access_token";
+      var redirectUri = $"{request.Scheme}://{request.Host}/api/FacebookCallBack";
+
+      // var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack";
+      // var redirectUri = $"https://assr.digitalnoticeboard.biz/api/FacebookCallBack";
+      // var redirectUri = $"https://localhost:7189/api/FacebookCallBack";
+      var tokenRequestUrl = "https://graph.facebook.com/v17.0/oauth/access_token";
 
             // Add required parameters
             var parameters = new Dictionary<string, string>
@@ -94,27 +108,23 @@ namespace ReactWithASP.Server.Controllers
         { "redirect_uri", redirectUri },
         { "code", code }
     };
-
             using (var httpClient = new HttpClient())
             {
-                // Build the request URI with query parameters
                 var requestUri = QueryHelpers.AddQueryString(tokenRequestUrl, parameters);
                 var response = await httpClient.GetAsync(requestUri);
                 var responseString = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Handle error response
                     return BadRequest(new { error = "Error retrieving access token", details = responseString });
                 }
-                // Parse the response to get the access token
+
                 var tokenResponse = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseString);
                 if (!tokenResponse.TryGetValue("access_token", out var accessToken))
                 {
                     return BadRequest(new { error = "Error parsing access token" });
                 }
 
-                //Console.WriteLine(responseString);
                 var userInfoUrl = $"https://graph.facebook.com/me?fields=id,name,picture&access_token={accessToken}";
                 var userResponseMessage = await httpClient.GetAsync(userInfoUrl);
                 var userResponseString = await userResponseMessage.Content.ReadAsStringAsync();
@@ -126,22 +136,25 @@ namespace ReactWithASP.Server.Controllers
                 }
 
                 var jsonResponse = JObject.Parse(userResponseString);
-                //string userId = jsonResponse["id"]?.ToString();
-                string userId = userid;
-                var existingUser = _context.FacebookUsers.FirstOrDefault(f => f.UserId == userId);
-                FacebookPageModel facebookPageModel = null;
-                if (existingUser == null || existingUser.UserId != userId)
+                var userId = HttpContext.Session.GetString("FacebookUserId");
+                var SocialMediaId = HttpContext.Session.GetString("FacebookSocialMediaId");
+
+                var existingUser = _context.Users.FirstOrDefault(f => f.Id == userId);
+                SocialMediaUsersModel FacebookModel = null;
+                if (existingUser.Id == userId)
                 {
-                    facebookPageModel = new FacebookPageModel
+                    FacebookModel = new SocialMediaUsersModel
                     {
                         UserId = userId,
-                        AccessToken = accessToken
+                        AccessToken = accessToken,
+                        SocialMedia = SocialMediaId,
+
                     };
-                    _context.FacebookUsers.Add(facebookPageModel);
+                    _context.SocialMediaUser.Add(FacebookModel);
                     var result = await _context.SaveChangesAsync();
                 }
-
-                var htmlContent = @"
+        
+        var htmlContent = @"
     <!DOCTYPE html>
     <html lang='en'>
     <head>
@@ -172,9 +185,18 @@ namespace ReactWithASP.Server.Controllers
            <div class='message'>
             You are authenticated. Please close this tab.
           </div>
+<script>
+       if (window.opener) {
+  // Send a message to the parent window (make sure the status is 'cancel' or other states as needed)
+  window.opener.postMessage({
+    status: 'cancel'
+  }, 'https://assrweb.digitalnoticeboard.biz/'); // Send it only to the expected domain
+}
+    </script>
             </body>
           </html>";
-                return new ContentResult
+        
+        return new ContentResult
                 {
                     Content = htmlContent,
                     ContentType = "text/html",
@@ -183,7 +205,7 @@ namespace ReactWithASP.Server.Controllers
             }
         }
 
-        [HttpGet("FacebookUserPages")]
+        [HttpGet("FacebookUserPages1")]
         public async Task<List<FacebookPageData>> GetFacebookPages(string userId, string accessToken)
         {
 
@@ -221,7 +243,7 @@ namespace ReactWithASP.Server.Controllers
                         Id = pageId,
                         Name = pageName,
                         Profile = profileUrl,
-                        AccessToken = pageAccessToken
+                        AccessToken = pageAccessToken,
                     });
                 }
 
@@ -235,7 +257,9 @@ namespace ReactWithASP.Server.Controllers
             {
                 return BadRequest("UserId is missing or invalid.");
             }
-            var existingUser = await _context.FacebookUsers.FirstOrDefaultAsync(u => u.UserId == userId);
+            //var existingUser = await _context.FacebookUsers.FirstOrDefaultAsync(u => u.UserId == userId);
+            var existingUser = await _context.SocialMediaUser.FirstOrDefaultAsync(u => u.UserId == userId);
+
             var dta = (await GetFacebookPages(existingUser.UserId, existingUser.AccessToken)).ToList();
             if (dta == null)
             {
@@ -269,7 +293,7 @@ namespace ReactWithASP.Server.Controllers
                 {
                     User = new
                     {
-                        UserId = userId
+                        UserId = userId,
                     },
                     Pages = formattedPages
                 }
@@ -277,22 +301,27 @@ namespace ReactWithASP.Server.Controllers
 
             //return Ok(response);
         }
-        
         [HttpPost("FacebookUpload")]
-        public async Task<IActionResult> FacebookUpload(IFormFile videoFile, string pageId, string accessToken)
+        public async Task<IActionResult> FacebookUpload(IFormFile videoFile, IFormFile imageFile, string pageId, string accessToken, string message)
         {
-            if (videoFile == null)
-            {
-                return BadRequest("Video file is required.");
-            }
+            //if (videoFile == null)
+            //{
+            //  return BadRequest("Video file is required.");
+            //}
 
             using (var client = new HttpClient())
             {
-                // Start the upload session
+                // Start the video upload session
                 var startResponse = await client.PostAsync(
                     $"https://graph.facebook.com/v12.0/{pageId}/videos?upload_phase=start&file_size={videoFile.Length}&access_token={accessToken}",
                     null
                 );
+
+                if (!startResponse.IsSuccessStatusCode)
+                {
+                    var startError = await startResponse.Content.ReadAsStringAsync();
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to start video upload: " + startError);
+                }
 
                 var startContent = await startResponse.Content.ReadAsStringAsync();
                 dynamic startJson = Newtonsoft.Json.JsonConvert.DeserializeObject(startContent);
@@ -319,6 +348,12 @@ namespace ReactWithASP.Server.Controllers
                                 content
                             );
 
+                            if (!uploadResponse.IsSuccessStatusCode)
+                            {
+                                var uploadError = await uploadResponse.Content.ReadAsStringAsync();
+                                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload video chunk: " + uploadError);
+                            }
+
                             var uploadContent = await uploadResponse.Content.ReadAsStringAsync();
                             dynamic uploadJson = Newtonsoft.Json.JsonConvert.DeserializeObject(uploadContent);
                             startOffset = uploadJson.start_offset;
@@ -326,7 +361,7 @@ namespace ReactWithASP.Server.Controllers
                     }
                 }
 
-                // Finish the upload session
+                // Finish the video upload session
                 var finishResponse = await client.PostAsync(
                     $"https://graph.facebook.com/v12.0/{pageId}/videos?upload_phase=finish&upload_session_id={uploadSessionId}&access_token={accessToken}",
                     null
@@ -334,29 +369,225 @@ namespace ReactWithASP.Server.Controllers
 
                 if (!finishResponse.IsSuccessStatusCode)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to finish video upload.");
+                    var finishError = await finishResponse.Content.ReadAsStringAsync();
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to finish video upload: " + finishError);
                 }
 
                 // Publish the video post
                 var publishResponse = await client.PostAsync(
-                    $"https://graph.facebook.com/v12.0/{pageId}/feed?message=Your+Video+Description&video_id={videoId}&access_token={accessToken}",
+                    $"https://graph.facebook.com/v12.0/{pageId}/feed?message={Uri.EscapeDataString(message)}&video_id={videoId}&access_token={accessToken}",
                     null
                 );
 
-                if (publishResponse.IsSuccessStatusCode)
+                if (!publishResponse.IsSuccessStatusCode)
                 {
-                    return Ok("Video posted successfully.");
+                    var publishError = await publishResponse.Content.ReadAsStringAsync();
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to publish video: " + publishError);
                 }
-                else
+
+                // If an image is provided, upload it
+                if (imageFile != null)
                 {
-                    var publishContent = await publishResponse.Content.ReadAsStringAsync();
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to publish video: " + publishContent);
+                    using (var imageStream = imageFile.OpenReadStream())
+                    {
+                        // Convert the image stream to a byte array inline
+                        byte[] imageBytes;
+                        using (var ms = new MemoryStream())
+                        {
+                            imageStream.CopyTo(ms);
+                            imageBytes = ms.ToArray();
+                        }
+
+                        var imageContent = new MultipartFormDataContent();
+                        imageContent.Add(new ByteArrayContent(imageBytes), "source", imageFile.FileName);
+                        imageContent.Add(new StringContent(message), "caption");
+
+                        var imageUploadResponse = await client.PostAsync(
+                            $"https://graph.facebook.com/v12.0/{pageId}/photos?access_token={accessToken}",
+                            imageContent
+                        );
+
+                        if (!imageUploadResponse.IsSuccessStatusCode)
+                        {
+                            var imageErrorContent = await imageUploadResponse.Content.ReadAsStringAsync();
+                            return StatusCode(StatusCodes.Status500InternalServerError, "Failed to upload image: " + imageErrorContent);
+                        }
+                    }
                 }
+
+                return Ok("Video and image posted successfully.");
+            }
+        }
+       
+
+        [HttpGet("LinkedInLogin")]
+        public IActionResult LinkedInLogin(string userId, string SocialMediaId)
+        
+         {
+            try
+            {
+        var request = _httpContextAccessor.HttpContext.Request;
+        HttpContext.Session.SetString("LinkedInUserId", userId);
+                HttpContext.Session.SetString("LinkedInSocialMediaId", SocialMediaId);
+        var clientId = "860d0h5icf09uj";
+        var redirectUri = $"{request.Scheme}://{request.Host}/api/HandleRedirect";        
+        var state = Guid.NewGuid().ToString();
+        var scope = "openid profile email w_member_social";
+        var authorizationUrl = $"https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={clientId}&redirect_uri={Uri.EscapeDataString(redirectUri)}&state={state}&scope={Uri.EscapeDataString(scope)}";        
+        return Redirect(authorizationUrl);
+      }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
+    [HttpGet("HandleRedirect")]
+    public async Task<IActionResult> HandleRedirect(string code, string state)
+    {
+      if (string.IsNullOrEmpty(code))
+      {
+        return BadRequest("Authorization code not found.");
+      }
+      string accessToken = await _linkedInService.GetAccessToken(code);
+  
 
+      var htmlContent = @"
+    <!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Authenticated</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f0f0f0;
+            }
+            .message {
+                padding: 20px;
+                background-color: #ffffff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='message'>
+            You are authenticated. Please close this tab.
+        </div>
+        <script>
+            if (window.opener) {
+                window.opener.postMessage({
+                    status: 'cancel'
+                }, 'https://assrweb.digitalnoticeboard.biz/');
+            }
+        </script>
+    </body>
+    </html>";
 
-
+      return Content(htmlContent, "text/html");
     }
+    
+
+    [HttpPost("upload")]
+        public async Task<IActionResult> UploadImageAndPost([FromHeader] string accessToken, [FromForm] IFormFile image, [FromForm] string postText)
+        {
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("Image is required");
+            }
+            using (var ms = new MemoryStream())
+            {
+                await image.CopyToAsync(ms);
+                var imageBytes = ms.ToArray();
+                var assetId = await _linkedInService.UploadImageAsync(accessToken, imageBytes, image.FileName);
+
+                await _linkedInService.CreatePostAsync(accessToken, assetId, postText);
+            }
+            return Ok("Post created successfully");
+        }
+
+
+    [HttpGet("twitter/login1")]
+    public IActionResult TwitterLogin1()
+    {
+      var clientId = "cGdPRzRwcGtMR0hLTncxbUZvSjg6MTpjaQ";
+      var redirectUri = "https://assr.digitalnoticeboard.biz/api/TwitterCallBack";
+      var state = Guid.NewGuid().ToString(); // Used for CSRF protection
+
+      var authUrl = $"https://twitter.com/i/oauth2/authorize" +
+                    $"?response_type=code" +
+                    $"&client_id={clientId}" +
+                    $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
+                    $"&scope=tweet.read users.read offline.access" +
+                    $"&state={state}" +
+                    $"&code_challenge=challenge" +  // Replace with actual PKCE challenge
+                    $"&code_challenge_method=plain";
+
+      return Redirect(authUrl);
+    }
+    [HttpGet("twitter/callback1")]
+    public async Task<IActionResult> TwitterCallback1([FromQuery] string code, [FromQuery] string state)
+    {
+      if (string.IsNullOrEmpty(code))
+      {
+        return BadRequest("Authorization code not found.");
+      }
+
+      var clientId = "cGdPRzRwcGtMR0hLTncxbUZvSjg6MTpjaQ";
+      var clientSecret = "bwTRE4qiFUIxToJNw8786vSQEu5MgHEP8Oc7HO5RTtapKWNPfh";
+      var redirectUri = "https://assr.digitalnoticeboard.biz/api/TwitterCallBack";
+
+      using (var client = new HttpClient())
+      {
+        var tokenRequest = new Dictionary<string, string>
+        {
+            { "client_id", clientId },
+            { "client_secret", clientSecret },
+            { "code", code },
+            { "grant_type", "authorization_code" },
+            { "redirect_uri", redirectUri },
+            { "code_verifier", "challenge" }  // Replace with actual PKCE verifier
+        };
+
+        var response = await client.PostAsync("https://api.twitter.com/2/oauth2/token", new FormUrlEncodedContent(tokenRequest));
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+          return BadRequest($"Failed to get access token: {responseContent}");
+        }
+
+        return Ok(responseContent); // Return access token and other details
+      }
+    }
+    [HttpGet("twitter/userinfo")]
+    public async Task<IActionResult> GetTwitterUserInfo([FromQuery] string accessToken)
+    {
+      using (var client = new HttpClient())
+      {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        var response = await client.GetAsync("https://api.twitter.com/2/users/me");
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (!response.IsSuccessStatusCode)
+        {
+          return BadRequest($"Failed to fetch user data: {responseContent}");
+        }
+
+        return Ok(responseContent);
+      }
+    }
+
+
+  }
 }

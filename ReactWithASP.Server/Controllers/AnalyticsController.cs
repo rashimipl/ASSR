@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using ReactWithASP.Server.Models;
 using System.Text.RegularExpressions;
 using ReactWithASP.Server.Models.Posts;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ReactWithASP.Server.Controllers
@@ -21,11 +23,13 @@ namespace ReactWithASP.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public AnalyticsController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+    private readonly HttpClient _httpClient;
+    public AnalyticsController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
-        }
+      _httpClient = new HttpClient();
+    }
 
 
         [HttpGet("analytics")]
@@ -102,5 +106,131 @@ namespace ReactWithASP.Server.Controllers
 
             return Ok(response);
         }
+
+
+    [HttpGet("GetPagePosts")]
+    public async Task<IActionResult> GetFacebookPagePosts(string userguid, string pageId, string accessToken, string date)
+    {
+      try
+      {
+        var url = $"https://graph.facebook.com/v19.0/{pageId}/posts?access_token={accessToken}";
+
+        var response = await _httpClient.GetAsync(url);
+        if (!response.IsSuccessStatusCode)
+          return BadRequest("Failed to fetch posts from Facebook.");
+
+        var content = await response.Content.ReadFromJsonAsync<FacebookPostsResponse>();
+        if (content?.data == null || content.data.Count == 0)
+          return NotFound("No posts found.");
+
+        // Parse date as date only
+        var targetDate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture).Date;
+        var todayDate = DateTime.UtcNow.Date;
+
+        var posts = content.data
+            .Where(p =>
+            {
+              var createdTimeUtc = DateTime.Parse(p.created_time, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+              return createdTimeUtc.Date >= targetDate && createdTimeUtc.Date <= todayDate;
+            })
+            .Select(p => new
+            {
+              PostId = p.id,
+              CreatedAt = DateTime.Parse(p.created_time).ToString("yyyy-MM-dd") // formatted without time
+            })
+            .ToList();
+        return Ok(posts);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, $"Error: {ex.Message}");
+      }
     }
+    [HttpGet("GetFacebookPostAnalytics")]
+    public async Task<FacebookPostAnalytics> GetFacebookPostAnalytics(string postId)
+    {
+      var existuser = await _context.PostIdForSocialMediaPosts.FirstOrDefaultAsync(p => p.PostId == postId);
+
+      using var http = new HttpClient();
+      var baseUrl = "https://graph.facebook.com/v19.0";
+
+      // 1. Get Reach
+      var reachUrl = $"{baseUrl}/{postId}/insights?metric=post_impressions&access_token={existuser.PageAccessToken}";
+      var reachData = await http.GetFromJsonAsync<FacebookInsightsResponse>(reachUrl);
+      int reach = reachData?.data?.FirstOrDefault()?.values?.FirstOrDefault()?.value ?? 0;
+
+      // 2. Get Likes
+      var likesUrl = $"{baseUrl}/{postId}/likes?summary=true&access_token={existuser.PageAccessToken}";
+      var likesData = await http.GetFromJsonAsync<FacebookLikesResponse>(likesUrl);
+      int likes = likesData?.summary?.total_count ?? 0;
+
+      // 3. Get Shares
+      var sharesUrl = $"{baseUrl}/{postId}?fields=shares&access_token={existuser.PageAccessToken}";
+      var sharesData = await http.GetFromJsonAsync<FacebookSharesResponse>(sharesUrl);
+      int shares = sharesData?.shares?.count ?? 0;
+
+      // 4. Get Video Views (optional)
+      var viewsUrl = $"{baseUrl}/{postId}/video_insights?metric=total_video_views&access_token={existuser.PageAccessToken}";
+      var viewsData = await http.GetFromJsonAsync<FacebookVideoViewsResponse>(viewsUrl);
+      int views = viewsData?.data?.FirstOrDefault()?.values?.FirstOrDefault()?.value ?? 0;
+
+      return new FacebookPostAnalytics
+      {
+        PostId = postId,
+        Reach = reach,
+        Likes = likes,
+        Shares = shares
+
+      };
+    }    
+    //[HttpGet("audience-insights")]
+    //public async Task<IActionResult> GetAudienceInsights(string userAccessToken)
+    //{
+    //  // Step 1: Get list of Pages the user manages
+    //  var accountsUrl = $"https://graph.facebook.com/v19.0/me/accounts?access_token={userAccessToken}";
+    //  var accountsResp = await _httpClient.GetAsync(accountsUrl);
+    //  if (!accountsResp.IsSuccessStatusCode)
+    //    return StatusCode((int)accountsResp.StatusCode, "Failed to fetch user pages");
+
+    //  var accountData = await accountsResp.Content.ReadFromJsonAsync<FacebookPageResponse>();
+
+    //  var firstPage = accountData?.data?.FirstOrDefault();
+    //  if (firstPage == null)
+    //    return BadRequest("No pages found for this user.");
+
+    //  var pageId = firstPage.id;
+    //  var pageAccessToken = firstPage.access_token;
+
+    //  // Step 2: Fetch Insights for the Page
+    //  var insightsUrl = $"https://graph.facebook.com/v19.0/{pageId}/insights/page_fans_gender_age?access_token={pageAccessToken}";
+    //  var insightsResp = await _httpClient.GetAsync(insightsUrl);
+    //  if (!insightsResp.IsSuccessStatusCode)
+    //  {
+    //    var err = await insightsResp.Content.ReadAsStringAsync();
+    //    return StatusCode((int)insightsResp.StatusCode, $"Failed to fetch insights: {err}");
+    //  }
+
+    //  var insightsData = await insightsResp.Content.ReadFromJsonAsync<FacebookInsightsMW>();
+
+    //  int men = 0, women = 0;
+    //  var values = insightsData?.data?.FirstOrDefault()?.Values?.FirstOrDefault()?.Value;
+    //  if (values != null)
+    //  {
+    //    foreach (var item in values)
+    //    {
+    //      if (item.Key.StartsWith("M.")) men += item.Value;
+    //      else if (item.Key.StartsWith("F.")) women += item.Value;
+    //    }
+    //  }
+
+    //  return Ok(new
+    //  {
+    //    platform = "Facebook",
+    //    accountId = pageId,
+    //    audience = new { men, women }
+    //  });
+    //}
+
+
+  }
 }

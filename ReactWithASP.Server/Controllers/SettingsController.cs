@@ -25,6 +25,9 @@ using System.Net.Mail;
 using System.Net;
 using System.Xml;
 using ReactWithASP.Server.Models.Settings;
+using PayPal.Api;
+using SendGrid;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace ReactWithASP.Server.Controllers
 {
@@ -37,14 +40,16 @@ namespace ReactWithASP.Server.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SettingsController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+    public SettingsController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _context = context;
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
-        }
+            _httpContextAccessor = httpContextAccessor;
+    }
 
         [HttpPost("SaveCompanyInfo")]
         public IActionResult SaveCompanyInfo([FromBody] CompanySetting model)
@@ -79,7 +84,7 @@ namespace ReactWithASP.Server.Controllers
             }
 
             // Fetch company settings based on UserGuid
-            var response = _context.CompanySetting.FirstOrDefault(x => x.UserGuid == UserGuid);
+            var response = _context.CompanySetting.Where(x => x.UserGuid == UserGuid).ToList();
 
             // Check if the company setting exists
             if (response == null)
@@ -88,58 +93,107 @@ namespace ReactWithASP.Server.Controllers
             }
 
             // Create result based on the found company setting
-            CompanySetting result = new CompanySetting()
+            var result = response.Select(Comp => new
             {
-                UserGuid = response.UserGuid,
-                Name = response.Name,
-                Address = response.Address,
-                PhoneNo = response.PhoneNo,
-                Email = response.Email,
-                Reg_Year = DateTime.Now.Year
-            };
+                UserGuid = Comp.UserGuid,
+                Name = Comp.Name,
+                Address = Comp.Address,
+                PhoneNo = Comp.PhoneNo,
+                Email = Comp.Email,
+                Reg_Year = Comp.Reg_Year
+            }).ToList();
 
             return Ok(result);
         }
 
-
-        [HttpPost("SMTP_Info")]
-        public IActionResult SMTP_Info([FromBody] SMTPsetting model)
+        [HttpPut("UpdateCompanyInfo")]
+        public IActionResult UpdateCompanyInfo([FromBody] UpdateCompanyinfo model)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = new
+            // Find the group by UserGuid and GroupId
+            var existingComp = _context.CompanySetting.FirstOrDefault(g => g.UserGuid == model.UserGuid);
+
+            if (existingComp == null)
             {
-                Email = "mailto:anubhav.j@mishainfotech.com",
-                Password = "sddcfgv",
-                Host = "smtp.gmail.com",
-                Port = "587",
-                Enable_SSl = 1
+                return NotFound(new
+                {
+                    Status = "False",
+                    Message = "CompanyInfo not found !..."
+                });
+            }
 
-            };
-            return Ok(new { message = "data save successfully", result });
+            // Update group properties
+            existingComp.Name = model.Name;
+            existingComp.Address = model.Address;
+            existingComp.PhoneNo = model.PhoneNo;
+            existingComp.Email = model.Email;
+            existingComp.Reg_Year = model.Reg_Year;
+            _context.CompanySetting.Update(existingComp);
+            // Save changes to the context
+            _context.SaveChanges();
 
+            return Ok(new
+            {
+                Status = "True",
+                Message = "CompanyInfo updated successfully..."
+            });
         }
 
+
+        //[HttpPost("SMTP_Info")]
+        //public IActionResult SMTP_Info([FromBody] SMTPsetting model)
+        //{
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var result = new
+        //    {
+        //        Email = "mailto:anubhav.j@mishainfotech.com",
+        //        Password = "sddcfgv",
+        //        Host = "smtp.gmail.com",
+        //        Port = "587",
+        //        Enable_SSl = 1
+
+        //    };
+        //    return Ok(new { message = "data save successfully", result });
+
+        //}
+
         [HttpPost("SMTP_InfoSave")]
-        public IActionResult SMTP_InfoSave([FromBody] SMTPsetting model)
+        public IActionResult SMTP_InfoSave([FromBody] SAVESMTPsetting model)
         {
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            // Check if the email already exists in the database
+            var existingEmail = _context.SMTPsetting.FirstOrDefault(x => x.Email == model.Email && x.UserGuid==model.UserGuid);
+            if (existingEmail != null)
+            {
+                return BadRequest(new { status = "false", message = "Email already exists." });
+            }
+
             SMTPsetting result = new SMTPsetting()
             {
                 UserGuid = model.UserGuid,
                 Email = model.Email,
-                Password = model.Password,
-                Host = model.Host,
-                Port = model.Port,
-                Enable_SSl = true
+                EmailFrom = "notification.mipl@gmail.com",
+                Password = "sgcsertpfujdwkyn",
+                Host = "smtp.gmail.com",
+                Port = "587",
+                Enable_SSl = true,
+                UserDefaultCredentials = true,
+                MailToCC = model.MailToCC,
+                CreatedOn = DateTime.Now
             };
 
             _context.SMTPsetting.Add(result);
@@ -150,6 +204,7 @@ namespace ReactWithASP.Server.Controllers
         }
 
 
+       
         [HttpGet("GetSMTP_Info")]
         public IActionResult GetSMTP_Info(string UserGuid)
         {
@@ -158,77 +213,150 @@ namespace ReactWithASP.Server.Controllers
                 return BadRequest(new { Message = "User GUID is required." });
             }
 
-            // Fetch company settings based on UserGuid
-            var response = _context.SMTPsetting.FirstOrDefault(x => x.UserGuid == UserGuid);
+            // Fetch the last inserted SMTP setting based on UserGuid
+            var response = _context.SMTPsetting
+                                  .Where(x => x.UserGuid == UserGuid)
+                                  .OrderByDescending(x => x.CreatedOn) // Assuming 'CreatedDate' or 'Id' exists
+                                  .FirstOrDefault();
 
-            // Check if the company setting exists
             if (response == null)
             {
-                return NotFound(new { Message = "Company information not found." });
+                return NotFound(new { Message = "SMTP information not found." });
             }
 
-            // Create result based on the found company setting
-            SMTPsetting result = new SMTPsetting()
+            // Map the SMTP setting to a result format
+            var result = new
             {
                 UserGuid = response.UserGuid,
                 Email = response.Email,
                 Password = response.Password,
                 Host = response.Host,
                 Port = response.Port,
-                Enable_SSl = response.Enable_SSl
+                Enable_SSl = response.Enable_SSl,
+                UserDefaultCredentials = response.UserDefaultCredentials,
+                MailToCC = response.MailToCC
             };
 
             return Ok(result);
         }
 
 
+        [HttpPut("UpdateSMTP_Info")]
+        public IActionResult UpdateSMTP_Info([FromBody] UpdateSMTPsetting model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Find the group by UserGuid and GroupId
+            var existingSmtpinfo = _context.SMTPsetting.FirstOrDefault(g => g.UserGuid == model.UserGuid);
+
+            if (existingSmtpinfo == null)
+            {
+                return NotFound(new
+                {
+                    Status = "False",
+                    Message = "SMTP_Info not found !..."
+                });
+            }
+
+            // Update group properties
+            existingSmtpinfo.Email = model.Email;
+            existingSmtpinfo.Password = model.Password;
+            existingSmtpinfo.Host = model.Host;
+            existingSmtpinfo.Port = model.Port;
+            existingSmtpinfo.Enable_SSl = model.Enable_SSl;
+            existingSmtpinfo.UserDefaultCredentials = model.UserDefaultCredentials;
+            existingSmtpinfo.MailToCC = model.MailToCC;
+            _context.SMTPsetting.Update(existingSmtpinfo);
+            // Save changes to the context
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                Status = "True",
+                Message = "SMTP_Info updated successfully..."
+            });
+        }
+
+
         [HttpPost("SMTP_SendinfoForTest")]
-        public IActionResult SMTP_SendinfoForTest([FromBody] SMTPsetting model)
+        //[Authorize]
+        public IActionResult SMTP_SendinfoForTest(string Email, string UserGuid)
         {
             try
             {
-                MailMessage msg = new MailMessage();
-                msg.To.Add(model.ToEmail);
-                if (model.MailToCC != null)
+                // Get the SMTP settings for the provided email and UserGuid
+                var data = _context.SMTPsetting.FirstOrDefault(x => x.Email == Email && x.UserGuid == UserGuid);
+
+                // Check if data was found
+                if (data == null)
                 {
-                    msg.CC.Add(model.MailToCC);
-                }
-                MailAddress address = new MailAddress(model.Email);
-                msg.From = address;
-                msg.Subject = "Send Test Mail.";
-                msg.Body = "Hello Dear,<br><br>This email for test email smtp setting <br><br> Thanks";
-                msg.IsBodyHtml = true;
-
-                using (SmtpClient client = new SmtpClient())
-                {
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    client.EnableSsl = model.Enable_SSl;
-                    client.Host = model.Host;
-                    client.Port = Convert.ToInt32(model.Port);
-
-                    NetworkCredential credentials = new NetworkCredential(model.Email, model.Password);
-                    client.UseDefaultCredentials = false /*model.UserDefaultCredentials*/;
-                    client.Credentials = credentials;
-
-                    client.Send(msg);
+                    return NotFound(new { message = "SMTP settings not found for the provided email and user." });
                 }
 
-                string xmlData = Path.Combine(Directory.GetCurrentDirectory(), "SMTPSetting.xml");
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(xmlData);
-                XmlNodeList nodeList = xmlDoc.SelectNodes("smtp");
-                foreach (XmlNode node in nodeList)
-                {
-                    node.Attributes[0].Value = model.Email;
+                //try
+                //{
+                    using (var client = new SmtpClient(data.Host, Convert.ToInt32(data.Port)))
+                    {
+                        client.EnableSsl = true; // Enable SSL for secure communication
+                        client.Credentials = new NetworkCredential(data.EmailFrom, data.Password); // Use the App Password
+                        client.UseDefaultCredentials = false; // Don't use default credentials, since you're providing them explicitly
 
-                    node.ChildNodes[0].Attributes[0].Value = model.Host;
-                    node.ChildNodes[0].Attributes[1].Value = model.Port;
-                    node.ChildNodes[0].Attributes[2].Value = model.UserDefaultCredentials ? "true" : "false";
-                    node.ChildNodes[0].Attributes[3].Value = model.Email;
-                    node.ChildNodes[0].Attributes[4].Value = model.Password;
-                    node.ChildNodes[0].Attributes[5].Value = model.Enable_SSl ? "true" : "false";
-                }
-                xmlDoc.Save(xmlData);
+                        using (var mailMessage = new MailMessage())
+                        {
+                            mailMessage.From = new MailAddress(data.EmailFrom); // Sender's email address
+                            mailMessage.Subject = "Send Test Mail."; // Email subject
+                            mailMessage.Body = "Hello Dear,<br><br>This email is for testing SMTP settings.<br><br>Thanks"; // Email body
+                            mailMessage.IsBodyHtml = true; // Set to true if the body contains HTML
+
+                            mailMessage.To.Add(data.Email); // Recipient's email address
+
+                            // Add CC (Carbon Copy) email address if provided
+                            if (!string.IsNullOrEmpty(data.MailToCC))
+                            {
+                                mailMessage.CC.Add(data.MailToCC); // Add CC recipient
+                            }
+
+                            // Send the email
+                            client.Send(mailMessage);
+                            
+                        }
+                                                            // Add recipient emails
+                    }
+
+                    //Console.WriteLine("Email sent successfully.");
+                //}
+                //catch (SmtpException ex)
+                //{
+                //    Console.WriteLine($"Error sending email: {ex.Message}");
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine($"General error: {ex.Message}");
+                //}
+
+
+
+                //// Update the SMTPSetting.xml file with the data from the database
+                //string xmlData = Path.Combine(Directory.GetCurrentDirectory(), "SMTPSetting.xml");
+                //XmlDocument xmlDoc = new XmlDocument();
+                //xmlDoc.Load(xmlData);
+
+                //XmlNodeList nodeList = xmlDoc.SelectNodes("smtp");
+                //foreach (XmlNode node in nodeList)
+                //{
+                //    node.Attributes[0].Value = data.Email;
+
+                //    node.ChildNodes[0].Attributes[0].Value = data.Host;
+                //    node.ChildNodes[0].Attributes[1].Value = data.Port;
+                //    node.ChildNodes[0].Attributes[2].Value = data.UserDefaultCredentials ? "true" : "false";
+                //    node.ChildNodes[0].Attributes[3].Value = data.Email;
+                //    node.ChildNodes[0].Attributes[4].Value = data.Password;
+                //    node.ChildNodes[0].Attributes[5].Value = data.Enable_SSl ? "true" : "false";
+                //}
+                //xmlDoc.Save(xmlData);
 
                 return Ok(new { Status = "True", message = "Email sent successfully!" });
             }
@@ -236,8 +364,69 @@ namespace ReactWithASP.Server.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred while sending the email.", error = ex.Message });
             }
-
         }
+
+
+
+
+
+        //// Prepare the MailMessage object
+        //MailMessage msg = new MailMessage();
+        //msg.To.Add(Email); // Add the recipient email
+
+        //if (!string.IsNullOrEmpty(data.MailToCC))
+        //{
+        //    msg.CC.Add(data.MailToCC); // Add CC email if provided
+        //}
+
+        //MailAddress address = new MailAddress(data.Email); // Use email from data
+        //msg.From = address;
+        //msg.Subject = "Send Test Mail.";
+        //msg.Body = "Hello Dear,<br><br>This email is for testing SMTP settings.<br><br>Thanks";
+        //msg.IsBodyHtml = true;
+
+        //// Using SMTP client to send the email
+
+        //using (SmtpClient client = new SmtpClient())
+        //{
+        //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //    client.EnableSsl = data.Enable_SSl; // Use SSL based on your data
+        //    client.Host = data.Host;            // SMTP Host (e.g., smtp.gmail.com)
+        //    client.Port = Convert.ToInt32(data.Port); // Port number (e.g., 465 for SSL, 587 for TLS)
+
+        //    // Ensure you're using correct SMTP credentials
+        //    NetworkCredential credentials = new NetworkCredential(data.Email, data.Password);
+        //    client.UseDefaultCredentials = false; // Must be false to use explicit credentials
+        //    client.Credentials = credentials;
+
+        //    try
+        //    {
+        //        client.Send(msg);
+        //    }
+        //    catch (SmtpException smtpEx)
+        //    {
+        //        return StatusCode(500, new { message = "SMTP Error", error = smtpEx.Message });
+        //    }
+        //}
+
+        //using (SmtpClient client = new SmtpClient())
+        //{
+        //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //    client.EnableSsl = data.Enable_SSl; // SSL setting from data
+        //    client.Host = data.Host; // Host from data
+        //    client.Port = Convert.ToInt32(data.Port); // Port from data
+
+        //    // Credentials for the SMTP server
+        //    NetworkCredential credentials = new NetworkCredential(data.Email, data.Password);
+        //    client.UseDefaultCredentials = false; // Use the provided credentials
+        //    client.Credentials = credentials;
+
+        //    // Send the email
+        //    client.Send(msg);
+        //}
+
+
+
 
         [HttpPost("DeveloperSetting_Info")]
         public IActionResult DeveloperSetting_Info([FromBody] DeveloperSetting model)
@@ -292,6 +481,44 @@ namespace ReactWithASP.Server.Controllers
             };
 
             return Ok(result);
+        }
+
+
+        [HttpPut("UpdateDeveloperSetting_Info")]
+        public IActionResult UpdateDeveloperSetting_Info([FromBody] UpdateDeveloperSetting model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Find the group by UserGuid and GroupId
+            var ExistingDeveloperpinfo = _context.DeveloperSetting.FirstOrDefault(g => g.UserGuid == model.UserGuid);
+
+            if (ExistingDeveloperpinfo == null)
+            {
+                return NotFound(new
+                {
+                    Status = "False",
+                    Message = "DeveloperSetting_Info not found !..."
+                });
+            }
+
+            // Update group properties
+            ExistingDeveloperpinfo.WebMasterEmail = model.WebMasterEmail;
+            ExistingDeveloperpinfo.DeveloperEmail = model.DeveloperEmail;
+            ExistingDeveloperpinfo.TestMode = model.TestMode;
+            ExistingDeveloperpinfo.CopytoWebmaster = model.CopytoWebmaster;
+            ExistingDeveloperpinfo.Copytodeveloper = model.Copytodeveloper;
+            _context.DeveloperSetting.Update(ExistingDeveloperpinfo);
+            // Save changes to the context
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                Status = "True",
+                Message = "Developer_Info updated successfully..."
+            });
         }
 
         //[HttpGet("ApplicationSetting_GetInfo")]
@@ -386,6 +613,52 @@ namespace ReactWithASP.Server.Controllers
         }
 
 
+        [HttpPut("UpdateApplicationSetting_Info")]
+        public IActionResult UpdateApplicationSetting_Info([FromBody] UpdateApplicationsetting model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Find the group by UserGuid and GroupId
+            var ExistAppInfo = _context.Applicationsetting.FirstOrDefault(g => g.UserGuid == model.UserGuid);
+
+            if (ExistAppInfo == null)
+            {
+                return NotFound(new
+                {
+                    Status = "False",
+                    Message = "DeveloperSetting_Info not found !..."
+                });
+            }
+
+            // Update group properties
+                ExistAppInfo.FullName = model.FullName;
+                ExistAppInfo.ApplicationURL = model.ApplicationURL;
+                ExistAppInfo.APIURL = model.APIURL;
+                ExistAppInfo.FacebookURL = model.FacebookURL;
+                ExistAppInfo.YoutubeURL = model.YoutubeURL;
+                ExistAppInfo.InstagramURL = model.InstagramURL;
+                ExistAppInfo.TwitterURL = model.TwitterURL;
+                ExistAppInfo.AdminURL = model.AdminURL;
+                ExistAppInfo.SupervisorURL = model.SupervisorURL;
+                ExistAppInfo.CompanyURL = model.CompanyURL;
+                ExistAppInfo.UserImagesURL = model.UserImagesURL;
+                ExistAppInfo.WorkerReportImagesURL = model.WorkerReportImagesURL;
+                ExistAppInfo.WorkerDocumentImagesURL = model.WorkerDocumentImagesURL;
+            _context.Applicationsetting.Update(ExistAppInfo);
+             // Save changes to the context
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                Status = "True",
+                Message = ".Application_Info updated successfully..."
+            });
+        }
+
+
         public static class CurrencyService
         {
             private static readonly Dictionary<string, decimal> ExchangeRates = new Dictionary<string, decimal>
@@ -446,23 +719,44 @@ namespace ReactWithASP.Server.Controllers
 
 
         // GET: api/NotificationSettings
-        [HttpGet("GetNotificationSetting")]
-        public async Task<ActionResult<NotificationSetting>> GetNotificationSetting(int id)
-        {
-            var notificationSetting = await _context.NotificationSetting.FindAsync(id);
+    [HttpGet("GetNotificationSetting")]
+    public async Task<ActionResult<NotificationSetting>> GetNotificationSetting(string UserGUID)
+    {
+      var notificationSetting = await _context.NotificationSetting
+    .FirstOrDefaultAsync(n => n.UserGUID == UserGUID);
 
-            if (notificationSetting == null)
-            {
-                return NotFound();
-            }
+      if (notificationSetting == null)
+      {
+        return NotFound();
+      }
 
-            return notificationSetting;
-        }
+      return Ok(notificationSetting);
+    }
+    [HttpGet("GetNotifications")]
+    public async Task<IActionResult> GetNotifications(string UserGUID)
+    {
+      var notifications = await _context.NotificationSetting
+    .Where(n => n.UserGUID == UserGUID)
+    .Select(n => new Notifications
+    {
+      Id = n.Id,
+      UserGUID = n.UserGUID,
+      Title = n.Title,
+      Descriptions = n.Descriptions,
+      ImageIcon = n.ImageIcon 
+    })
+    .ToListAsync();
 
+      if (notifications == null )
+      {
+        return NotFound(new { Message = "No notification settings found for the provided UserGUID." });
+      }
 
+      return Ok(new { Data = notifications });
+    }
 
-        // PUT: api/NotificationSettings
-        [HttpPut("PutNotificationSetting")]
+    // PUT: api/NotificationSettings
+    [HttpPut("PutNotificationSetting")]
         public async Task<IActionResult> PutNotificationSetting(int id, NotificationSetting notificationSetting)
         {
             if (id != notificationSetting.Id)
@@ -510,6 +804,48 @@ namespace ReactWithASP.Server.Controllers
         private bool NotificationSettingExists(int id)
         {
             return _context.NotificationSetting.Any(e => e.Id == id);
+        }
+
+
+        [HttpPost("TestFCMNotification")]
+        public async Task<IActionResult> TestFCMNotification(string userguid,int id, string deviceTokens)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Id == userguid);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Create new notification setting
+            NotificationSetting Obj = new NotificationSetting();
+            Obj.UserGUID = user.Id;
+            Obj.PhoneNumber = user.PhoneNumber;
+            Obj.Email = user.Email;
+            Obj.DeviceToken = deviceTokens;
+
+            string[] deviceTokens1 = new string[1];
+            deviceTokens1[0] = deviceTokens;
+            var content = "Sample notification content"; // Replace with actual content
+
+            string fileName = _context.FCMSetting.Where(x=>x.Id==id).Select(x=>x.UploadedFile).FirstOrDefault();
+            string relativePath = Path.Combine("FirebaseNotification", fileName);
+            //string virtualPath = "D:\\ReactWithASP\\ReactWithASP.Server\\FirebaseNotification\\fcmpushnotificationfile.json"; // Note: no tilde (~) prefix in ASP.NET Core
+            string path = Path.Combine(_hostingEnvironment.ContentRootPath, relativePath);
+            try
+            {
+                await SendAndroidNotificationAsync2(deviceTokens1, content, path);
+                // Add the notification setting to the database
+                _context.NotificationSetting.Add(Obj);
+                _context.SaveChanges();
+                return Ok(new { status = true, message = "Notification Send Successfully.." });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, new { status = false, message = "Something Went Wrong" });
+            }
+            //await SendAndroidNotificationAsync2(deviceTokens, content, path);
+            //return Ok(new { status = true });
         }
 
         // POST: api/NotificationSettings
@@ -563,9 +899,18 @@ namespace ReactWithASP.Server.Controllers
 
         private async Task SendAndroidNotificationAsync2(string[] deviceTokens, string content, string path)
         {
-            var credentials = GoogleCredential.FromFile(path).CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
+            var credentials = GoogleCredential.FromFile(path)
+            .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
 
+            // Check if credentials are null
+            if (credentials == null)
+            {
+                throw new Exception("Failed to create Google credentials from the provided file.");
+            }
+
+            // Get the access token for requests
             var token = await credentials.UnderlyingCredential.GetAccessTokenForRequestAsync();
+
 
 
             await SendNotificationsAsync(deviceTokens, token, content);
@@ -709,5 +1054,273 @@ namespace ReactWithASP.Server.Controllers
         }
 
 
+        [HttpPost("CreateFCMSetting")]
+        public async Task<IActionResult> CreateFCMSetting([FromForm] FCMSettingModel model)
+        {
+            if (model.UploadedFile.FileName == null || model.UploadedFile.FileName.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+
+            // Save the file
+            var filePath = Path.Combine("FirebaseNotification", model.UploadedFile.FileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.UploadedFile.CopyToAsync(stream);
+            }
+
+            // Create FCMSetting entity
+            var fcmSetting = new FCMSetting
+            {
+                FiberBaseId = model.FiberBaseId,
+                UploadedFile = model.UploadedFile.FileName, // Store the file name or path
+                CreatedOn = DateTime.UtcNow
+            };
+
+            // Add to database
+            _context.FCMSetting.Add(fcmSetting);
+            _context.SaveChanges();
+
+            return Ok(new { status = true, message = "Save Successfully.." });
+            //return CreatedAtAction(nameof(CreateFCMSetting), new { id = fcmSetting.Id }, fcmSetting);
+
+        }
+
+        [HttpGet("GetFCMSetting_Info")]
+        public IActionResult GetFCMSetting_Info(int Id)
+        {
+            if (Id==null)
+            {
+                return BadRequest(new { Message = "User GUID is required." });
+            }
+
+            // Fetch FCMSetting based on UserGuid
+            var response = _context.FCMSetting.FirstOrDefault(x => x.Id == Id);
+
+            // Check if the FCMSetting exists
+            if (response == null)
+            {
+                return NotFound(new { Message = "FCMSetting information not found." });
+            }
+
+            // Create result based on the found company setting
+            FCMSetting result = new FCMSetting()
+            {
+                Id = response.Id,
+                FiberBaseId = response.FiberBaseId,
+                UploadedFile = response.UploadedFile,
+                CreatedOn = response.CreatedOn
+            };
+
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateFCMSetting_Info")]
+        public IActionResult UpdateFCMSetting_Info([FromForm] UpdateFCMSettingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Find the group by UserGuid and GroupId
+            var existingFCMinfo = _context.FCMSetting.FirstOrDefault(g => g.Id == model.Id);
+
+            if (existingFCMinfo == null)
+            {
+                return NotFound(new
+                {
+                    Status = "False",
+                    Message = "FCMSetting_Info not found !..."
+                });
+            }
+            // Save the file
+            var filePath = Path.Combine("FirebaseNotification", model.UploadedFile.FileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                 model.UploadedFile.CopyToAsync(stream);
+            }
+
+            // Update group propertie
+            existingFCMinfo.UploadedFile = model.UploadedFile.FileName;
+            
+            _context.FCMSetting.Update(existingFCMinfo);
+            // Save changes to the context
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                Status = "True",
+                Message = "FCM_Info updated successfully..."
+            });
+        }
+
+        [HttpGet("GetUserWithDeviceToken")]
+        public IActionResult GetUserWithDeviceToken()
+        {
+
+            var response = (from U in _context.Users
+                            join Ns in _context.NotificationSetting on U.Id equals Ns.UserGUID
+                            orderby Ns.Id descending // Specify a property to order by
+                            select new
+                            {
+                                U.FullName,
+                                Ns.UserGUID,
+                                Ns.Id,
+                                Ns.DeviceToken
+                            }).ToList();
+
+            if (response == null)
+            {
+                return NotFound(new { Message = "User info not found." });
+            }
+
+            return Ok(response);
+        }
+    [HttpGet("GetSettings")]
+    public async Task<IActionResult> GetSettings(string userGUid)
+    {
+      var settings = await _context.AllNotificationSettings
+          .FirstOrDefaultAsync(x => x.UserGUid == userGUid);
+
+      if (settings == null)
+      {
+        return Ok(new AllNotificationSettings
+        {
+          AllNotifications = false,
+          ActivityReminder = false,
+          Errors = false,
+          RemindBefore1Hour = false,
+          PublishedPost = false
+        });
+      }
+
+      return Ok(new AllNotificationSettings
+      {
+        AllNotifications = settings.AllNotifications,
+        ActivityReminder = settings.ActivityReminder,
+        Errors = settings.Errors,
+        RemindBefore1Hour = settings.RemindBefore1Hour,
+        PublishedPost = settings.PublishedPost
+      });
     }
+    [HttpPost("UpdateAllNotificationSettings")]   
+    public async Task<IActionResult> UpdateAllNotificationSettings(string userGUid, [FromBody] UpdateNotificationSettingsRequest request)
+    {
+      var settings = await _context.AllNotificationSettings
+          .FirstOrDefaultAsync(x => x.UserGUid == userGUid);
+
+      if (settings == null)
+      {
+        settings = new AllNotificationSettings { UserGUid = userGUid };
+        _context.AllNotificationSettings.Add(settings);
+      }
+
+      settings.AllNotifications = request.AllNotifications;
+      settings.ActivityReminder = request.ActivityReminder;
+      settings.Errors = request.Errors;
+      settings.RemindBefore1Hour = request.RemindBefore1Hour;
+      settings.PublishedPost = request.PublishedPost;
+
+      await _context.SaveChangesAsync();
+
+      return Ok(new { Message = "Notification settings updated." });
+    }
+    // 🔹 HELP CENTER
+
+    [HttpGet("GetAllFAQs")]
+    public async Task<IActionResult> GetAllFAQs()
+    {
+      var faqs = await _context.HelpArticles
+          .OrderByDescending(x => x.CreatedOn)
+          .ToListAsync();
+      if (faqs.Count == 0)
+      {
+        return NotFound(new { Message = "FAQs Not Found." });
+      }
+      return Ok(faqs);
+    }
+
+    [HttpPost("CreateFAQ")]
+    public async Task<IActionResult> AddFAQ([FromBody] HelpArticle model)
+    {
+      if (!ModelState.IsValid)
+        return BadRequest(ModelState);
+
+      model.CreatedOn = DateTime.UtcNow;  
+      model.UpdatedOn = DateTime.UtcNow;             
+
+      _context.HelpArticles.Add(model);
+      await _context.SaveChangesAsync();
+
+      return Ok(new { Message = "FAQ added successfully." });
+    }
+
+    // 🔹 PUT update FAQ (admin side)
+    [HttpPut("UpdateFAQ")]
+    public async Task<IActionResult> UpdateFAQ( [FromBody] HelpArticle model)
+    {
+      var faq = await _context.HelpArticles.FindAsync(model.Id);
+      if (faq == null)
+        return NotFound();
+
+      faq.Question = model.Question;
+      faq.Answer = model.Answer;
+      faq.UpdatedOn = DateTime.UtcNow;  
+
+      await _context.SaveChangesAsync();
+
+      return Ok(new { Message = "FAQ updated successfully." });
+    }
+
+    // 🔹 DELETE FAQ (admin side)
+    [HttpDelete("DeleteFAQ")]
+    public async Task<IActionResult> DeleteFAQ(int id)
+    {
+      var faq = await _context.HelpArticles.FindAsync(id);
+      if (faq == null) return NotFound();
+
+      _context.HelpArticles.Remove(faq);
+      await _context.SaveChangesAsync();
+      return Ok(new { Message = "FAQ deleted successfully." });
+    }
+
+    // 🔹 REFER A FRIEND
+
+    [HttpGet("GetReferralLink")]
+    public async Task<IActionResult> GetReferralLink()
+    {
+      var request = _httpContextAccessor.HttpContext.Request;
+      var referralLink = $"{request.Scheme}://{request.Host}/api/Authenticate/register";
+      return Ok(new { referralLink });
+    }
+    // 🔹 REVIEWS
+
+    [HttpPost("SubmitReview")]
+    public async Task<IActionResult> SubmitReview([FromBody] Review model)
+    {
+      _context.Reviews.Add(model);
+      await _context.SaveChangesAsync();
+      return Ok(new { Message = "Thanks for your feedback!" });
+    }
+
+    [HttpGet("GetAllReviews")]
+    public async Task<IActionResult> GetAllReviews()
+    {
+      var reviews = await _context.Reviews.OrderByDescending(x => x.CreatedOn).ToListAsync();
+      return Ok(reviews);
+    }
+
+    [HttpDelete("DeleteReview")]
+    public async Task<IActionResult> DeleteReview(int id)
+    {
+      var review = await _context.Reviews.FindAsync(id);
+      if (review == null) return NotFound();
+
+      _context.Reviews.Remove(review);
+      await _context.SaveChangesAsync();
+      return Ok(new { Message = "Review deleted." });
+    }
+
+  }
 }

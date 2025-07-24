@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "VWmsE7xXcwU=",
+  "dgSpecHash": "Xcrwo/3iyfI=",
   "success": true,
-  "projectFilePath": "D:\\ReactWithASP1\\ReactWithASP\\ClassLibrary1\\ClassLibrary1.csproj",
+  "projectFilePath": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ClassLibrary1\\ClassLibrary1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.33\\microsoft.windowsdesktop.app.ref.6.0.33.nupkg.sha512",
-    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.33\\microsoft.netcore.app.ref.6.0.33.nupkg.sha512",
-    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.33\\microsoft.aspnetcore.app.ref.6.0.33.nupkg.sha512"
+    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.36\\microsoft.windowsdesktop.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.36\\microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\MIPL\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.36\\microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512"
   ],
   "logs": []
 }

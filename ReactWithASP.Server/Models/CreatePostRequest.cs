@@ -3,6 +3,39 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ReactWithASP.Server.Models
 {
+    //public class CreatePostRequest
+    //{
+    //    [Required(ErrorMessage = "UserGuid is required.")]
+    //    public string userGUId { get; set; }
+
+    //    [Required(ErrorMessage = "Title is required.")]
+    //    [StringLength(100, ErrorMessage = "Title length can't be more than 100.")]
+    //    public string Title { get; set; }
+
+    //    [Required(ErrorMessage = "Description is required.")]
+    //    [StringLength(500, ErrorMessage = "Description length can't be more than 500.")]
+    //    public string Description { get; set; }
+
+    //    [Required(ErrorMessage = "At least one MediaUrl is required.")]
+    //    [MinLength(1, ErrorMessage = "At least one MediaUrl is required.")]
+
+    //    public List<string> MediaUrl { get; set; }
+    //    //public List<IFormFile> MediaUrl { get; set; }
+
+    //    [Required(ErrorMessage = "At least one Tag is required.")]
+    //    [MinLength(1, ErrorMessage = "At least one Tag is required.")]
+    //    public List<string> Tags { get; set; }
+
+    //    [Required(ErrorMessage = "AccountOrGroupName is required.")]
+    //    public string AccountOrGroupName { get; set; }
+    //    public string deviceTokens { get; set; }
+    //    public string[] NotificationIds { get; set; }
+
+    //    /*[Required(ErrorMessage = "At least one AccountOrGroupId is required.")]
+    //    [MinLength(1, ErrorMessage = "At least one AccountOrGroupId is required.")]*/
+    //    public List<string> AccountOrGroupId { get; set; }
+    //}
+
     public class CreatePostRequest
     {
         [Required(ErrorMessage = "UserGuid is required.")]
@@ -13,7 +46,7 @@ namespace ReactWithASP.Server.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Description is required.")]
-        [StringLength(500, ErrorMessage = "Description length can't be more than 500.")]
+        [StringLength(3000, ErrorMessage = "Description length can't be more than 3000.")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "At least one MediaUrl is required.")]
@@ -28,13 +61,29 @@ namespace ReactWithASP.Server.Models
 
         [Required(ErrorMessage = "AccountOrGroupName is required.")]
         public string AccountOrGroupName { get; set; }
-        public string deviceTokens { get; set; }
-        public string[] NotificationIds { get; set; }
+        //public List<string> pageId { get; set; }
+        //public string deviceTokens { get; set; }
+
+        //public string accessToken { get; set; }
+        //public string[] NotificationIds { get; set; }
 
         /*[Required(ErrorMessage = "At least one AccountOrGroupId is required.")]
         [MinLength(1, ErrorMessage = "At least one AccountOrGroupId is required.")]*/
-        public List<string> AccountOrGroupId { get; set; }
+        // Handles both cases
+        //public string? AccountOrGroupIdStrings { get; set; }
+        //public List<AccountOrGroupItem>? AccountOrGroupIdObjects { get; set; }
+        public List<AccountOrPageId1> AccountOrGroupId { get; set; }
+        //public string PostText { get; set; }
+        //public int socialmediaId { get; set; }
     }
+
+    public class AccountOrPageId1
+    {
+        public string Id { get; set; }
+        public string? PageId { get; set; }
+        public string? accountId  { get; set; }
+
+  }
 
 
     public class CreateDraftRequest
@@ -66,7 +115,8 @@ namespace ReactWithASP.Server.Models
 
         /*[Required(ErrorMessage = "At least one AccountOrGroupId is required.")]
         [MinLength(1, ErrorMessage = "At least one AccountOrGroupId is required.")]*/
-        public List<string> AccountOrGroupId { get; set; }
+        //public List<string> AccountOrGroupId { get; set; }
+        public List<AccountOrPageId1> AccountOrGroupId { get; set; }
     }
 
     public class CreatePostResponse
@@ -84,6 +134,7 @@ namespace ReactWithASP.Server.Models
         public string FilePath { get; set; }
         public string ContentType { get; set; }
         public string ThumbnailUrl { get; set; }
+        public string ImageName { get; set; }
     }
     public class MediaSelectionResponse
     {
@@ -113,7 +164,9 @@ namespace ReactWithASP.Server.Models
     {
         public int Id { get; set; }
         public string UserGuid { get; set; }
-        public string ScheduledType { get; set; }
+        //public string PageId { get; set; }
+    public string? PageId { get; set; }
+    public string ScheduledType { get; set; }
         public string? Days { get; set; }
         public string? Months { get; set; }
         public string ScheduledTime { get; set; }
@@ -129,7 +182,8 @@ namespace ReactWithASP.Server.Models
         public string AccountOrGroupId { get; set; }
         public string DeviceToken { get; set; }
         public DateTime createdOn { get; set; }
-    }
+        public string ContentType { get; set; }
+  }
 
     public class CreateScheduledPostRequest
     {
@@ -139,10 +193,18 @@ namespace ReactWithASP.Server.Models
         public List<string>? Days { get; set; }
         public List<string>? Months { get; set; }
         public string ScheduledTime { get; set; }
-        public string DeviceToken { get; set; }
         public List<string>? ScheduledDate { get; set; }
         public string? FromDate { get; set; }
         public string? ToDate { get; set; }
         public bool IsPublished { get; set; }
+        public string? AccountOrGroupName { get; set; }
+        //public List<string> AccountOrGroupId { get; set; }
+        //public string AccountOrGroupIdStrings { get; set; }
+        public List<AccountOrPageId1>? AccountOrGroupId { get; set; }
+        public List<string>? MediaUrl { get; set; }
+        public string? Description { get; set; }
+        public string? Title { get; set; }
+        public List<string>? Tags { get; set; }
+
     }
 }

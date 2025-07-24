@@ -34,7 +34,15 @@ public class EmailSender : IEmailSender
 
         mailMessage.To.Add(email);
 
-        await client.SendMailAsync(mailMessage);
+        try
+        {
+            await client.SendMailAsync(mailMessage);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
     }
 }
 

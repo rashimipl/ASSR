@@ -4,8 +4,88 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\MIPL\Desktop\Assr_5</_PublishTargetUrl>
-    <History>True|2024-08-16T05:07:07.7158754Z||;True|2024-08-14T18:41:24.9223323+05:30||;True|2024-08-14T18:38:38.1699622+05:30||;True|2024-08-14T18:14:43.2588882+05:30||;True|2024-08-14T16:06:18.3175942+05:30||;True|2024-08-14T15:57:31.7350594+05:30||;</History>
+    <_PublishTargetUrl>C:\Users\MIPL\Desktop\15072025assr</_PublishTargetUrl>
+    <History>True|2025-07-24T08:34:22.4321398Z||;True|2025-07-23T17:58:50.4189295+05:30||;True|2025-07-23T17:34:43.5903502+05:30||;True|2025-07-23T15:27:29.4852635+05:30||;True|2025-07-22T18:14:14.9081723+05:30||;True|2025-07-22T17:03:33.9905912+05:30||;True|2025-07-22T16:07:26.6468751+05:30||;True|2025-07-22T12:17:46.7019697+05:30||;True|2025-07-21T17:35:18.6882056+05:30||;True|2025-07-21T15:11:43.0780800+05:30||;True|2025-07-21T11:44:02.6454088+05:30||;True|2025-07-15T17:42:24.5655602+05:30||;True|2025-07-15T17:37:59.4378867+05:30||;True|2025-07-15T16:26:42.1307842+05:30||;True|2025-07-15T14:53:32.1333627+05:30||;True|2025-07-15T12:10:24.1890802+05:30||;True|2025-07-15T11:59:51.9703888+05:30||;True|2025-07-14T12:34:20.8709877+05:30||;True|2025-07-14T11:56:04.7734285+05:30||;True|2025-07-10T15:27:56.0678597+05:30||;True|2025-07-10T13:10:40.7016827+05:30||;True|2025-07-09T18:28:00.2182738+05:30||;True|2025-07-09T16:33:35.1198912+05:30||;True|2025-07-03T15:02:50.6704684+05:30||;True|2025-07-03T13:28:12.9136046+05:30||;True|2025-07-02T11:51:18.4099779+05:30||;True|2025-07-02T11:43:05.0696745+05:30||;True|2025-04-07T12:12:07.4292648+05:30||;True|2025-04-07T11:02:16.3676713+05:30||;True|2025-04-07T11:02:00.3035947+05:30||;True|2025-04-02T12:22:09.1351070+05:30||;True|2025-04-02T12:19:02.9664236+05:30||;True|2025-04-02T12:12:31.8573752+05:30||;True|2025-04-02T12:04:41.9354806+05:30||;True|2025-04-02T11:57:46.5092697+05:30||;True|2025-03-26T11:21:36.4919040+05:30||;True|2025-03-25T12:47:40.7872307+05:30||;True|2025-03-24T16:22:06.8854346+05:30||;True|2025-03-24T16:17:50.2559598+05:30||;True|2025-03-24T15:59:31.6314839+05:30||;True|2025-03-24T15:50:43.1141198+05:30||;True|2025-03-24T15:30:55.3310481+05:30||;True|2025-03-24T13:25:04.4907041+05:30||;True|2025-03-18T18:00:03.6095630+05:30||;True|2025-03-18T17:38:45.8133041+05:30||;True|2025-03-18T13:06:39.1592935+05:30||;True|2025-02-28T13:26:32.1604168+05:30||;True|2025-02-28T12:53:27.1061976+05:30||;True|2025-02-28T12:50:47.3882064+05:30||;False|2025-02-28T12:50:25.2673673+05:30||;True|2025-02-28T10:41:33.2345289+05:30||;True|2025-02-24T10:34:05.1585305+05:30||;True|2025-02-18T16:04:10.1000457+05:30||;True|2025-02-14T16:12:39.0808032+05:30||;True|2025-02-13T17:42:36.5122613+05:30||;True|2025-02-13T17:23:46.7575850+05:30||;True|2025-02-13T17:18:41.3104487+05:30||;True|2025-02-13T17:11:28.3331378+05:30||;True|2025-02-13T16:14:50.0726587+05:30||;True|2025-02-13T15:54:49.0711721+05:30||;True|2025-02-13T15:53:01.0418915+05:30||;True|2025-02-13T15:48:53.5288804+05:30||;True|2025-02-13T15:18:12.5486738+05:30||;True|2025-02-13T15:06:00.9507223+05:30||;True|2025-02-13T12:33:56.5258839+05:30||;True|2025-02-13T12:33:17.2899831+05:30||;True|2025-02-12T10:50:24.2396271+05:30||;True|2025-02-12T10:05:30.7712818+05:30||;True|2025-02-11T18:29:56.1350520+05:30||;True|2025-02-11T17:44:10.0974634+05:30||;True|2025-02-07T13:56:24.9693332+05:30||;True|2025-02-07T12:07:08.9337695+05:30||;True|2025-02-07T10:11:00.1024747+05:30||;True|2025-02-04T12:26:28.0307524+05:30||;True|2025-02-04T10:06:09.2686858+05:30||;True|2025-01-31T16:31:26.8149563+05:30||;True|2025-01-31T15:56:14.4328830+05:30||;True|2025-01-31T15:11:11.5680670+05:30||;True|2025-01-30T13:32:57.7084161+05:30||;True|2025-01-29T14:20:42.9056399+05:30||;True|2025-01-29T12:32:24.7041826+05:30||;True|2025-01-29T11:12:09.0689473+05:30||;True|2025-01-29T10:13:08.1375058+05:30||;True|2025-01-28T14:29:26.6400859+05:30||;True|2025-01-28T14:26:38.3332927+05:30||;True|2025-01-28T13:23:22.7177868+05:30||;True|2025-01-28T11:08:26.2343049+05:30||;True|2025-01-21T15:12:06.2567149+05:30||;True|2025-01-21T14:53:51.3642759+05:30||;True|2025-01-21T14:08:49.5464695+05:30||;False|2025-01-21T12:23:34.8551565+05:30||;False|2025-01-21T12:23:19.8479315+05:30||;True|2025-01-20T16:43:33.6709423+05:30||;False|2025-01-20T16:41:27.6257272+05:30||;True|2025-01-20T12:07:03.1429596+05:30||;False|2025-01-20T12:04:09.9802840+05:30||;False|2025-01-20T12:00:53.9944574+05:30||;True|2025-01-13T12:21:22.4611050+05:30||;True|2025-01-09T13:47:28.2656208+05:30||;True|2025-01-09T10:14:19.6135738+05:30||;</History>
     <LastFailureDetails />
   </PropertyGroup>
+  <ItemGroup>
+    <File Include="Controllers/AccountController.cs">
+      <publishTime>07/08/2024 13:05:04</publishTime>
+    </File>
+    <File Include="Controllers/AnalyticsController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/AuthenticateController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/ChangePasswordController.cs">
+      <publishTime>07/08/2024 13:03:50</publishTime>
+    </File>
+    <File Include="Controllers/DashboardController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/FCMController.cs">
+      <publishTime>07/04/2024 16:09:12</publishTime>
+    </File>
+    <File Include="Controllers/ForgotPasswordController.cs">
+      <publishTime>08/05/2024 11:11:32</publishTime>
+    </File>
+    <File Include="Controllers/GroupsController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/HomeScreenController.cs">
+      <publishTime>09/11/2024 17:39:46</publishTime>
+    </File>
+    <File Include="Controllers/IdentityController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/InsightsController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/NotificationController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/PaymentsController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/PayPalController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/PlannerController.cs">
+      <publishTime>09/11/2024 11:59:52</publishTime>
+    </File>
+    <File Include="Controllers/PostController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/PrivacyPolicyController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/SettingsController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/SocialMediaConnectController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/SocialMediaController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/StoryController.cs">
+      <publishTime>07/02/2024 14:31:06</publishTime>
+    </File>
+    <File Include="Controllers/SubscriptionController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/UserController.cs">
+      <publishTime>09/09/2024 17:09:20</publishTime>
+    </File>
+    <File Include="Controllers/UserSubscriptionController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="Controllers/WeatherForecastController.cs">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="wwwroot/uploads/eac8cfdc-b5dd-48a0-a84e-1f60304552fa_VID20240917183952.mp4">
+      <publishTime>09/19/2024 18:37:38</publishTime>
+    </File>
+  </ItemGroup>
 </Project>

@@ -39,7 +39,7 @@ namespace ReactWithASP.Server.Controllers
         [Authorize]
         public IActionResult ChangeStatus(string status, string UserGUID)
         {
-            var result = _context.UserSubscriptions.Where(u => u.UserGUID == UserGUID).ToList();
+            var result = _context.UserSubscriptions.Where(u => u.UserGuid == UserGUID).ToList();
 
             if (result.Count == 0)
             {
@@ -57,58 +57,124 @@ namespace ReactWithASP.Server.Controllers
 
             }
         }
+    [HttpGet]
+    [Route("UserDetailList")]
+    public async Task<IActionResult> UserDetailList(
+    string? sortColumn = null,
+    string? sortOrder = null,
+    int? pageNumber = null,
+    int? pageSize = null)
+    {
+      // Apply fallback defaults dynamically
+      string sortBy = string.IsNullOrWhiteSpace(sortColumn) ? "Id" : sortColumn;
+      string order = string.IsNullOrWhiteSpace(sortOrder) ? "asc" : sortOrder.ToLower();
+      int currentPage = pageNumber.GetValueOrDefault(1);
+      int currentPageSize = pageSize.GetValueOrDefault(10);
 
-        [HttpGet]
-        [Route("UserDetailList")]
-        //[Authorize]
-        public async Task<IActionResult> UserDetailList(string sortColumn = "Id", string sortOrder = "asc", int pageNumber = 1, int pageSize = 10)
+      // Base query
+      var query = _context.Users.Where(x => x.IsActive);
+
+      // Dynamic sorting
+      switch (sortBy.ToLower())
+      {
+        case "name":
+          query = order == "asc"
+              ? query.OrderBy(u => u.FullName)
+              : query.OrderByDescending(u => u.FullName);
+          break;
+        case "id":
+        default:
+          query = order == "asc"
+              ? query.OrderBy(u => u.Id)
+              : query.OrderByDescending(u => u.Id);
+          break;
+      }
+
+      // Total count before pagination
+      var totalRecords = await query.CountAsync();
+
+      // Pagination
+      var users = await query
+          .Skip((currentPage - 1) * currentPageSize)
+          .Take(currentPageSize)
+          .ToListAsync();
+
+      // Handle empty result
+      if (users == null || !users.Any())
+      {
+        return NotFound(new
         {
+          status = false,
+          message = "No users found for the given criteria."
+        });
+      }
 
-            var usersQuery = _context.Users.Where(x => x.IsActive).ToList();
+      // Final response
+      return Ok(new
+      {
+        status = true,
+        paginationMetadata = new
+        {
+          totalRecords = totalRecords,
+          pageSize = currentPageSize,
+          currentPage = currentPage,
+          totalPages = (int)Math.Ceiling(totalRecords / (double)currentPageSize)
+        },
+        data = users
+      });
+    }
 
-            if (usersQuery != null)
-            {
-                // Sorting
-                switch (sortColumn.ToLower())
-                {
-                    case "name":
-                        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.FullName).ToList() : usersQuery.OrderByDescending(u => u.FullName).ToList();
-                        break;
-                    case "id":
-                    default:
-                        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.Id).ToList() : usersQuery.OrderByDescending(u => u.Id).ToList(); ;
-                        break;
-                }
+    //[HttpGet]
+    //[Route("UserDetailList")]
+    ////[Authorize]
+    //public async Task<IActionResult> UserDetailList(string sortColumn, string sortOrder, int pageNumber, int pageSize)
+    //{
 
-                // Pagination
-                var totalRecords = usersQuery.Count;
-                var users = usersQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    //  var usersQuery = _context.Users.Where(x => x.IsActive).ToList();
 
-                if (users == null || !users.Any())
-                {
-                    return NotFound("No user found for the given criteria.");
-                }
+    //  if (usersQuery != null)
+    //  {
+    //    // Sorting
+    //    switch (sortColumn.ToLower())
+    //    {
+    //      case "name":
+    //        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.FullName).ToList() : usersQuery.OrderByDescending(u => u.FullName).ToList();
+    //        break;
+    //      case "id":
+    //      default:
+    //        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.Id).ToList() : usersQuery.OrderByDescending(u => u.Id).ToList(); ;
+    //        break;
+    //    }
 
-                // Creating pagination metadata
-                var paginationMetadata = new
-                {
-                    totalRecords = totalRecords,
-                    pageSize = pageSize,
-                    currentPage = pageNumber,
-                    totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
-                    data = users
-                };
+    //    // Pagination
+    //    var totalRecords = usersQuery.Count;
+    //    var usersold = usersQuery.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+    //    var users = usersQuery.ToList();
+    //    if (users == null || !users.Any())
+    //    {
+    //      return NotFound("No user found for the given criteria.");
+    //    }
 
-                // Return results along with pagination metadata
-                return Ok(new { status = true, paginationMetadata });
-            }
-            else
-            {
-                return NotFound("Data not found !..");
-            }
-        }
+    //    // Creating pagination metadata
+    //    var paginationMetadata = new
+    //    {
+    //      totalRecords = totalRecords,
+    //      pageSize = pageSize,
+    //      currentPage = pageNumber,
+    //      totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
+    //      data = users
+    //    };
 
-        [HttpGet]
+    //    // Return results along with pagination metadata
+    //    return Ok(new { status = true, paginationMetadata });
+    //  }
+    //  else
+    //  {
+    //    return NotFound("Data not found !..");
+    //  }
+    //}
+
+    [HttpGet]
         [Route("UserDetailListById")]
         //[Authorize]
         public async Task<IActionResult> UserDetailListById(string UserGuid)
@@ -133,15 +199,15 @@ namespace ReactWithASP.Server.Controllers
         public IActionResult GetAllSubscriptionPlanbyUserId(string UserGUID)
         {
             var query = from sp in _context.SubscriptionPlans
-                        join us in _context.UserSubscriptions on sp.Id equals us.SubsPlanID
-                        join u in _context.Users on us.UserGUID equals u.Id
+                        join us in _context.UserSubscriptions on sp.Id equals us.SubsPlanId
+                        join u in _context.Users on us.UserGuid equals u.Id
                         where u.Id == UserGUID
                         select new subscriptionplanbyuserid
                         {
                             UserGUID = u.Id,
                             PlanName = sp.PlanName,
                             Price = sp.Price,
-                            SubsPlanID = us.SubsPlanID,
+                            SubsPlanID = us.SubsPlanId,
                             FullName = u.FullName,
                             Email = u.Email,
                             PhoneNumber = u.PhoneNumber,

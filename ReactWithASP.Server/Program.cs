@@ -1,5 +1,6 @@
 using ASSR.Server.Services;
 using JWTAuthentication.Authentication;
+using LinkedApiIntegration.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,36 +8,53 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using ReactWithASP.Server;
+using ReactWithASP.Server.Controllers;
+using ReactWithASP.Server.InterfaceServices;
 using ReactWithASP.Server.Models;
 using ReactWithASP.Server.Services;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Hangfire;
+using Hangfire.SqlServer;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
 // Add services to the container.
 /*builder.Services.AddTransient<IEmailSender, EmailSender>();*/
 builder.Services.AddControllers();
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<ILinkedInService, LinkedInService>();
+//builder.Services.AddHostedService<BackgroundJob>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
-
+builder.Services.AddHostedService<SubscriptionExpirationChecker>();
 // Add Quartz services
 builder.Services.AddQuartz(q =>
 {
-    q.UseMicrosoftDependencyInjectionJobFactory();
-    q.AddJob<NotificationJob>(opts => opts.WithIdentity("NotificationJob")
-                                             .StoreDurably()); // Ensure the job is durable
+    q.AddJob<NotificationJob>(opts => opts.WithIdentity("NotificationJob").StoreDurably()); // Ensure the job is durable
+    q.AddJob<ScheduledOnTimeJob>(opts => opts.WithIdentity("ScheduledOnTimeJob").StoreDurably()); // Ensure the job is durable
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 // Other service registrations
 builder.Services.AddControllersWithViews();
+builder.Services.AddHangfire(config =>
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+          .UseSimpleAssemblyNameTypeSerializer()
+          .UseRecommendedSerializerSettings()
+          .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHangfireServer();
 
 
 
@@ -75,30 +93,44 @@ builder.Services.AddAuthentication(options =>
                 facebookOptions.SaveTokens = true;
                 facebookOptions.Scope.Add("email"); // Add the email scope
             });
-            /*.AddFacebook(options =>
-            {
-                options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-                options.Scope.Add("email");
-                options.Scope.Add("public_profile");
-                options.Fields.Add("email");
-                options.Fields.Add("name");
-                options.Fields.Add("picture");
-                options.Fields.Add("phone");  // Note: Facebook may not provide phone number directly
-                options.SaveTokens = true;
-            });*/
+/*.AddFacebook(options =>
+{
+    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+    options.Scope.Add("email");
+    options.Scope.Add("public_profile");
+    options.Fields.Add("email");
+    options.Fields.Add("name");
+    options.Fields.Add("picture");
+    options.Fields.Add("phone");  // Note: Facebook may not provide phone number directly
+    options.SaveTokens = true;
+});*/
 
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll",
+//        builder => builder.AllowAnyOrigin()
+//                          .AllowAnyMethod()
+//                          .AllowAnyHeader());
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+  options.AddPolicy("AllowAll", policy =>
+  {
+    policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+  });
 });
 
-
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
 
 
@@ -155,6 +187,7 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+
 /*// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -173,9 +206,11 @@ if (app.Environment.IsDevelopment())
 }*/
 app.UseRouting();
 app.UseHttpsRedirection();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseCors("AllowAll");
 app.UseCors("AllowAll");
 app.MapControllers();
 
@@ -204,7 +239,4 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
-
-
-
 app.Run();

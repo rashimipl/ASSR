@@ -17,6 +17,8 @@ using System.Text;
 using ReactWithASP.Server.Models;
 using Quartz;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using LinkedApiIntegration.Services;
+using ReactWithASP.Server.InterfaceServices;
 
 namespace JWTAuthentication
 {
@@ -32,16 +34,21 @@ namespace JWTAuthentication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllers();
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("AllowAll",
-            //        builder => builder.AllowAnyOrigin()
-            //                          .AllowAnyMethod()
-            //                          .AllowAnyHeader());
-            //});
-            //services.UseCors(CorsOptions.);
-           services.AddCors(p => p.AddPolicy("corsapp", builder =>
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins", builder =>
+                {
+                    builder.WithOrigins("https://assr.digitalnoticeboard.biz")  // Your front-end domain
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();  // If you're using sessions or cookies
+                });
+            });
+
+            services.AddSession();  // Ensure you have session services added
+            services.AddControllersWithViews();
+
+            services.AddCors(p => p.AddPolicy("corsapp", builder =>
             {
                 builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
             }));
@@ -51,6 +58,7 @@ namespace JWTAuthentication
             services.Configure<PayPalConfig>(Configuration.GetSection("PayPal"));
 
             services.AddSingleton<PayPalService>();
+            services.AddScoped<ILinkedInService, LinkedInService>();
 
             services.AddQuartz(q =>
             {
@@ -151,11 +159,14 @@ namespace JWTAuthentication
             .AddCookie()
             .AddFacebook(options =>
             {
-                //options.AppId = "1033466688290874";
-                //options.AppSecret = "ebabb1971e2e6ba0ac7bef0f5da65343";
-                options.AppId = "1427730781267757";
-                options.AppSecret = "bc240ab16175afe1304bfede342acf55";
-                options.CallbackPath = "/FacebookResponse";
+              //options.AppId = "1033466688290874";
+              //options.AppSecret = "ebabb1971e2e6ba0ac7bef0f5da65343";
+              //options.AppId = "1427730781267757";
+              //options.AppSecret = "bc240ab16175afe1304bfede342acf55";
+              //options.CallbackPath = "/FacebookResponse";
+              options.AppId = "2401998193494689";
+              options.AppSecret = "08bd0d4de34aa5bee3df8a0a0b7fe42d";
+              options.CallbackPath = "/FacebookCallBack";
 
             });
         }
@@ -181,7 +192,8 @@ namespace JWTAuthentication
             }
 
             app.UseRouting();
-            //app.UseCors("AllowAll");
+            app.UseCors("AllowAllOrigins");
+            app.UseSession();
             app.UseCors("corsapp");
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,8 +1,12 @@
-﻿namespace ReactWithASP.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ReactWithASP.Server.Models
 {
     public class SubscriptionPlans
     {
+        [Key]
         public int Id { get; set; }
+        public int PlanId { get; set; }
         public string PlanName { get; set; }
         public decimal Price { get; set; }
         public int ConnectedChannels { get; set; }
@@ -16,16 +20,7 @@
         public bool RecurringPosts { get; set; }
         public bool PremiumSupport { get; set; }
     }
-    public class UserSubscriptions
-    {
-        public int Id { get; set; }
-        public string Status { get; set; }
-        public string UserGUID { get; set; }
-        public int SubsPlanID { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-
+    
     public class UserSubsDuration
     {
         public string UserGuid { get; set; }

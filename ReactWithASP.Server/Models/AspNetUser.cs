@@ -12,7 +12,7 @@ namespace ReactWithASP.Server.Models
             AspNetUserTokens = new HashSet<AspNetUserToken>();
             /*Groups = new HashSet<Group>();*/
             UserSocialMediaStatuses = new HashSet<UserSocialMediaStatus>();
-            UserSubscriptions = new HashSet<UserSubscription>();
+            UserSubscriptions = new HashSet<UserSubscriptions>();
             Roles = new HashSet<AspNetRole>();
         }
 
@@ -39,7 +39,7 @@ namespace ReactWithASP.Server.Models
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
         /*public virtual ICollection<Group> Groups { get; set; }*/
         public virtual ICollection<UserSocialMediaStatus> UserSocialMediaStatuses { get; set; }
-        public virtual ICollection<UserSubscription> UserSubscriptions { get; set; }
+        public virtual ICollection<UserSubscriptions> UserSubscriptions { get; set; }
 
         public virtual ICollection<AspNetRole> Roles { get; set; }
     }

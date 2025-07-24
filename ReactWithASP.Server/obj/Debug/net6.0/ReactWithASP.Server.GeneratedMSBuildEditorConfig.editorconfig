@@ -9,19 +9,19 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ReactWithASP.Server
 build_property.RootNamespace = ReactWithASP.Server
-build_property.ProjectDir = D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server\
+build_property.ProjectDir = D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server
+build_property.MSBuildProjectDirectory = D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/ReactWithASP1/ReactWithASP/ReactWithASP.Server/Templates/Emails/ForgetPassword.cshtml]
+[D:/new assr code 2312/ReactWithASP1/ASSR_Project/ReactWithASP.Server/Templates/Emails/ForgetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = VGVtcGxhdGVzXEVtYWlsc1xGb3JnZXRQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/ReactWithASP1/ReactWithASP/ReactWithASP.Server/Templates/Emails/WelcomeTemp.cshtml]
+[D:/new assr code 2312/ReactWithASP1/ASSR_Project/ReactWithASP.Server/Templates/Emails/WelcomeTemp.cshtml]
 build_metadata.AdditionalFiles.TargetPath = VGVtcGxhdGVzXEVtYWlsc1xXZWxjb21lVGVtcC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

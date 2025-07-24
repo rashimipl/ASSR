@@ -350,3 +350,270 @@ D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\staticwebas
 D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildMultiTargeting.ReactWithASP.Server.props
 D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildTransitive.ReactWithASP.Server.props
 D:\ReactWithASP1\ReactWithASP\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.pack.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\appsettings.Development.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\appsettings.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\FirebaseNotification\fcmpushnotificationfile.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\spa.proxy.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.staticwebassets.runtime.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.exe
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.deps.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.runtimeconfig.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.pdb
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.Auth.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.Core.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Humanizer.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Facebook.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Google.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.SpaProxy.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Data.SqlClient.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Caching.Memory.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Configuration.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.DependencyInjection.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Identity.Core.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Identity.Stores.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Identity.Client.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Abstractions.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.OpenApi.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Newtonsoft.Json.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Newtonsoft.Json.Bson.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\NReco.VideoConverter.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\PayPal.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.AspNetCore.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.Extensions.DependencyInjection.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.Extensions.Hosting.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\SendGrid.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\SixLabors.ImageSharp.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\StarkbankEcdsa.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.CodeDom.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Configuration.ConfigurationManager.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Diagnostics.DiagnosticSource.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Drawing.Common.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Management.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Runtime.Caching.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Security.Permissions.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Windows.Extensions.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Xabe.FFmpeg.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Management.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.csproj.AssemblyReference.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\spa.proxy.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.GeneratedMSBuildEditorConfig.editorconfig
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.AssemblyInfoInputs.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.AssemblyInfo.cs
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.csproj.CoreCompileInputs.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.MvcApplicationPartsAssemblyInfo.cs
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.MvcApplicationPartsAssemblyInfo.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.RazorAssemblyInfo.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.RazorAssemblyInfo.cs
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.sourcelink.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.build.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.development.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.ReactWithASP.Server.Microsoft.AspNetCore.StaticWebAssets.props
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.build.ReactWithASP.Server.props
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildMultiTargeting.ReactWithASP.Server.props
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildTransitive.ReactWithASP.Server.props
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.pack.json
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\scopedcss\bundle\ReactWithASP.Server.styles.css
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWit.193B6FCA.Up2Date
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\refint\ReactWithASP.Server.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.pdb
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.genruntimeconfig.cache
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ref\ReactWithASP.Server.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Twitter.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\FFMpegCore.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Instances.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Text.Encodings.Web.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Text.Json.dll
+D:\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\appsettings.Development.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\appsettings.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\FirebaseNotification\fcmpushnotificationfile.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\spa.proxy.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.staticwebassets.runtime.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.exe
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.deps.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.runtimeconfig.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ReactWithASP.Server.pdb
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\FFMpegCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.Auth.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Google.Apis.Core.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Humanizer.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Instances.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Facebook.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Google.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.Twitter.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.AspNetCore.SpaProxy.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Data.SqlClient.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Caching.Memory.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Configuration.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.DependencyInjection.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Identity.Core.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Extensions.Identity.Stores.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Identity.Client.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Abstractions.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.OpenApi.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Newtonsoft.Json.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Newtonsoft.Json.Bson.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\NReco.VideoConverter.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\PayPal.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.AspNetCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.Extensions.DependencyInjection.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Quartz.Extensions.Hosting.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\SendGrid.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\SixLabors.ImageSharp.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\StarkbankEcdsa.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.CodeDom.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Configuration.ConfigurationManager.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Diagnostics.DiagnosticSource.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Drawing.Common.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Management.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Runtime.Caching.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Security.Permissions.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Text.Encodings.Web.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Text.Json.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Windows.Extensions.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Xabe.FFmpeg.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Management.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.csproj.AssemblyReference.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\spa.proxy.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.GeneratedMSBuildEditorConfig.editorconfig
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.AssemblyInfoInputs.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.AssemblyInfo.cs
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.csproj.CoreCompileInputs.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.MvcApplicationPartsAssemblyInfo.cs
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.MvcApplicationPartsAssemblyInfo.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.RazorAssemblyInfo.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.RazorAssemblyInfo.cs
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.sourcelink.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.build.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.development.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.ReactWithASP.Server.Microsoft.AspNetCore.StaticWebAssets.props
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.build.ReactWithASP.Server.props
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildMultiTargeting.ReactWithASP.Server.props
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets\msbuild.buildTransitive.ReactWithASP.Server.props
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\staticwebassets.pack.json
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\scopedcss\bundle\ReactWithASP.Server.styles.css
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWit.193B6FCA.Up2Date
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\refint\ReactWithASP.Server.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.pdb
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ReactWithASP.Server.genruntimeconfig.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\obj\Release\net6.0\ref\ReactWithASP.Server.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\PayPalCheckoutSdk.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\PayPalHttp-Dotnet.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Autofac.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Owin.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Owin.Security.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Microsoft.Owin.Security.OAuth.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Owin.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\RestSharp.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Controllers.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Core.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Credentials.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Logic.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Security.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.Streams.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.WebLogic.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Tweetinvi.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Hangfire.AspNetCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Hangfire.Core.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Hangfire.NetCore.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\Hangfire.SqlServer.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\ca\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\de\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\es\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\fa\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\fr\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\nb\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\nl\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\pt-BR\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\pt-PT\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\pt\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\sv\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\tr-TR\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\zh-TW\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\zh\Hangfire.Core.resources.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\BouncyCastle.Cryptography.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\MailKit.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\MimeKit.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\NETCore.MailKit.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Formats.Asn1.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\System.Text.Encoding.CodePages.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\ReactWithASP.Server\bin\Release\net6.0\runtimes\win\lib\net6.0\System.Text.Encoding.CodePages.dll

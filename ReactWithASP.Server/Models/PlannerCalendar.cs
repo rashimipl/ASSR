@@ -22,4 +22,5 @@
         public int? year { get; set; }
         public string? searchbox { get; set; }
     }
+  
 }

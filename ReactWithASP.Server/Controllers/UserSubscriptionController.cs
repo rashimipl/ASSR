@@ -32,37 +32,54 @@ namespace ReactWithASP.Server.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //[Route("ChangeStatus")]
-        //[Authorize]
-        //public IActionResult ChangeStatus(string status,string UserGUID)
-        //{
-        //    var result = _context.UserSubscriptions.Where(u => u.UserGUID == UserGUID).ToList();
+        [HttpGet]
+        [Route("UserSubscriptionListbyId")]
+        public IActionResult UserSubscriptionListbyId(int Id)
+        {
+            var usersQuery = (from userSub in _context.UserSubscriptions
+                              join plan in _context.SubscriptionPlans on userSub.SubsPlanId equals plan.PlanId
+                              join U in _context.Users on userSub.UserGuid equals U.Id where userSub.Id==Id
+                              select new
+                              {
+                                  userSub.Id,
+                                  userSub.UserGuid,
+                                  userSub.StartDate,
+                                  userSub.EndDate,
+                                  userSub.Status,
+                                  userSub.SubsPlanId,
+                                  userSub.ManualSubscription,
+                                  plan.PlanId,
+                                  plan.Price,
+                                  U.UserName
+                              }).ToList();
 
-        //    if (result.Count == 0)
-        //    {
-        //        return BadRequest(new { Message = " Data Not Found!..." });
-        //    }
-        //    else
-        //    {
-        //        foreach (var subscription in result)
-        //        {
-        //            subscription.Status = status;
-        //        }
 
-        //        _context.SaveChanges();
-        //        return Ok(new { Message = " Status Update Successfully" });
+             return Ok(new { status = true, usersQuery });
 
-        //    }
-        //}
+        }
 
         [HttpGet]
         [Route("UserSubscriptionDetailList")]
-        [Authorize]
-        public async Task<IActionResult> UserSubscriptionDetailList(string Status, string paymentStatus, string Username, DateTime SubsStartDate, DateTime SubsEndDate, string sortColumn = "Id", string sortOrder = "asc", int pageNumber = 1, int pageSize = 10)
+        //[Authorize]
+        public async Task<IActionResult> UserSubscriptionDetailList(string? Status, string? Username, DateTime SubsStartDate, DateTime SubsEndDate, string sortColumn = "Id", string sortOrder = "asc", int pageNumber = 1, int pageSize = 10)
         {
 
-            var usersQuery = _context.UserSubscriptions.ToList();
+            var usersQuery = (from userSub in _context.UserSubscriptions
+                              join plan in _context.SubscriptionPlans on userSub.SubsPlanId equals plan.PlanId
+                              join U in _context.Users on userSub.UserGuid equals U.Id
+                              select new
+                              {
+                                  userSub.Id,
+                                  userSub.UserGuid,
+                                  userSub.StartDate,
+                                  userSub.EndDate,
+                                  userSub.Status,
+                                  userSub.SubsPlanId,
+                                  userSub.ManualSubscription,
+                                  plan.PlanId,
+                                  plan.Price,
+                                  U.UserName
+                              }).ToList();
 
             if (usersQuery != null)
             {
@@ -70,7 +87,7 @@ namespace ReactWithASP.Server.Controllers
                 switch (sortColumn.ToLower())
                 {
                     case "SubsPlanID":
-                        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.SubsPlanID).ToList() : usersQuery.OrderByDescending(u => u.SubsPlanID).ToList();
+                        usersQuery = sortOrder.ToLower() == "asc" ? usersQuery.OrderBy(u => u.SubsPlanId).ToList() : usersQuery.OrderByDescending(u => u.SubsPlanId).ToList();
                         break;
                     case "id":
                     default:
@@ -78,7 +95,7 @@ namespace ReactWithASP.Server.Controllers
                         break;
                 }
 
-                if (usersQuery != null)
+                if (Status != null)
                 {
                     usersQuery = usersQuery.Where(x => x.Status == Status).ToList();
                 }
@@ -86,26 +103,26 @@ namespace ReactWithASP.Server.Controllers
                 //{
                 //    usersQuery = usersQuery.Where(x => x.paymentStatus == paymentStatus).ToList();
                 //}
-                //if (usersQuery != null)
-                //{
-                //    usersQuery = usersQuery.Where(x => x.UserName == Username).ToList();
-                //}
-                if (usersQuery != null)
+                if (Username != null)
                 {
-                    if (SubsStartDate > SubsEndDate)
-                    {
-                        return NotFound("Start Date not greater than End date ");
-                    }
-                    usersQuery = usersQuery.Where(x => x.StartDate >= SubsStartDate).ToList();
+                    usersQuery = usersQuery.Where(x => x.UserName == Username).ToList();
+                }
+                // Filtering by Subscription Start Date
+                if (SubsStartDate != DateTime.MinValue)
+                {
+                    usersQuery = usersQuery.Where(x => x.StartDate >= SubsStartDate.Date).ToList();
                 }
 
-                if (usersQuery != null)
+                // Filtering by Subscription End Date
+                if (SubsEndDate != DateTime.MinValue)
                 {
-                    if (SubsEndDate < SubsStartDate)
-                    {
-                        return NotFound("End date not Smaller than Start Date");
-                    }
-                    usersQuery = usersQuery.Where(x => x.EndDate <= SubsEndDate).ToList();
+                    usersQuery = usersQuery.Where(x => x.EndDate <= SubsEndDate.Date).ToList();
+                }
+
+                // Check if start date is before end date
+                if (SubsStartDate != DateTime.MinValue && SubsEndDate != DateTime.MinValue && SubsStartDate > SubsEndDate)
+                {
+                    return BadRequest("Start Date cannot be greater than End Date.");
                 }
 
                 // Pagination
@@ -136,6 +153,87 @@ namespace ReactWithASP.Server.Controllers
             }
         }
 
+
+        [HttpPost("SaveUserSubscriptionInfo")]
+        public async Task<IActionResult> SaveUserSubscriptionInfo([FromForm] SaveUserSubscription model)
+        {
+            // Validate the input
+            if (string.IsNullOrEmpty(model.UserGuid) || string.IsNullOrEmpty(model.PlanName))
+            {
+                return BadRequest("Invalid data provided.");
+            }
+
+            var planId = await _context.SubscriptionPlans
+                .Where(x => x.PlanName == model.PlanName)
+                .Select(x => x.PlanId)
+                .FirstOrDefaultAsync();
+
+            // Check if the planId was found
+            if (planId == 0) // Assuming 0 indicates no plan found
+            {
+                return BadRequest("Invalid plan name provided.");
+            }
+
+            // Create UserSubscription entity
+            var userSubs = new UserSubscriptions
+            {
+                //Id = model.Id,
+                UserGuid = model.UserGuid,
+                SubsPlanId = planId,
+                StartDate = model.StartDate ?? DateTime.Now,
+                EndDate = model.EndDate ?? DateTime.Now,
+                Status = model.Status,
+                ManualSubscription = model.ManualSubscription,
+                CreatedOn = DateTime.Now
+            };
+
+            // Add to database
+            await _context.UserSubscriptions.AddAsync(userSubs);
+
+            // Save changes asynchronously
+            await _context.SaveChangesAsync();
+
+            // Return a success response
+            return Ok(new { status = true, message = "Saved successfully." });
+        }
+
+
+        [HttpGet]
+        [Route("GetUserSubscriptionPlanDeailsbyId")]
+        public async Task<IActionResult> GetUserSubscriptionPlanDeailsbyId(string Userguid)
+        {
+            var result = (from U in _context.Users
+                              join us in _context.UserSubscriptions on U.Id equals us.UserGuid
+                              join usp in _context.SubscriptionPlans on us.SubsPlanId equals usp.PlanId 
+                              where U.Id==Userguid
+                              select new UserSubscriptionPlanDeailsbyId
+                              {
+                                  UserGuid = U.Id,
+                                  UserName = U.FullName,
+                                  PlanId = usp.PlanId,
+                                  PlanName = usp.PlanName,
+                                  Price = usp.Price,
+                                  ConnectedChannels = usp.ConnectedChannels,
+                                  SmartContentSuggestionsMonthly = usp.SmartContentSuggestionsMonthly,
+                                  ImageSuggestionsMonthly = usp.ImageSuggestionsMonthly,
+                                  DailyPostInspirations = usp.DailyPostInspirations,
+                                  DraftedPosts = usp.DraftedPosts,
+                                  PostsDaily = usp.PostsDaily,
+                                  ScheduledPostsQueue = usp.ScheduledPostsQueue,
+                                  MultiImageVideoPosts = usp.MultiImageVideoPosts,
+                                  RecurringPosts = usp.RecurringPosts,
+                                  PremiumSupport = usp.PremiumSupport
+                              }).ToList();
+
+            if (result != null)
+            {
+                return Ok(new { status = true, result });
+            }
+            else
+            {
+                return NotFound("Data not found !..");
+            }
+        }
 
 
 

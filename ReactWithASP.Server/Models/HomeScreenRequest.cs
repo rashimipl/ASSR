@@ -28,7 +28,7 @@ namespace ReactWithASP.Server.Models
 
     public class RRequest
     {
-        public string? Days { get; set; }
+        public string Days { get; set; }
         public string UserGuid { get; set; }
         public int? NoOfPosts { get; set; } = 5;
     }
@@ -41,6 +41,8 @@ namespace ReactWithASP.Server.Models
         public int Followers { get; set; }
         public int Likes { get; set; }
         public int Share { get; set; }
+        public string UserGuid { get; set; }
+
     }
     public class PostResponse
     {
@@ -82,9 +84,10 @@ namespace ReactWithASP.Server.Models
     {
         public GroupResponse Group { get; set; }
         public string Title { get; set; }
+        public int Id { get; set; }
         public string Description { get; set; }
         public string PostIcon { get; set; }
-        public int Id { get; set; }
+        public int SocialMediaPostId { get; set; }
         public int Likes { get; set; }
         public int Views { get; set; }
         public int Comments { get; set; }
@@ -97,8 +100,9 @@ namespace ReactWithASP.Server.Models
         public string UserGuid { get; set; }
         public string platform { get; set; }
         public bool PostStatus { get; set; }
-
-    }
+   
+    public AccountResponse Account { get; set; }
+  }
 
 
     public class PostDateWise
@@ -113,16 +117,16 @@ namespace ReactWithASP.Server.Models
     public class Groups
     {
 
-        public int Id { get; set; }
-        public string UserGuid { get; set; }
-        public string Name { get; set; }
-        public string groupIcon { get; set; }
-        public int SocialMediaId { get; set; }
-        /*public List<string> Platform { get; set; }*/
-        public virtual ICollection<GroupSocialMedias> GroupSocialMedias { get; set; }
-        
-        //public ICollection<GroupPlatform> Platforms { get; set; } = new List<GroupPlatform>();
-    }
+    public int Id { get; set; }
+    public string UserGuid { get; set; }
+    public string Name { get; set; }
+    public string groupIcon { get; set; }
+    public int SocialMediaId { get; set; }
+    /*public List<string> Platform { get; set; }*/
+    public virtual ICollection<GroupSocialMedias> GroupSocialMedias { get; set; }
+
+    public ICollection<GroupPlatform> Platforms { get; set; } = new List<GroupPlatform>();
+  }
     public class GroupPlatform
     {
         public int Id { get; set; }
@@ -157,5 +161,6 @@ namespace ReactWithASP.Server.Models
         public string ScheduledTimeString { get; set; }
         public bool Poststatus { get; set; }
         public DateTime ScheduledTime { get; set; }
-    }
+    public DateTime ScheduledDate { get; set; }
+  }
 }

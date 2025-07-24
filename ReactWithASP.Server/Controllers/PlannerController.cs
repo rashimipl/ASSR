@@ -92,8 +92,7 @@ namespace ReactWithASP.Server.Controllers
                                 PostIcon = g.Key.MediaUrl,
                                 Id = g.Key.Id,
                                 ScheduledTimeString = g.Select(x => x.sdp.ScheduledTime).FirstOrDefault(),
-                            }).ToList();
-
+                            }).AsEnumerable().GroupBy(x => new { x.Id, x.Title, x.Description })  .Select(x => x.First()).ToList();
             if (response.Count!=0)
             {
                 return Ok(response);
@@ -110,8 +109,8 @@ namespace ReactWithASP.Server.Controllers
 
 
 
-        [HttpGet("PlannerScheduled")]
-        [Authorize]
+        [HttpGet("Scheduled")]
+        //[Authorize]
         public IActionResult PlannerScheduled([FromQuery] PlannerSchedule request)
         {
             if (request.month == null)
@@ -123,10 +122,11 @@ namespace ReactWithASP.Server.Controllers
             {
                 return BadRequest(new { Message = "year is required." });
             }
-            int Month = request.month+1;
+      //int Month = request.month+1;  old code 
+      int Month = request.month;   // new code 
 
 
-            var response = (from sdp in _context.ScheduledPost
+      var response = (from sdp in _context.ScheduledPost
                             join gp in _context.@group on sdp.UserGuid equals gp.UserGuid
                             join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
                             join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
@@ -146,8 +146,9 @@ namespace ReactWithASP.Server.Controllers
                                 PostIcon = g.Key.MediaUrl,
                                 Id = g.Key.Id,
                                 ScheduledTimeString = g.Select(x => x.sdp.ScheduledTime).FirstOrDefault(),
-                            }).ToList();
+                              ScheduledDate = g.Select(x => x.sdp.ScheduledDate).FirstOrDefault(),
 
+                            }).AsEnumerable().GroupBy(x => new { x.Id, x.Title, x.Description }).Select(x => x.First()).ToList();
 
                             if (!string.IsNullOrWhiteSpace(request.searchbox) && request.searchbox != "null")
                             {
@@ -203,9 +204,9 @@ namespace ReactWithASP.Server.Controllers
         //    return Ok(response);
         //}
 
-        [HttpGet("PlannerDraft")]
-        [Authorize]
-        public IActionResult PlannerDraft([FromQuery] string searchbox, string UserGuid)
+        [HttpGet("Draft")]
+        //[Authorize]
+        public IActionResult PlannerDraft([FromQuery]  string ?searchbox, string UserGuid)
         {
             if (string.IsNullOrWhiteSpace(UserGuid))
             {
@@ -224,26 +225,27 @@ namespace ReactWithASP.Server.Controllers
                                 Group = new GroupResponse
                                 {
                                     Name = g.Key.Name,
-                                    GroupIcon = g.Key.GroupIcon,
+                                    GroupIcon = g.Key.GroupIcon,                                  
                                     Platform = g.Select(x => x.sm.SocialMediaName).Distinct().ToArray(),  // Return as a string array
                                 },
                                 Title = g.Key.Title,
                                 Description = g.Key.Description,
                                 PostIcon = g.Key.PostIcon,
                                 Id = g.Key.Id,
-                            }).ToList();
+                            }).AsEnumerable().GroupBy(x => new { x.Id, x.Title, x.Description }).Select(x => x.First()).ToList();
 
-            if (!string.IsNullOrWhiteSpace(searchbox) && searchbox != "null")
+            // Apply the search filter only if searchbox is not empty or whitespace
+            if (!string.IsNullOrWhiteSpace(searchbox))
             {
                 response = response.Where(d =>
-                                  d.Title.Contains(searchbox) ||
-                                  d.Description.Contains(searchbox) ||
-                                  d.Group.Name.Contains(searchbox) ||
-                                  d.Group.Platform.Any(p => p.Contains(searchbox)))
-                                  .ToList();
+                                      d.Title.Contains(searchbox) ||
+                                      d.Description.Contains(searchbox) ||
+                                      d.Group.Name.Contains(searchbox) ||
+                                      d.Group.Platform.Any(p => p.Contains(searchbox)))
+                                      .ToList();
             }
 
-            if (response.Count!=0)
+            if (response.Count != 0)
             {
                 return Ok(response);
             }
@@ -252,6 +254,7 @@ namespace ReactWithASP.Server.Controllers
                 return BadRequest(new { Message = "Data Not Found !...." });
             }
         }
+
 
 
 
@@ -301,5 +304,7 @@ namespace ReactWithASP.Server.Controllers
         //    };
         //    return Ok(response);
         //}
+
+        
     }
 }

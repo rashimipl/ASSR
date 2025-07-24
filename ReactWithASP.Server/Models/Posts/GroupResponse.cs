@@ -18,4 +18,9 @@
         public string UserGuid { get; set; }
         public string[] Platform { get; set; }
     }
+  public class AccountResponse
+  {
+    public string[] SocialMediaName { get; set; }
+    public string UserGuid { get; set; }
+  }
 }

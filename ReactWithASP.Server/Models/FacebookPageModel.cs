@@ -18,4 +18,14 @@ namespace ReactWithASP.Server.Authentication
         public string Profile { get; set; }
         public string AccessToken { get; set; }
     }
+
+    public class LinkedInProfileData
+    {
+        public string sub { get; set; }
+        public string name { get; set; }
+        public string given_name { get; set; }
+        public string family_name { get; set; }
+        public string picture { get; set; }
+
+    }
 }

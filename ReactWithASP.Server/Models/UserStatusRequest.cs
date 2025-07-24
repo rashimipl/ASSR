@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ReactWithASP.Server.Models.Posts;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReactWithASP.Server.Models
 {
@@ -33,8 +34,10 @@ namespace ReactWithASP.Server.Models
 
     public class SubscriptionPlan
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
+        public int PlanId { get; set; }
         public string Name { get; set; }
+        public decimal Price { get; set; }
         public int ConnectedChannels { get; set; }
         public int SmartContentSuggestionsMonthly { get; set; }
         public int ImageSuggestionsMonthly { get; set; }
@@ -58,4 +61,50 @@ namespace ReactWithASP.Server.Models
         public string PhoneNumber { get; set; }
         public DateTime CreatedOn { get; set; }
     }
+
+    public class CreatePlanRequest
+    {
+        public int Id { get; set; }
+        public int PlanId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public int ConnectedChannels { get; set; }
+        public int SmartContentSuggestionsMonthly { get; set; }
+        public string ImageSuggestionsMonthly { get; set; }
+        public string DailyPostInspirations { get; set; }
+        public string DraftedPosts { get; set; }
+        public string PostsDaily { get; set; }
+        public string ScheduledPostsQueue { get; set; }
+        public bool MultiImageVideoPosts { get; set; }
+        public bool RecurringPosts { get; set; }
+        public bool PremiumSupport { get; set; }
+    }
+  public class CreateSubFeatureRequest
+  {
+    //public string FeatureCode { get; set; }
+    public string FeatureName { get; set; }
+    public string Free { get; set; }
+    public string Standard { get; set; }
+    public string Premium { get; set; }
+    public bool Status { get; set; }    
+  }
+
+  public class subscriptionplanResponse
+  {
+    public int PackageId { get; set; }
+    public string PackageName { get; set; }
+    public string Price { get; set; }
+    public List<subscriptionFeature> subscriptionFeature { get; set; }
+  }
+  public class subscriptionFeature
+  {
+    public string FeatureCode { get; set; }
+    public string FeatureName { get; set; }
+    public int Allowedcount { get; set; }
+    public int Isunlimited { get; set; }
+    public bool Status { get; set; }
+    public int Validity_days { get; set; }
+  }
+
+  
 }

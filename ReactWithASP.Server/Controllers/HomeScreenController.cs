@@ -356,75 +356,122 @@ namespace ReactWithASP.Server.Controllers
             return $"{baseUrl}/uploads/{fileName}";
         }
 */
-
-
+        //Old Code
         [HttpGet("Posts")]
         public IActionResult Posts([FromQuery] RRequest request)
         {
             try
             {
-                // Step 1: Fetch all necessary data from the database and group by group ID
-                var query = (from smp in _context.SocialMediaPosts
-                             join ugp in _context.UserGroupPosts on smp.Id equals ugp.PostId
-                             join g in _context.@group on ugp.GroupId equals g.Id
-                             join gsm in _context.GroupSocialMedia on g.Id equals gsm.GroupId
-                             join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
-                             join pl in _context.PostLikes on smp.Id equals pl.PostId into plGroup
-                             from pl in plGroup.DefaultIfEmpty()
-                             join pv in _context.PostViews on smp.Id equals pv.PostId into pvGroup
-                             from pv in pvGroup.DefaultIfEmpty()
-                             join ps in _context.PostShares on smp.Id equals ps.PostId into psGroup
-                             from ps in psGroup.DefaultIfEmpty()
-                             where smp.UserGuid == request.UserGuid
-                             select new
+        
+        var query = (from smp in _context.SocialMediaPosts
+                     join ugp in _context.UserGroupPosts on smp.Id equals ugp.PostId
+                     join sm in _context.SocialMedia on ugp.AccountID equals sm.Id.ToString() into smJoin
+                     from sm in smJoin.DefaultIfEmpty() 
+                     join g in _context.@group on ugp.GroupId equals g.Id into gJoin
+                     from g in gJoin.DefaultIfEmpty() 
+                     where smp.UserGuid == request.UserGuid
+                           && (ugp.GroupId > 0 || ugp.AccountID != null)
+                           orderby smp.Id descending
+                     select new
                              {
-                                 smp.Title,
-                                 smp.Description,
-                                 smp.PostIcon,
-                                 smp.CreatedAt,
-                                 smp.Id,
-                                 Likes = pl != null ? pl.PostLikesCount : 0,
-                                 Shares = ps != null ? ps.PostSharesCount : 0,
-                                 Views = pv != null ? pv.PostViewsCount : 0,
-                                 smp.Status,
-                                 GroupId = g.Id,
-                                 g.UserGuid,
-                                 g.Name,
-                                 g.GroupIcon,
-                                 sm.SocialMediaName
-                             }).ToList();
+                       smp.Title,
+                       smp.Description,
+                       smp.PostIcon,
+                       smp.CreatedAt,
+                       smp.Id,
+                       smp.Status,
+                       GroupId = g != null ? g.Id : 0, 
+                       smp.UserGuid,
+                       GroupName = g != null ? g.Name : null, 
+                       GroupIcon = g != null ? g.GroupIcon : null, 
+                       SocialMediaName = sm != null ? sm.SocialMediaName : null 
+                     }).ToList();
 
                 if (query.Count == 0)
                 {
                     return Ok(new { Status = "true", data = new List<PostResponse1>() });
                 }
 
-                // Step 2: Group the data by post and group ID, and aggregate the platforms
-                var response = query
-                    .GroupBy(q => new { q.Id, q.GroupId })
-                    .Select(g => new PostResponse1
-                    {
-                        Title = g.First().Title,
-                        Description = g.First().Description,
-                        PostIcon = JsonConvert.DeserializeObject<List<string>>(g.First().PostIcon)
-                                      .Select(fileName => GenerateServerPathUrl(fileName)).FirstOrDefault(),
-                        CreatedAt = g.First().CreatedAt,
-                        Id = g.First().Id,
-                        Likes = g.Sum(x => x.Likes),
-                        Shares = g.Sum(x => x.Shares),
-                        Views = g.Sum(x => x.Views),
-                        Status = g.First().Status,
-                        Group = new GroupResponse
-                        {
-                            Id = g.First().GroupId,
-                            UserGuid = g.First().UserGuid,
-                            Name = g.First().Name,
-                            GroupIcon = g.First().GroupIcon,
-                            Platform = g.Select(x => x.SocialMediaName).Distinct().ToArray()
-                        }
-                    }).ToList();
+        //// Step 2: Group the data by post and group ID, and aggregate the platforms
 
-                return Ok(response);
+        //var response = query
+        //  .GroupBy(q => new { q.Id, q.GroupId })
+        //  .Select(g => new PostResponse1
+        //  {
+        //      Id = g.First().Id,  // Use the database Id as the unique identifier
+        //      Title = g.First().Title,
+        //      Description = g.First().Description,
+        //      PostIcon = ParsePostIcon(g.First().PostIcon)
+        //                    .Select(fileName => GenerateServerPathUrl(fileName))
+        //                    .FirstOrDefault(),
+        //      CreatedAt = g.First().CreatedAt,
+        //      SocialMediaPostId = g.First().Id,
+        //      Status = g.First().Status,
+        //      Group = new GroupResponse
+        //      {
+        //          Id = g.First().GroupId,
+        //          UserGuid = g.First().UserGuid,
+
+        //          Platform = g.Select(x => x.SocialMediaName).Distinct().ToArray()
+        //      }
+        //  }).ToList();
+        var response = query
+.GroupBy(q => new { q.Id, q.GroupId })
+.Select(g => new PostResponse1
+{
+Id = g.First().Id,
+Title = g.First().Title,
+Description = g.First().Description,
+PostIcon = ParsePostIcon(g.First().PostIcon)
+  .Select(fileName => GenerateServerPathUrl(fileName))
+  .FirstOrDefault(),
+CreatedAt = g.First().CreatedAt,
+SocialMediaPostId = g.First().Id,
+Status = g.First().Status,
+Group = g.First().GroupId > 0
+? new GroupResponse
+{
+Id = g.First().GroupId,
+Name = g.First().GroupName,
+UserGuid = g.First().UserGuid,
+GroupIcon = g.First().GroupIcon,
+Platform = g.Select(x => x.SocialMediaName).Distinct().ToArray(),
+}
+: null,
+Account = g.First().GroupId == 0 
+? new AccountResponse
+{
+SocialMediaName = g.Select(x => x.SocialMediaName).Distinct().ToArray(),
+UserGuid = g.First().UserGuid
+}
+: null 
+}).ToList();
+        //var response = query
+        //    .GroupBy(q => new { q.Id, q.GroupId })
+        //    .Select(g => new PostResponse1
+        //    {
+        //        Title = g.First().Title,
+        //        Description = g.First().Description,
+        //        PostIcon = ParsePostIcon(g.First().PostIcon)
+        //      .Select(fileName => GenerateServerPathUrl(fileName))
+        //      .FirstOrDefault(),
+        //        CreatedAt = g.First().CreatedAt,
+        //        SocialMediaPostId = g.First().Id,
+        //        Likes = g.Sum(x => x.Likes),
+        //        Shares = g.Sum(x => x.Shares),
+        //        Views = g.Sum(x => x.Views),
+        //        Status = g.First().Status,
+        //        Group = new GroupResponse
+        //        {
+        //            Id = g.First().GroupId,
+        //            UserGuid = g.First().UserGuid,
+        //            Name = g.First().Name,
+        //            GroupIcon = g.First().GroupIcon,
+        //            Platform = g.Select(x => x.SocialMediaName).Distinct().ToArray()
+        //        }
+        //    }).ToList();
+
+        return Ok(response);
             }
             catch (Exception ex)
             {
@@ -437,8 +484,8 @@ namespace ReactWithASP.Server.Controllers
         {
             var request = HttpContext.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
-            //return $"{baseUrl}/uploads/{fileName}";
-            return $"{baseUrl}/uploads/thumbnails/{fileName}";
+            return $"{baseUrl}/uploads/{fileName}";
+            //return $"{baseUrl}/uploads/thumbnails/{fileName}";
         }
 
 
@@ -1301,6 +1348,8 @@ namespace ReactWithASP.Server.Controllers
                         join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
                         join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
                         where sdp.UserGuid == request.userGUId
+                              && (gsm.GroupId > 0 || gsm.SocialMediaId != null)
+                        orderby sdp.Id descending
                         select new
                         {
                             CreatedAt = sdp.createdOn,
@@ -1315,7 +1364,8 @@ namespace ReactWithASP.Server.Controllers
                             title = sdp.Title,
                             description = sdp.Description,
                             postIcon = sdp.MediaUrl,
-                            id = sdp.Id,
+                            scheduleedPostId = sdp.Id,
+                            Id = gp.Id,
                             likes = 1000,
                             views = 2000,
                             comments = 2000,
@@ -1351,12 +1401,18 @@ namespace ReactWithASP.Server.Controllers
                                   d.platform.Contains(request.searchKeyword)).ToList();
             }
 
-            // Grouping by date
+            // Ensure unique records based on scheduleedPostId (or other key fields)
+            data = data.GroupBy(d => d.scheduleedPostId)
+                       .Select(g => g.First()) // This ensures only the first distinct record per scheduleedPostId is kept
+                       .ToList();
+
+            // Grouping by date and ordering by CreatedAt in descending order
             var groupedData = data
-                .GroupBy(d => d.CreatedAt.Date)
-                .Select(g => new
-                {
-                    date = new
+            .OrderByDescending(d => d.CreatedAt) // First order by CreatedAt in descending order
+            .GroupBy(d => d.CreatedAt.Date)
+            .Select(g => new
+            {
+            date = new
                     {
                         value = g.Key.ToString("yyyy-MM-dd"),
                         data = g.Select(post => new
@@ -1365,55 +1421,213 @@ namespace ReactWithASP.Server.Controllers
                             post.title,
                             post.description,
                             post.postIcon,
-                            post.id,
+                            post.scheduleedPostId,
+                            post.Id,
                             post.likes,
                             post.views,
                             post.comments,
                             post.shares,
                             Status = post.status,
                             post.statusCode
-                        }).ToList()
+                        }).Distinct().ToList()
                     }
-                })
-                .ToList();
+                }).Distinct().ToList();
 
             return Ok(groupedData);
         }
+
+        //public IActionResult FilteredPost([FromQuery] PostsFilterRequest request)
+        //{
+        //    var data = (from sdp in _context.ScheduledPost
+        //                join gp in _context.@group on sdp.UserGuid equals gp.UserGuid
+        //                join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
+        //                join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
+        //                where sdp.UserGuid == request.userGUId
+        //                select new
+        //                {
+        //                    CreatedAt = sdp.createdOn,
+        //                    @group = new
+        //                    {
+        //                        name = gp.Name,
+        //                        groupIcon = gp.GroupIcon,
+        //                        platform = new string[] { sm.SocialMediaName },
+        //                    },
+        //                    UserGuid = sdp.UserGuid,
+        //                    platform = sm.SocialMediaName,
+        //                    title = sdp.Title,
+        //                    description = sdp.Description,
+        //                    postIcon = sdp.MediaUrl,
+        //                    scheduleedPostId = sdp.Id,
+        //                    Id=gp.Id,
+        //                    likes = 1000,
+        //                    views = 2000,
+        //                    comments = 2000,
+        //                    shares = 200,
+        //                    statusCode = 1,
+        //                    TagsGroup = "Influencers",
+        //                    SelectedGroup = "Group 2",
+        //                    status = sdp.IsPublished ? "Published" : "Unpublished"
+        //                }).ToList();
+
+        //    // Filtering based on platform, date, and keywords as needed
+        //    if (!string.IsNullOrWhiteSpace(request.Platform) && request.Platform != "null")
+        //    {
+        //        data = data.Where(d => d.platform.Contains(request.Platform)).ToList();
+        //    }
+
+        //    if (!string.IsNullOrWhiteSpace(request.Date) && request.Date != "null")
+        //    {
+        //        if (DateTime.TryParse(request.Date, out DateTime parsedDate))
+        //        {
+        //            data = data.Where(d => d.CreatedAt.Date == parsedDate.Date).ToList();
+        //        }
+        //    }
+
+        //    if (!string.IsNullOrWhiteSpace(request.searchKeyword) && request.searchKeyword != "null")
+        //    {
+        //        data = data.Where(d =>
+        //                          d.title.Contains(request.searchKeyword) ||
+        //                          d.description.Contains(request.searchKeyword) ||
+        //                          d.@group.name.Contains(request.searchKeyword) ||
+        //                          d.TagsGroup.Contains(request.searchKeyword) ||
+        //                          d.SelectedGroup.Contains(request.searchKeyword) ||
+        //                          d.platform.Contains(request.searchKeyword)).ToList();
+        //    }
+
+        //    // Ensure unique records based on scheduleedPostId (or other key fields)
+        //    data = data.GroupBy(d => d.scheduleedPostId)
+        //               .Select(g => g.First()) // This ensures only the first distinct record per scheduleedPostId is kept
+        //               .ToList();
+
+        //    // Grouping by date
+        //    var groupedData = data
+        //        .GroupBy(d => d.CreatedAt.Date)
+        //        .Select(g => new
+        //        {
+        //            date = new
+        //            {
+        //                value = g.Key.ToString("yyyy-MM-dd"),
+        //                data = g.Select(post => new
+        //                {
+        //                    post.@group,
+        //                    post.title,
+        //                    post.description,
+        //                    post.postIcon,
+        //                    post.scheduleedPostId,
+        //                    post.Id,
+        //                    post.likes,
+        //                    post.views,
+        //                    post.comments,
+        //                    post.shares,
+        //                    Status = post.status,
+        //                    post.statusCode
+        //                }).Distinct().ToList()
+        //            }
+        //        }).Distinct().ToList();
+
+        //    return Ok(groupedData);
+        //}
+
 
 
         [HttpGet("ScheduledPosts")]
         public IActionResult ScheduledPosts([FromQuery] ScheduledPostsRequest request)
         {
-            var response = (from sdp in _context.ScheduledPost
-                            join gp in _context.@group on sdp.UserGuid equals gp.UserGuid
-                            join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
-                            join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
-                            where sdp.UserGuid == request.UserGUId
-                            orderby sdp.Id descending
-                            select new
-                            {
-                                id = sdp.Id,
-                                Group = new GroupResponse
-                                {
-                                    Name = gp.Name,
-                                    GroupIcon = gp.GroupIcon,
-                                    Platform = new string[] { sm.SocialMediaName },
-                                },
-                                // Post = new ScheduledPostResponse
-                                // {
-                                Title = sdp.Title,
-                                Description = sdp.Description,
-                                //PostIcon = HomeScreenController.GetFirstMediaUrl(sdp.MediaUrl),
-                                PostIcon = sdp.MediaUrl,
-                                ScheduledTimeString = sdp.ScheduledTime,
-                                Poststatus = sdp.IsPublished
-                                //}
-                            }).ToList();
-            return Ok(response);
+            var scheduledPostsData = (from sdp in _context.ScheduledPost
+                                      join gp in _context.@group on sdp.UserGuid equals gp.UserGuid
+                                      join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
+                                      join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
+                                      where sdp.UserGuid == request.UserGUId && sdp.IsPublished!=true
+                                       && (gsm.GroupId > 0 || gsm.SocialMediaId != null)
+                                      select new
+                                      {
+                                          scheduleedPostId = sdp.Id,
+                                          id = gp.Id,
+                                          Group = new GroupResponse
+                                          {
+                                              Name = gp.Name,
+                                              GroupIcon = gp.GroupIcon,
+                                              Platform = new string[] { sm.SocialMediaName },
+                                          },
+                                          Title = sdp.Title,
+                                          Description = sdp.Description,
+                                          PostIcon = sdp.MediaUrl,
+                                          ScheduledTimeString = sdp.ScheduledTime,
+                                          Poststatus = sdp.IsPublished,
+                                          ScheduledDate =sdp.ScheduledDate
+
+                                      }).ToList(); // Fetch the results from the database
+
+                        // Perform the grouping and ordering in-memory
+                        var response = scheduledPostsData
+                            .GroupBy(x => x.scheduleedPostId) // Group by ScheduledPostId
+                            .Select(g => g.FirstOrDefault())  // Select the first item from each group
+                            .OrderByDescending(x => x.scheduleedPostId) // Order by ScheduledPostId in descending order
+                            .ToList();
+                        //var response = (from sdp in _context.ScheduledPost
+                        //                join gp in _context.@group on sdp.UserGuid equals gp.UserGuid
+                        //                join gsm in _context.GroupSocialMedia on gp.Id equals gsm.GroupId
+                        //                join sm in _context.SocialMedia on gsm.SocialMediaId equals sm.Id
+                        //                where sdp.UserGuid == request.UserGUId
+                        //                select new
+                        //                {
+                        //                    scheduleedPostId = sdp.Id,
+                        //                    id = gp.Id,
+                        //                    Group = new GroupResponse
+                        //                    {
+                        //                        Name = gp.Name,
+                        //                        GroupIcon = gp.GroupIcon,
+                        //                        Platform = new string[] { sm.SocialMediaName },
+                        //                    },
+                        //                    // Post = new ScheduledPostResponse
+                        //                    // {
+                        //                    Title = sdp.Title,
+                        //                    Description = sdp.Description,
+                        //                    //PostIcon = HomeScreenController.GetFirstMediaUrl(sdp.MediaUrl),
+                        //                    PostIcon = sdp.MediaUrl,
+                        //                    ScheduledTimeString = sdp.ScheduledTime,
+                        //                    Poststatus = sdp.IsPublished
+                        //                    //}
+                        //                }).Distinct() // Remove any potential duplicate records
+                        //        .GroupBy(x => x.scheduleedPostId) // Group by ScheduledPostId
+                        //        .Select(g => g.FirstOrDefault()) // Take the first item from each group
+                        //        .ToList();
+                        return Ok(response);
         }
 
 
+        private List<string> SafeDeserializePostIcon(string postIconJson)
+        {
+            try
+            {
+                // Attempt to deserialize the JSON string
+                return JsonConvert.DeserializeObject<List<string>>(postIconJson) ?? new List<string>();
+            }
+            catch (JsonException)
+            {
+                // If deserialization fails, return an empty list or handle the error as needed
+                return new List<string>();
+            }
+        }
+        private List<string> ParsePostIcon(string postIcon)
+        {
+            // Check if the string is a valid JSON array
+            if (postIcon.StartsWith("[") && postIcon.EndsWith("]"))
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<List<string>>(postIcon) ?? new List<string>();
+                }
+                catch (JsonException)
+                {
+                    // If deserialization fails, return the string as a single item in the list
+                    return new List<string> { postIcon };
+                }
+            }
 
+            // If it's not a JSON array, treat it as a single URL
+            return new List<string> { postIcon };
+        }
     }
 }
 

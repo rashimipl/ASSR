@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+//using PayPal.Api;
 using ReactWithASP.Server.Authentication;
 using ReactWithASP.Server.Models;
 using ReactWithASP.Server.Models.Posts;
@@ -19,13 +20,15 @@ namespace JWTAuthentication.Authentication
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<SubscriptionPlans>()
-        .HasNoKey();
+        //    builder.Entity<SubscriptionPlans>()
+        //.HasNoKey();
             builder.Entity<UserSubscriptions>()
         .HasNoKey();
             builder.Entity<Groups>()
         .HasNoKey();
 
+            builder.Entity<UserSubscriptions>()
+                .HasKey(us => us.Id);
             /*builder.Entity<GroupPlatform>()
            .HasOne(gp => gp.Group)
            .WithMany(g => g.Platforms)
@@ -42,20 +45,20 @@ namespace JWTAuthentication.Authentication
                 .HasOne(gsm => gsm.SocialMedia)
                 .WithMany(sm => sm.GroupSocialMedias)
                 .HasForeignKey(gsm => gsm.SocialMediaId);*/
-            builder.Entity<PostLikes>()
-            .HasOne(pl => pl.SocialMediaPosts)
-            .WithMany(smp => smp.PostLikes)
-            .HasForeignKey(pl => pl.PostId);
+            //builder.Entity<PostLikes>()
+            //.HasOne(pl => pl.SocialMediaPosts)
+            //.WithMany(smp => smp.PostLikes)
+            //.HasForeignKey(pl => pl.PostId);
 
-            builder.Entity<PostShares>()
-            .HasOne(ps => ps.SocialMediaPosts)
-            .WithMany(smp => smp.PostShares)
-            .HasForeignKey(ps => ps.PostId);
+            //builder.Entity<PostShares>()
+            //.HasOne(ps => ps.SocialMediaPosts)
+            //.WithMany(smp => smp.PostShares)
+            //.HasForeignKey(ps => ps.PostId);
 
-            builder.Entity<PostViews>()
-           .HasOne(pv => pv.SocialMediaPosts)
-           .WithMany(smp => smp.PostViews)
-           .HasForeignKey(pv => pv.PostId);
+           // builder.Entity<PostViews>()
+           //.HasOne(pv => pv.SocialMediaPosts)
+           //.WithMany(smp => smp.PostViews)
+           //.HasForeignKey(pv => pv.PostId);
 
 
         }
@@ -79,7 +82,7 @@ namespace JWTAuthentication.Authentication
         public DbSet<ScheduledPost> ScheduledPost { get; set; }
         public DbSet<Hashtag> Hashtag { get; set; }
         public DbSet<HashtagGroup> HashtagGroup { get; set; }
-        public DbSet<PrivacyPolicy> PrivacyPolicy { get; set; }
+        //public DbSet<PrivacyPolicy> PrivacyPolicy { get; set; }
 
         public DbSet<AccountConnection> AccountConnection { get; set; }
         public DbSet<FacebookPageModel> FacebookUsers { get; set; }
@@ -89,9 +92,25 @@ namespace JWTAuthentication.Authentication
         public DbSet<Applicationsetting> Applicationsetting { get; set; }
         public DbSet<SocialMediaAccountSettings> SocialMediaAccountSettings { get; set; }
         public DbSet<Drafts> Drafts { get; set; }
-        public DbSet<PayPalTransactions> PayPalTransactions { get; set; }
+        public DbSet<Payments> Payments { get; set; }
         public DbSet<Notification> Notification { get; set; }
-
-
-    }
+        public DbSet<ConnectedSocialMediaInfo> ConnectedSocialMediaInfo { get; set; }
+        public DbSet<SocialMediaUsersModel> SocialMediaUser { get; set; }
+        public DbSet<SocialMediaSetting> SocialMediaSetting { get; set; }
+        public DbSet<PostIdForSocialMediaPosts> PostIdForSocialMediaPosts { get; set; }
+        public DbSet<FCMSetting> FCMSetting { get; set; }
+        public DbSet<TransectionDetails> TransectionDetails { get; set; }
+        public DbSet<PostedStory> PostedStory { get; set; }
+        public DbSet<SubscriptionFeatures> SubscriptionFeatures { get; set; }
+        public DbSet<SubscriptionPackage> SubscriptionPackage { get; set; }
+        public DbSet<SubscriptionPlanFeatures> SubscriptionPlanFeatures { get; set; }
+        public DbSet<UserSubscriptionPlan> UserSubscriptionPlan { get; set; }
+        public DbSet<Transection> Transection { get; set; }
+        public DbSet<PaymentDetails> PaymentDetails { get; set; }
+        public DbSet<TransactionLog> TransactionLog { get; set; }
+    public DbSet<PolicyContents> PolicyContents { get; set; }
+    public DbSet<AllNotificationSettings> AllNotificationSettings { get; set; }
+    public DbSet<HelpArticle> HelpArticles { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+  }
 }
