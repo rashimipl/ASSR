@@ -47,6 +47,7 @@
     public string PostId { get; set; }
     public int Reach { get; set; }
     public int Likes { get; set; }
+    public Dictionary<string, int> Reactions { get; set; } // Key: reaction type, Value: count
     public int Shares { get; set; }
     public int Views { get; set; }
   }
@@ -126,4 +127,18 @@
   //{
   //  public Dictionary<string, int> Value { get; set; }
   //}
+
+    public class AnalyticsSaveRequest
+    {
+        public string UserGuid { get; set; }
+        public string PostId { get; set; }
+        public int Likes { get; set; }
+        public int Shares { get; set; }
+        public int Reach { get; set; }
+        public int Views { get; set; }
+        public DateTime Date { get; set; }
+        public Dictionary<string, int> Reactions { get; set; } // New: reaction type breakdown
+    }
+
+
 }

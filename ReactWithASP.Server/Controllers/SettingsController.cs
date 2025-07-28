@@ -43,7 +43,7 @@ namespace ReactWithASP.Server.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
 
     public SettingsController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IConfiguration configuration, IWebHostEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor)
-        {
+    {
             _userManager = userManager;
             _context = context;
             _configuration = configuration;

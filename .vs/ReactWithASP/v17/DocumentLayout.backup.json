@@ -3,28 +3,66 @@
   "WorkspaceRootPath": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\settingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\settingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\storycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\storycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\socialmediaconnectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\socialmediaconnectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\postcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\authenticatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\authenticatecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\socialmediaconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\socialmediaconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\651519c1e9f1bd2e4df7605562bb25fbfe7b4c6eca871e32996c378b98ae034d\\ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\helparticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\helparticle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\analyticsrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\analyticsrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\socialmediaconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\socialmediaconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\5b2b2da9439a27d42b38906c7d3df4013a9b23776deac1fda14ed83c0a7b2e0c\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\jobs\\scheduledontimejob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\jobs\\scheduledontimejob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\homescreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\homescreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\settingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\settingscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\authentication\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,32 +73,12 @@
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\allnotificationsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\storycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\storycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\homescreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\homescreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\privacypolicycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\privacypolicycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\createpostrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\createpostrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\analyticscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\socialmediaconnectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\socialmediaconnectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\analyticsrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\analyticsrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\storyresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -79,10 +97,6 @@
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\controllers\\groupscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|d:\\new assr code 2312\\reactwithasp1\\assr_project\\reactwithasp.server\\models\\socialmediagroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A78468E0-66F2-41BD-AC15-A9856DA2DC3D}|ReactWithASP.Server\\ReactWithASP.Server.csproj|solutionrelative:reactwithasp.server\\models\\socialmediagroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -98,17 +112,17 @@
       "DocumentGroups": [
         {
           "DockedHeight": 278,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "HomeScreenController.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\HomeScreenController.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\HomeScreenController.cs",
               "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\HomeScreenController.cs",
               "RelativeToolTip": "ReactWithASP.Server\\Controllers\\HomeScreenController.cs",
-              "ViewState": "AgIAAPUFAAAAAAAAAAAQwPkFAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAPgFAAAAAAAAAAAQwP0FAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-18T04:23:48.359Z",
               "IsPinned": true,
@@ -124,46 +138,146 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SettingsController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SettingsController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SettingsController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SettingsController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SettingsController.cs",
-              "ViewState": "AgIAALMEAAAAAAAAAAAiwMEEAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-23T08:35:28.274Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "SocialMediaConnectionController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAowMQAAABRAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T07:43:10.652Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "PostController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PostController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\PostController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PostController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\PostController.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAgwI4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-18T06:41:16.924Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SocialMediaConnectController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAQwFYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T07:43:09.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "AuthenticateController.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AuthenticateController.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\AuthenticateController.cs",
               "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AuthenticateController.cs",
               "RelativeToolTip": "ReactWithASP.Server\\Controllers\\AuthenticateController.cs",
-              "ViewState": "AgIAADUEAAAAAAAAAAASwEMEAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAANwGAAAAAAAAAAAQwOkGAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-14T11:23:40.144Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "GroupsController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\GroupsController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\GroupsController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\GroupsController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\GroupsController.cs",
+              "ViewState": "AgIAAJ8DAAAAAAAAAAAQwKwDAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T05:56:41.09Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StoryController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\StoryController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\StoryController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\StoryController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\StoryController.cs",
+              "ViewState": "AgIAAKoCAAAAAAAAAAAgwLkCAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T11:23:40.269Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\appsettings.json",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\appsettings.json",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\appsettings.json",
+              "RelativeToolTip": "ReactWithASP.Server\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-28T05:03:39.105Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SocialMediaConnectionController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SocialMediaConnectionController.cs",
+              "ViewState": "AgIAALsAAAAAAAAAAAAwwMsAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-15T07:43:10.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HelpArticle.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\HelpArticle.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\HelpArticle.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\HelpArticle.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Models\\HelpArticle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-24T06:08:51.755Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\651519c1e9f1bd2e4df7605562bb25fbfe7b4c6eca871e32996c378b98ae034d\\ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\651519c1e9f1bd2e4df7605562bb25fbfe7b4c6eca871e32996c378b98ae034d\\ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAAAHMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T06:46:11.54Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AnalyticsController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAAAMsAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-21T07:00:44.042Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AnalyticsRequest.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAQwJAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-22T06:46:59.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "Review.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\Review.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\Review.cs",
@@ -171,38 +285,48 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\Review.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-24T06:10:35.827Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-24T06:10:35.827Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AnalyticsController.cs",
+              "DocumentMoniker": "C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\5b2b2da9439a27d42b38906c7d3df4013a9b23776deac1fda14ed83c0a7b2e0c\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
+              "ToolTip": "C:\\Users\\MIPL\\AppData\\Local\\SourceServer\\5b2b2da9439a27d42b38906c7d3df4013a9b23776deac1fda14ed83c0a7b2e0c\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs [Read Only]",
+              "ViewState": "AgIAANsAAAAAAAAAAAAgwOgAAAAAAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-25T07:15:12.061Z",
+              "EditorCaption": " [Read Only]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
-              "Title": "AnalyticsController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\AnalyticsController.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAIwBUAAAAxAAAAAAAAAA==",
+              "Title": "ScheduledOnTimeJob.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Jobs\\ScheduledOnTimeJob.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Jobs\\ScheduledOnTimeJob.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Jobs\\ScheduledOnTimeJob.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Jobs\\ScheduledOnTimeJob.cs",
+              "ViewState": "AgIAAJUAAAAAAAAAAAAowI4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T07:00:44.042Z",
+              "WhenOpened": "2025-07-24T10:49:15.93Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "HelpArticle.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\HelpArticle.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\HelpArticle.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\HelpArticle.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Models\\HelpArticle.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAmAAAAAAAAAA==",
+              "DocumentIndex": 14,
+              "Title": "SettingsController.cs",
+              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SettingsController.cs",
+              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SettingsController.cs",
+              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SettingsController.cs",
+              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SettingsController.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAowE8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-24T06:08:51.755Z",
+              "WhenOpened": "2025-07-23T08:35:28.274Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 16,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs",
@@ -210,25 +334,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Authentication\\ApplicationDbContext.cs",
               "ViewState": "AgIAAGIAAAAAAAAAAAA2wHMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-24T06:12:11.105Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-24T06:12:11.105Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PostController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PostController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\PostController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PostController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\PostController.cs",
-              "ViewState": "AgIAAAwHAAAAAAAAAAAkwBgHAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-18T06:41:16.924Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 18,
               "Title": "PrivacyPolicyController.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PrivacyPolicyController.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\PrivacyPolicyController.cs",
@@ -236,12 +346,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Controllers\\PrivacyPolicyController.cs",
               "ViewState": "AgIAAB4AAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-18T06:29:03.988Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-18T06:29:03.988Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 17,
               "Title": "AllNotificationSettings.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\AllNotificationSettings.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\AllNotificationSettings.cs",
@@ -249,12 +358,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\AllNotificationSettings.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-23T11:21:32.009Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-23T11:21:32.009Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 20,
               "Title": "StoryResponse.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\StoryResponse.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\StoryResponse.cs",
@@ -262,38 +370,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\StoryResponse.cs",
               "ViewState": "AgIAAJQAAAAAAAAAAAAUwJsAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-22T09:27:38.645Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-22T09:27:38.645Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "AnalyticsRequest.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Models\\AnalyticsRequest.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAA2wDIAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-22T06:46:59.022Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "StoryController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\StoryController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\StoryController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\StoryController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\StoryController.cs",
-              "ViewState": "AgIAAGQDAAAAAAAAAAAAwJsDAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-14T11:23:40.269Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 21,
               "Title": "PlannerController.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\PlannerController.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\PlannerController.cs",
@@ -306,7 +387,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 19,
               "Title": "CreatePostRequest.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\CreatePostRequest.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\CreatePostRequest.cs",
@@ -314,25 +395,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\CreatePostRequest.cs",
               "ViewState": "AgIAALwAAAAAAAAAAAAtwMwAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-23T08:37:22.927Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-23T08:37:22.927Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "SocialMediaConnectController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\SocialMediaConnectController.cs",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAgwNEAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-15T07:43:09.757Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 22,
               "Title": "PostedStory.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\PostedStory.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\PostedStory.cs",
@@ -340,12 +407,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\PostedStory.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-22T09:54:23.005Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-22T09:54:23.005Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 23,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Program.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Program.cs",
@@ -357,7 +423,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 24,
               "Title": "SocialMediaGroup.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Models\\SocialMediaGroup.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Models\\SocialMediaGroup.cs",
@@ -365,25 +431,11 @@
               "RelativeToolTip": "ReactWithASP.Server\\Models\\SocialMediaGroup.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T09:29:08.482Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-21T09:29:08.482Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "GroupsController.cs",
-              "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\GroupsController.cs",
-              "RelativeDocumentMoniker": "ReactWithASP.Server\\Controllers\\GroupsController.cs",
-              "ToolTip": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Controllers\\GroupsController.cs",
-              "RelativeToolTip": "ReactWithASP.Server\\Controllers\\GroupsController.cs",
-              "ViewState": "AgIAAAwCAAAAAAAAAAAQwN4BAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T05:56:41.09Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 25,
               "Title": "Startup.cs",
               "DocumentMoniker": "D:\\new assr code 2312\\ReactWithASP1\\ASSR_Project\\ReactWithASP.Server\\Startup.cs",
               "RelativeDocumentMoniker": "ReactWithASP.Server\\Startup.cs",
@@ -391,8 +443,7 @@
               "RelativeToolTip": "ReactWithASP.Server\\Startup.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAMMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-18T06:33:26.689Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-18T06:33:26.689Z"
             }
           ]
         }

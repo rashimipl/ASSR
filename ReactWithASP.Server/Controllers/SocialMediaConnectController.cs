@@ -63,7 +63,8 @@ namespace ReactWithASP.Server.Controllers
 
     [HttpGet("FacebookLogin")]
         public IActionResult FacebookLogin(string userId, string SocialMediaId)
-        {
+        
+    {
           var request = _httpContextAccessor.HttpContext.Request;
 
             HttpContext.Session.SetString("FacebookUserId", userId);

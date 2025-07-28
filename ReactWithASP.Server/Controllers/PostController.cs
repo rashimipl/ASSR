@@ -130,8 +130,8 @@ namespace ReactWithASP.Server.Controllers
 
          if (request.AccountOrGroupName == "Groups")
          {
-        foreach (var accountId in request.AccountOrGroupId)
-        {
+          foreach (var accountId in request.AccountOrGroupId)
+         {
           // Directly access the `Id` property of `AccountOrPageId1`, no parsing needed
           var groupId = accountId.Id;
           var groupPagedata = await (from gsm in _context.GroupSocialMedia

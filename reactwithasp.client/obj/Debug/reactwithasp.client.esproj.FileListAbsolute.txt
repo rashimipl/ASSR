@@ -2,3 +2,4 @@ E:\WorkSpaceAnubhav\ASSR\ReactWithASP\reactwithasp.client\obj\Debug\reactwithasp
 E:\ReactWithASP\reactwithasp.client\obj\Debug\reactwithasp.client.esproj.CoreCompileInputs.cache
 D:\ReactWithASP1\ReactWithASP\reactwithasp.client\obj\Debug\reactwithasp.client.esproj.CoreCompileInputs.cache
 D:\ReactWithASP1\ASSR_Project\reactwithasp.client\obj\Debug\reactwithasp.client.esproj.CoreCompileInputs.cache
+D:\new assr code 2312\ReactWithASP1\ASSR_Project\reactwithasp.client\obj\Debug\reactwithasp.client.esproj.CoreCompileInputs.cache

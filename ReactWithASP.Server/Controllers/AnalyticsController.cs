@@ -13,6 +13,10 @@ using System.Text.RegularExpressions;
 using ReactWithASP.Server.Models.Posts;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Linq;
 
 
 namespace ReactWithASP.Server.Controllers
@@ -107,6 +111,60 @@ namespace ReactWithASP.Server.Controllers
             return Ok(response);
         }
 
+        [HttpPost("SaveAnalytics")]
+        public async Task<IActionResult> SaveAnalytics([FromBody] AnalyticsSaveRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.UserGuid) || string.IsNullOrWhiteSpace(request.PostId))
+            {
+                return BadRequest("UserGuid and PostId are required.");
+            }
+
+            // Save all reactions (each type as a separate PostLikes record)
+            if (request.Reactions != null && request.Reactions.Count > 0)
+            {
+                foreach (var reaction in request.Reactions)
+                {
+                    var like = new PostLikes
+                    {
+                        PostId = request.PostId,
+                        UserGuid = request.UserGuid,
+                        PostLikesCount = reaction.Value,
+                        ReactionType = reaction.Key,
+                        CreatedAt = request.Date
+                    };
+                    _context.PostLikes.Add(like);
+                }
+            }
+            else
+            {
+                // Fallback: Save Likes as LIKE if no reactions provided
+                var like = new PostLikes
+                {
+                    PostId = request.PostId,
+                    UserGuid = request.UserGuid,
+                    PostLikesCount = request.Likes,                   
+                    CreatedAt = request.Date
+                };
+                _context.PostLikes.Add(like);
+            }
+
+            // Save Shares
+            var share = new PostShares
+            {
+                PostId = request.PostId,
+                UserGuid = request.UserGuid,
+                PostSharesCount = request.Shares,
+                CreatedAt = request.Date
+            };
+            _context.PostShares.Add(share);
+
+   
+            // Note: Reach is not stored in a table, but can be calculated as needed.
+
+            await _context.SaveChangesAsync();
+            return Ok(new { Message = "Analytics data saved successfully." });
+        }
+
 
     [HttpGet("GetPagePosts")]
     public async Task<IActionResult> GetFacebookPagePosts(string userguid, string pageId, string accessToken, string date)
@@ -159,28 +217,36 @@ namespace ReactWithASP.Server.Controllers
       var reachData = await http.GetFromJsonAsync<FacebookInsightsResponse>(reachUrl);
       int reach = reachData?.data?.FirstOrDefault()?.values?.FirstOrDefault()?.value ?? 0;
 
-      // 2. Get Likes
-      var likesUrl = $"{baseUrl}/{postId}/likes?summary=true&access_token={existuser.PageAccessToken}";
+      // 2. Get Likes (only LIKE reactions)
+      var likesUrl = $"{baseUrl}/{postId}/reactions?type=LIKE&summary=true&access_token={existuser.PageAccessToken}";
       var likesData = await http.GetFromJsonAsync<FacebookLikesResponse>(likesUrl);
       int likes = likesData?.summary?.total_count ?? 0;
+
+      // 2b. Get all reaction types and their counts
+      var reactionTypes = new[] { "LIKE", "LOVE", "WOW", "SAD", "ANGRY", "HAHA", "THANKFUL", "PRIDE" };
+      var reactions = new Dictionary<string, int>();
+      foreach (var type in reactionTypes)
+      {
+        var url = $"{baseUrl}/{postId}/reactions?type={type}&summary=true&access_token={existuser.PageAccessToken}";
+        var data = await http.GetFromJsonAsync<FacebookLikesResponse>(url);
+        reactions[type] = data?.summary?.total_count ?? 0;
+      }
 
       // 3. Get Shares
       var sharesUrl = $"{baseUrl}/{postId}?fields=shares&access_token={existuser.PageAccessToken}";
       var sharesData = await http.GetFromJsonAsync<FacebookSharesResponse>(sharesUrl);
       int shares = sharesData?.shares?.count ?? 0;
 
-      // 4. Get Video Views (optional)
-      var viewsUrl = $"{baseUrl}/{postId}/video_insights?metric=total_video_views&access_token={existuser.PageAccessToken}";
-      var viewsData = await http.GetFromJsonAsync<FacebookVideoViewsResponse>(viewsUrl);
-      int views = viewsData?.data?.FirstOrDefault()?.values?.FirstOrDefault()?.value ?? 0;
+      
 
       return new FacebookPostAnalytics
       {
         PostId = postId,
         Reach = reach,
         Likes = likes,
-        Shares = shares
-
+        Reactions = reactions,
+        Shares = shares,
+        
       };
     }    
     //[HttpGet("audience-insights")]
